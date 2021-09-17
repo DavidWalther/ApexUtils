@@ -57,6 +57,9 @@ public with sharing virtual class GenericRecordBuilder {
         return this.storedRelatedLists.get(listType);
     }
 
+    /**
+     * Note: Deepclone breaks referncial integrity of parents and child records.
+     */
     public SObject getDeepClonedRecord()
     {
         SObject record = sobjectType.newSObject();
