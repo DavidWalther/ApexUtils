@@ -15,8 +15,7 @@ public with sharing class GenericRecordBuilderTest
         Test.startTest();
         try
         {
-            builder.setPrimitive(Lead.FirstName, firstname);
-            builder.setPrimitive(Lead.Lastname, lastname);
+            builder.setPrimitive(Lead.FirstName, firstname).setPrimitive(Lead.Lastname, lastname);
             firstNameToCheck = (String)builder.getPrimitive(Lead.FirstName);
             lastNameToCheck = (String)builder.getPrimitive(Lead.Lastname);
         } catch (System.Exception exc)
@@ -43,8 +42,7 @@ public with sharing class GenericRecordBuilderTest
         Test.startTest();
         try
         {
-            builder.setPrimitive(Lead.FirstName, firstname);
-            builder.setPrimitive(Lead.Lastname, lastname);
+            builder.setPrimitive(Lead.FirstName, firstname).setPrimitive(Lead.Lastname, lastname);
             recordToCheck = (Lead)builder.getDeepClonedRecord();
         } catch (System.Exception exc)
         {

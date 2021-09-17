@@ -11,10 +11,11 @@ public with sharing virtual class GenericRecordBuilder {
         this.sobjectType = sobjectType;
     }
 
-    public void setPrimitive(SObjectField fieldToken, Object value)
+    public GenericRecordBuilder setPrimitive(SObjectField fieldToken, Object value)
     {
         if(value instanceof SObject) throw new GenericRecordBuilder_Exception();
         this.storedPrimitives.put(fieldToken, value);
+        return this;
     }
 
     public Object getPrimitive(SObjectField fieldToken)
@@ -22,7 +23,7 @@ public with sharing virtual class GenericRecordBuilder {
         return this.storedPrimitives.get(fieldToken);
     }
 
-    public void setLookup(SObjectField fieldToken, SObject value)
+    public GenericRecordBuilder setLookup(SObjectField fieldToken, SObject value)
     {
         if(value == NULL)
         {
@@ -34,6 +35,7 @@ public with sharing virtual class GenericRecordBuilder {
             this.storedPrimitives.put(fieldToken, value.Id);
             this.storedLookups.put(fieldToken, value);
         }
+        return this;
     }
 
     public SObject getLookup(SObjectField fieldToken)
@@ -41,7 +43,7 @@ public with sharing virtual class GenericRecordBuilder {
         return this.storedLookups.get(fieldToken);
     }
 
-    public void addRelatedRecord(Schema.ChildRelationship listType, SObject relatedRecord)
+    public GenericRecordBuilder addRelatedRecord(Schema.ChildRelationship listType, SObject relatedRecord)
     {
         List<SObject> records = storedRelatedLists.get(listType);
         if(records == NULL)
@@ -50,6 +52,7 @@ public with sharing virtual class GenericRecordBuilder {
             storedRelatedLists.put(listType,records);
         }
         records.add(relatedRecord);
+        return this;
     }
 
     public List<SObject> getRelatedRecords(Schema.ChildRelationship listType)
