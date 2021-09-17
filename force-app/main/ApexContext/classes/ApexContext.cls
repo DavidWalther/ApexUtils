@@ -76,17 +76,21 @@ public with sharing class ApexContext {
     }
 
     public void commitToDatabase() {
-        if(!this.objectsToInsert.isEmpty()) {
-            insert this.objectsToInsert;
-        }
-        if(!this.objectsToUpdate.isEmpty()) {
-            update this.objectsToUpdate;
-        }
-        if(!this.objectsToDelete.isEmpty()) {
-            delete this.objectsToDelete;
-        }
-        if(!this.objectsToUndelete.isEmpty()) {
-            undelete this.objectsToUndelete;
+        try {   
+            if(!this.objectsToInsert.isEmpty()) {
+                insert this.objectsToInsert;
+            }
+            if(!this.objectsToUpdate.isEmpty()) {
+                update this.objectsToUpdate;
+            }
+            if(!this.objectsToDelete.isEmpty()) {
+                delete this.objectsToDelete;
+            }
+            if(!this.objectsToUndelete.isEmpty()) {
+                undelete this.objectsToUndelete;
+            }      
+        } catch(System.Exception exc) {
+            throw exc;
         }
     }
 
