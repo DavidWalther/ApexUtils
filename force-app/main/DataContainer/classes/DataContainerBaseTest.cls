@@ -17,36 +17,28 @@ public with sharing class DataContainerBaseTest {
         insert new List<Lead>{lead01, lead02, lead03, lead04, lead05, lead06};
     }
 
-
-    @IsTest
-    static void addRecordToMap_CreatesMapForEachObjectType() {
-        Map<Id, Lead> queriedLeads = new Map<Id, Lead>([SELECT Id, Name FROM Lead ORDER BY Name]);
-        Integer expectedSizeOfLeadMap = queriedLeads.size();
-        
-        Map<Id, Account> queriedAccounts = new Map<Id, Account>([SELECT Id, Name FROM Account ORDER BY Name]);
-        Integer expectedSizeOfAccountMap = queriedAccounts.size();
-
-        Test.startTest();
-        DataContainer dataContainer2Check = new DataContainer().queryAccounts().queryLeads();
-        Test.stopTest();
-
-        System.assert(dataContainer2Check.records.containsKey(Lead.getSObjectType()), 'Lead records were not added');
-        System.assertEquals(expectedSizeOfLeadMap, dataContainer2Check.records.get(Lead.getSObjectType()).size(), 'Not all Leads were added');
-
-        System.assert(dataContainer2Check.records.containsKey(Account.getSObjectType()), 'Account records were not added');
-        System.assertEquals(expectedSizeOfAccountMap, dataContainer2Check.records.get(Account.getSObjectType()).size(), 'Not all Account were added');
-
-        // check: every lead is mapped by it's id
-        for(Lead lead : queriedLeads.values()) {
-            Id recordId = lead.Id;
-            System.assert(dataContainer2Check.records.get(Lead.getSObjectType()).containsKey(recordId), 'The lead ' + lead.Name + 'was not mapped.');
+    /**
+     * This class is an example for the use of DataContainerBase
+     */
+    private with sharing virtual class DataContainer extends DataContainerBase {
+        public List<Account> accounts {get{return this.getObjectRecords(Account.getSObjectType());} private set;}
+        public List<Lead> leads {get{return this.getObjectRecords(Lead.getSObjectType());} private set;}
+      
+        public virtual DataContainer queryAllRecords() {
+          this.queryAccounts().queryLeads();
+          
+          return this;
         }
-    
-        // check: every Account is mapped by it's id
-        for(Account acc : queriedAccounts.values()) {
-            Id recordId = acc.Id;
-            System.assert(dataContainer2Check.records.get(Account.getSObjectType()).containsKey(recordId), 'The lead ' + acc.Name + 'was not mapped.');
-        }    
+        
+        public virtual DataContainer queryAccounts() {
+          this.addRecordToMap([SELECT Id, Name FROM Account ORDER BY Name]);
+          return this;
+        }
+        
+        public virtual DataContainer queryLeads() {
+          this.addRecordToMap([SELECT Id, Name FROM Lead ORDER BY Name]);
+          return this;
+        }
     }
 
     @IsTest
@@ -79,27 +71,38 @@ public with sharing class DataContainerBaseTest {
         System.assert(!containerHasNULL);
     }
 
-    /**
-     * This class is an example for the use of DataContainerBase
-     */
-    private with sharing virtual class DataContainer extends DataContainerBase {
-        public List<Account> accounts {get{return this.getObjectRecords(Account.getSObjectType());} private set;}
-        public List<Lead> leads {get{return this.getObjectRecords(Lead.getSObjectType());} private set;}
-      
-        public virtual DataContainer queryAllRecords() {
-          this.queryAccounts().queryLeads();
-          
-          return this;
-        }
+    @IsTest
+    static void addRecordToMap_CreatesMapForEachObjectType() {
+        Map<Id, Lead> queriedLeads = new Map<Id, Lead>([SELECT Id, Name FROM Lead ORDER BY Name]);
+        Integer expectedSizeOfLeadMap = queriedLeads.size();
         
-        public virtual DataContainer queryAccounts() {
-          this.addRecordToMap([SELECT Id, Name FROM Account ORDER BY Name]);
-          return this;
+        Map<Id, Account> queriedAccounts = new Map<Id, Account>([SELECT Id, Name FROM Account ORDER BY Name]);
+        Integer expectedSizeOfAccountMap = queriedAccounts.size();
+
+        Test.startTest();
+        DataContainer dataContainer2Check = new DataContainer().queryAccounts().queryLeads();
+        Test.stopTest();
+
+        // check whether the container contains a Map for Leads
+        System.assert(dataContainer2Check.records.containsKey(Lead.getSObjectType()), 'Lead records were not added');
+        // check whether the number of mapped leads matches the number of queried ones
+        System.assertEquals(expectedSizeOfLeadMap, dataContainer2Check.records.get(Lead.getSObjectType()).size(), 'Not all Leads were added');
+
+        // check whether the container contains a Map for Accounts
+        System.assert(dataContainer2Check.records.containsKey(Account.getSObjectType()), 'Account records were not added');
+        // check whether the number of mapped Accounts matches the number of queried ones
+        System.assertEquals(expectedSizeOfAccountMap, dataContainer2Check.records.get(Account.getSObjectType()).size(), 'Not all Account were added');
+
+        // check: every lead is mapped by it's id
+        for(Lead lead : queriedLeads.values()) {
+            Id recordId = lead.Id;
+            System.assert(dataContainer2Check.records.get(Lead.getSObjectType()).containsKey(recordId), 'The lead ' + lead.Name + 'was not mapped.');
         }
-        
-        public virtual DataContainer queryLeads() {
-          this.addRecordToMap([SELECT Id, Name FROM Lead ORDER BY Name]);
-          return this;
-        }
+    
+        // check: every Account is mapped by it's id
+        for(Account acc : queriedAccounts.values()) {
+            Id recordId = acc.Id;
+            System.assert(dataContainer2Check.records.get(Account.getSObjectType()).containsKey(recordId), 'The lead ' + acc.Name + 'was not mapped.');
+        }    
     }
 }
