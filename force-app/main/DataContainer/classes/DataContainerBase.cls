@@ -23,7 +23,7 @@ public with sharing abstract class DataContainerBase {
      */
     protected virtual List<SObject> getObjectRecords(Schema.SObjectType objectType) {
       if(this.hasObjectRecords(objectType)) {
-        return this.records.get(objectType);
+        return this.records.get(objectType).values();
       } else {
         return new List<SObject>();
       }
