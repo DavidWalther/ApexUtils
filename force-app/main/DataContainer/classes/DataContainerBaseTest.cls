@@ -63,6 +63,22 @@ public with sharing class DataContainerBaseTest {
         System.assert(queriedLeads.keySet().containsAll(mappedLeadsMap.keySet()));
     }
 
+    @IsTest
+    static void hasObjectRecords_ReturnsTrueIfRecordsOfThisTypeAreMapped() {
+        
+        DataContainer dataContainer2Check = new DataContainer().queryLeads();
+
+        Test.startTest();
+        Boolean containerHasLead = dataContainer2Check.hasObjectRecords(Lead.getSObjectType());
+        Boolean containerHasContacts = dataContainer2Check.hasObjectRecords(Contact.getSObjectType());
+        Boolean containerHasNULL = dataContainer2Check.hasObjectRecords(NULL);
+        Test.stopTest();
+
+        System.assert(containerHasLead);
+        System.assert(!containerHasContacts);
+        System.assert(!containerHasNULL);
+    }
+
     /**
      * This class is an example for the use of DataContainerBase
      */
