@@ -39,4 +39,29 @@ public with sharing abstract class DataContainerBase {
       
       return this.records.get(objectTypeFromId)?.get(recordId);
     }
+
+    protected void addRecordToMap(SObject record) {
+      if(record == NULL) {return;}
+      if(record.Id == NULL) {return;}
+
+      Id recordId = record.Id;
+      Schema.SObjectType objectTypeFromId = recordId.getSObjectType();
+
+      Map<Id, SObject> typeMap = records.get(objectTypeFromId);
+      if(typeMap == NULL) {
+        typeMap = new Map<Id, SObject>();
+        records.put(objectTypeFromId, typeMap);
+      }
+      typeMap.put(recordId, record);
+    } 
+
+    protected void addRecordToMap(List<SObject> records) {
+      if(records == NULL) {return;}
+      if(records.isEmpty() == NULL) {return;}
+
+      for(SObject record : records) {
+        this.addRecordToMap(record);
+      }
+    } 
+
   }
