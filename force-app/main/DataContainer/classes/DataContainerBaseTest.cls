@@ -1,7 +1,6 @@
 @IsTest
 public with sharing class DataContainerBaseTest {
 
-
     @TestSetup
     static void makeData(){
         Account acc01 = new Account( Name = 'Acc 01');
@@ -20,7 +19,7 @@ public with sharing class DataContainerBaseTest {
 
 
     @IsTest
-    static void addRecordToMapCreatesMapForEachObjectType() {
+    static void addRecordToMap_CreatesMapForEachObjectType() {
         Map<Id, Lead> queriedLeads = new Map<Id, Lead>([SELECT Id, Name FROM Lead ORDER BY Name]);
         Integer expectedSizeOfLeadMap = queriedLeads.size();
         
@@ -48,6 +47,20 @@ public with sharing class DataContainerBaseTest {
             Id recordId = acc.Id;
             System.assert(dataContainer2Check.records.get(Account.getSObjectType()).containsKey(recordId), 'The lead ' + acc.Name + 'was not mapped.');
         }    
+    }
+
+    @IsTest
+    static void getObjectRecords_ReturnsListOfMappedRecordsOfSobjectType() {
+        Map<Id, Lead> queriedLeads = new Map<Id, Lead>([SELECT Id, Name FROM Lead ORDER BY Name]);
+
+        Test.startTest();
+        DataContainer dataContainer2Check = new DataContainer().queryLeads();
+        Test.stopTest();
+        List<Lead> mappedLeads = dataContainer2Check.getObjectRecords(Lead.getSObjectType());
+        Map<Id, Lead> mappedLeadsMap = new Map<Id, Lead>(mappedLeads);
+
+        System.assert(mappedLeadsMap.keySet().containsAll(queriedLeads.keySet()));
+        System.assert(queriedLeads.keySet().containsAll(mappedLeadsMap.keySet()));
     }
 
     /**
