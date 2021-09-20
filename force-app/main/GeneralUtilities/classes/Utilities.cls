@@ -216,41 +216,6 @@ public class Utilities {
         ];
     }
 
-    public static Map<String,Id> getQueueNameIdMap() {
-
-        // Returns a map of all existing queues as a map of DeveloperName --> Id
-        Map<String, Id> queueNameIdMap = new Map<String, Id>();
-
-        List<Group> queues = [
-                SELECT
-                        Id,
-                        DeveloperName
-                FROM
-                        Group
-                WHERE
-                        Type = 'Queue'
-        ];
-
-        for (Group queue : queues) {
-            queueNameIdMap.put(queue.DeveloperName, queue.Id);
-        }
-
-        return queueNameIdMap;
-    }
-
-    public static List<GroupMember> getGroupMembers(Id groupId) {
-        List<GroupMember> groupMembers = new List<GroupMember>([
-            SELECT
-                UserOrGroupId,
-                GroupId
-            FROM
-                GroupMember
-            WHERE
-                GroupId =: groupId
-        ]);
-        return groupMembers;
-    }
-
     public static List<String> splitClean(String stringToSplit, String regex) {
         // 1. split
         List<String> splitParts = stringToSplit.split(regex);
@@ -278,68 +243,6 @@ public class Utilities {
         return OrgWideAddressConfiguration__c.getAll();
     }
 
-    public static String getQueueIdBySalesOffice (String salesOrg, String salesOffice) {
-
-        if (Test.isRunningTest()) salesOffice = salesOffice+'_Test';
-
-        if (queueNameToIdMap.isEmpty()) {
-            List<Group> queues = [SELECT Id, DeveloperName FROM Group WHERE Type = 'Queue'];
-            for (Group queue : queues) {
-                if (queue.DeveloperName == 'BackOffice_'+salesOrg+'_'+salesOffice) {
-                    queueNameToIdMap.put(queue.DeveloperName,queue.Id);
-                }
-            }
-        }
-        if (!queueNameToIdMap.isEmpty() && queueNameToIdMap.containsKey('BackOffice_'+salesOrg+'_'+salesOffice)) {
-            return queueNameToIdMap.get('BackOffice_'+salesOrg+'_'+salesOffice);
-        }
-        return null;
-    }
-
-    public static void wait(Integer millisec) {
-        if (millisec == null || millisec < 0) {
-            millisec = 0;
-        }
-        final Long startTime = DateTime.now().getTime();
-        Long finishTime = DateTime.now().getTime();
-        while ((finishTime - startTime) < millisec) {
-            //sleep for parameter x millisecs
-            finishTime = DateTime.now().getTime();
-        }
-    }
-
-    public static String getUUID()
-    {
-        Blob b = Crypto.GenerateAESKey(128);
-        String h = EncodingUtil.ConvertTohex(b);
-        String guid = h.SubString(0,8)+ '-' + h.SubString(8,12) + '-' + h.SubString(12,16) + '-' + h.SubString(16,20) + '-' + h.substring(20);
-        system.debug(guid);
-        return guid;
-    }
-
-    public static String getSessionIdFromVFPage() {
-
-        String sessionId = '';
-        String content = '';
-
-        try {
-            if (!Test.isRunningTest()) {
-                content = Page.GetSessionId.getContent().toString();
-            } else {
-                content = '{"sessionId": "sessionId"}';
-            }
-
-            Map<String, Object> root = (Map<String, Object>) JSON.deserializeUntyped(content);
-
-            if (root.containsKey('sessionId')) {
-                sessionId = (String) root.get('sessionId');
-            }
-        } catch(Exception ex){
-            System.debug('Error getSessionIdFromVFPage: ' + ex);
-        }
-
-        return sessionId;
-    }
 
     /*
 	*	Method allows to get all the Id from related parent objects.
@@ -516,53 +419,6 @@ public class Utilities {
         }
 
         return pickListMap;
-    }
-
-    /*
-    Converts SAP dates like '20201106' into a Date.
-    Dates like '99991231' are infinity dates.
-    Dates like '00000000' are zero dates.
-    */
-    public static Date getDateFromSAPString(String sapDate) {
-        if (sapDate == '0') {
-            sapDate = '00000000';
-        }
-        if (String.isBlank(sapDate) || sapDate.length() != 8) {
-            return null;
-        }
-
-        Integer year = Integer.valueOf(sapDate.substring(0, 4));
-        Integer month = Integer.valueOf(sapDate.substring(4, 6));
-        Integer day = Integer.valueOf(sapDate.substring(6, 8));
-        if (year == 0) {
-            final Date zeroDate = Date.newInstance(1900, 01, 01);
-            return zeroDate;
-        } else if (year > 4000) {
-            final Date infinityDate = Date.newInstance(4000, 12, 31);
-            return infinityDate;
-        } else {
-            return Date.newInstance(year,month,day);
-        }
-    }
-
-    public static Date getDateFromSAPInteger(Integer sapDate) {
-        return getDateFromSAPString(String.valueOf(sapDate));
-    }
-
-    public static String getSAPStringFromDate(Date tempDate)
-    {
-        return Datetime.newInstance(tempDate, Time.newInstance(0,0,0,0)).format('yyyyMMdd');
-    }
-
-    public static String getLanguageKeyByUserIsoLanguage(final String isoLanguage, final boolean toUpperCase) {
-        if(String.isBlank(isoLanguage)) {
-            return null;
-        }
-        List<String> localeInformation = isoLanguage.split('_');
-        if(!localeInformation.isEmpty()) {
-            return toUpperCase ? localeInformation.get(0).toUpperCase() : localeInformation.get(0);
-        }
-        return null;
     }
 
     /**
