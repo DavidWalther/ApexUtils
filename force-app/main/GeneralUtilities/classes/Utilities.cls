@@ -14,10 +14,6 @@ public class Utilities {
     // TODO: what about including and excluding at the same time? extra parameter for secound set of keys or structured parameter?
     public enum MAP_OPTIONS {KEY_IGNORE_NULL, KEY_INCLUDE_ONLY}
 
-    public interface IValueReader {
-        String getValue(Object objectToGetValueFrom);
-    }
-
     public interface ISObjectUtilities {
         Map<String, SObject> mapSObjectListByFieldValues(List<SObject> sObjects, SObjectField field);
 
