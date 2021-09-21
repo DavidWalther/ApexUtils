@@ -179,6 +179,32 @@ public with sharing class UtilitiesTest {
     }
 
     @IsTest
+    static void mappingMethodResultCanBeTransformedIntoOriginalType() {
+     String TESTCOMPANY_1_NAME = 'TestCompany1';
+        Lead lead1 = new Lead(
+            Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
+
+        List<Lead> leadList = new List<Lead>{lead1};
+        
+        Lead leadToCheck = NULL;
+        System.Exception exception_ToCheck = NULL;
+        
+        Test.startTest();
+        try {
+            Map<String, Object> mappedLeads2 = Utilities.sObjectsUtilities.mapSObjectListByValueReaderResults(
+                leadList, new LeadCompanyReader(), Utilities.MAP_RETAIN_MODE.RETAIN_LAST);
+            leadToCheck = (Lead)mappedLeads2.values().get(0);
+        } catch(System.Exception exc) {
+            exception_ToCheck = exc;
+        }
+        Test.stopTest();
+
+        System.assertEquals(NULL, exception_ToCheck);
+        System.assertNotEquals(NULL, leadToCheck);
+        System.assertEquals(lead1.Id, leadToCheck.Id);
+    }
+
+    @IsTest
     static void mappingMethodTypeCastFromObjectToListOfSObjectsIsFine() {
      String TESTCOMPANY_1_NAME = 'TestCompany1';
         Lead lead1 = new Lead(
