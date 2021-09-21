@@ -15,7 +15,7 @@ public class Utilities {
     public enum MAP_OPTIONS {KEY_IGNORE_NULL, KEY_INCLUDE_ONLY}
 
     public interface IValueReader {
-        String getValue(SObject objectToGetValueFrom);
+        String getValue(Object objectToGetValueFrom);
     }
 
     public interface ISObjectUtilities {
@@ -144,8 +144,9 @@ public class Utilities {
         public FieldValueReader(SObjectField field) {
             this.field = field;
         }
-        public String getValue(SObject objectToGetValueFrom) {
-            return String.valueOf(objectToGetValueFrom.get(String.valueOf(field)));
+        public String getValue(Object objectToGetValueFrom) {
+            SObject recordToRead = (SObject)objectToGetValueFrom;
+            return String.valueOf(recordToRead.get(String.valueOf(field)));
         }
     }
 }
