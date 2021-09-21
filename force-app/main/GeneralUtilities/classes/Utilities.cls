@@ -19,7 +19,6 @@ public class Utilities {
     }
 
     public interface ISObjectUtilities {
-        Set<String> getStringValues(List<SObject> sObjects, SObjectField field);
         Map<String, SObject> mapSObjectListByFieldValues(List<SObject> sObjects, SObjectField field);
 
         /**
@@ -53,10 +52,6 @@ public class Utilities {
      * store it in a static variable.
      */
     private class SObjectUtilities implements ISObjectUtilities {
-        public Set<String> getStringValues(List<SObject> sObjects, SObjectField field) {
-            // TODO: use mapSObjectListByFieldValues.keyset()
-            return Utilities.getStringValues(sObjects, field);
-        }
 
         public Map<String, SObject> mapSObjectListByFieldValues(List<SObject> sObjects, SObjectField field) {
             return (Map<String, SObject>)this.mapSObjectListByValueReaderResults(sObjects, new FieldValueReader(field), MAP_RETAIN_MODE.RETAIN_LAST);
