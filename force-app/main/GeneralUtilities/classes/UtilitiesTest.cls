@@ -367,4 +367,84 @@ public with sharing class UtilitiesTest {
         System.assertEquals(pair1Modulo2.getValueA(), ((IntegerPair)mappedLeads2.get('2')[0]).getValueA());
         System.assertEquals(pair1Modulo2.getValueB(), ((IntegerPair)mappedLeads2.get('2')[0]).getValueB());
     }
+
+    @IsTest
+    static void mapObjectListByValueReaderResults_CanUseRetainFirstMode() {
+        /**
+         * Given
+         * A List of IntegerPairs
+         */
+        IntegerPair pair1Modulo1 = new IntegerPair(4, 3);
+        IntegerPair pair1Modulo2 = new IntegerPair(5, 3);
+        IntegerPair pair2Modulo1 = new IntegerPair(7, 6);
+
+        List<IntegerPair> integerpairs = new List<IntegerPair>{pair1Modulo1, pair1Modulo2, pair2Modulo1};
+
+        Test.startTest();
+            /**
+             * When
+             * the pairs are mapped by their modulo result and only the first entriy for each key is retained
+             */
+            Map<String, Object> mappedLeads2 = (Map<String, Object>)Utilities.sObjectsUtilities.mapObjectListByValueReaderResults(
+                integerpairs,
+                new ModValueReader(),
+                Utilities.MAP_RETAIN_MODE.RETAIN_FIRST, 
+                new Set<Utilities.MAP_OPTIONS>(),
+                new Set<String>()
+            );
+        Test.stopTest();
+
+        /**
+         * Then
+         * - pair (4,3) is mapped by value '1' (4 % 3 == 1)
+         * - pair (5,3) is mapped by value '2' (5 % 3 == 2) 
+         */
+        System.assert(mappedLeads2.containsKey('1'));
+        System.assertEquals(pair1Modulo1.getValueA(), ((IntegerPair)mappedLeads2.get('1')).getValueA());
+        System.assertEquals(pair1Modulo1.getValueB(), ((IntegerPair)mappedLeads2.get('1')).getValueB());
+        
+        System.assert(mappedLeads2.containsKey('2'));
+        System.assertEquals(pair1Modulo2.getValueA(), ((IntegerPair)mappedLeads2.get('2')).getValueA());
+        System.assertEquals(pair1Modulo2.getValueB(), ((IntegerPair)mappedLeads2.get('2')).getValueB());
+    }
+
+    @IsTest
+    static void mapObjectListByValueReaderResults_CanUseRetainLastMode() {
+        /**
+         * Given
+         * A List of IntegerPairs
+         */
+        IntegerPair pair1Modulo1 = new IntegerPair(4, 3);
+        IntegerPair pair1Modulo2 = new IntegerPair(5, 3);
+        IntegerPair pair2Modulo1 = new IntegerPair(7, 6);
+
+        List<IntegerPair> integerpairs = new List<IntegerPair>{pair1Modulo1, pair1Modulo2, pair2Modulo1};
+
+        Test.startTest();
+            /**
+             * When
+             * the pairs are mapped by their modulo result and only the first entriy for each key is retained
+             */
+            Map<String, Object> mappedLeads2 = (Map<String, Object>)Utilities.sObjectsUtilities.mapObjectListByValueReaderResults(
+                integerpairs,
+                new ModValueReader(),
+                Utilities.MAP_RETAIN_MODE.RETAIN_LAST, 
+                new Set<Utilities.MAP_OPTIONS>(),
+                new Set<String>()
+            );
+        Test.stopTest();
+
+        /**
+         * Then
+         * - pair (4,3) is mapped by value '1' (7 % 6 == 1)
+         * - pair (5,3) is mapped by value '2' (5 % 3 == 2) 
+         */
+        System.assert(mappedLeads2.containsKey('1'));
+        System.assertEquals(pair2Modulo1.getValueA(), ((IntegerPair)mappedLeads2.get('1')).getValueA());
+        System.assertEquals(pair2Modulo1.getValueB(), ((IntegerPair)mappedLeads2.get('1')).getValueB());
+        
+        System.assert(mappedLeads2.containsKey('2'));
+        System.assertEquals(pair1Modulo2.getValueA(), ((IntegerPair)mappedLeads2.get('2')).getValueA());
+        System.assertEquals(pair1Modulo2.getValueB(), ((IntegerPair)mappedLeads2.get('2')).getValueB());
+    }
 }
