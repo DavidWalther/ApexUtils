@@ -34,6 +34,17 @@ public class Utilities {
         Map<String, Object> mapSObjectListByValueReaderResults(List<SObject> sObjects, IValueReader valueReader, MAP_RETAIN_MODE retainingMode);
         // retainingMode: RETAIN_ALL, mapOptions: {}, keySet: {}
         Map<String, Object> mapSObjectListByValueReaderResults(List<SObject> sObjects, IValueReader valueReader);
+
+        /**
+         * @param objects A list of class instances to create a map for.
+         * @param valueReader An instance of IValueReader. It is used to read the mapping key for each entry in 'objects'.
+         * @param retainingMode the retaining mode to use RETAIN_FIRST, RETAIN_LAST, RETAIN_ALL
+         * @param mapOptions A Set of options to configure the map creation. Possible values are: KEY_IGNORE_NULL, KEY_INCLUDE_ONLY
+         * @param keySet A Set of keys to exlude or to retain. The keys are compared via String.valueOf
+         *
+         * @return A map of all entries in objects mapped by the key returned by valueReader.getValue. The Structure of the values depend on the reaining option.
+         */
+        Map<String, Object> mapObjectListByValueReaderResults(List<Object> objects, IValueReader valueReader, MAP_RETAIN_MODE retainingMode, Set<MAP_OPTIONS> mapOptions, Set<String> keySet);
     }
 
     //----------------------------
@@ -120,6 +131,73 @@ public class Utilities {
                         // check whether the List for the key already exists or not
                         if(alreadyMappedObjects == NULL) {
                             alreadyMappedObjects = new List<SObject>();
+                            result.put(key, alreadyMappedObjects);
+                        }
+                        alreadyMappedObjects.add(tempSObject);
+                    }
+                    return result;
+                }
+                when else {
+                    throw new SObjectUtilities_Exception('Retaining option is not implemented yet.');
+                }
+            }
+        }
+
+        public Map<String, Object> mapObjectListByValueReaderResults(List<Object> objects, IValueReader valueReader, MAP_RETAIN_MODE retainingMode, Set<MAP_OPTIONS> mapOptions, Set<String> keySet) {
+
+            //----------------------------
+            // Guardians
+            //----------------------------
+
+            if(objects == NULL) throw new SObjectUtilities_Exception('The list of objects to map must not be NULL.');
+            if(valueReader == NULL) throw new SObjectUtilities_Exception('An Instance of Utilities.IValueReader must be provided.');
+            if(retainingMode == NULL) throw new SObjectUtilities_Exception('The retaining mode must be provided.');
+            if(mapOptions == NULL) throw new SObjectUtilities_Exception('A set of mapOptions must be provided');
+            if(keySet == NULL) throw new SObjectUtilities_Exception('A set of keys to in-/exclude must be provided');
+
+            //----------------------------
+            // Business logic
+            //----------------------------
+
+            Boolean isKeyIgnoreNull = mapOptions.contains(MAP_OPTIONS.KEY_IGNORE_NULL);
+            Boolean isKeyIncludeOnly = mapOptions.contains(MAP_OPTIONS.KEY_INCLUDE_ONLY);
+
+            // Instead of checking the retainOption in every iteration we check only once
+            switch on retainingMode {
+                when RETAIN_FIRST {
+                    Map<String, Object> result = new Map<String, Object>();
+                    for(Object tempObject : objects) {
+                        String key = valueReader.getValue(tempObject);
+                        if(isKeyIgnoreNull && key == NULL) {continue;}
+                        if(isKeyIncludeOnly && !keySet.contains(String.valueOf(key))) {continue;}
+                        // only insert into map if key does not exist yet
+                        if(!result.containsKey(key)) {
+                            result.put(key, tempObject);
+                        }
+                    }
+                    return result;
+                }
+                when RETAIN_LAST {
+                    Map<String, Object> result = new Map<String, Object>();
+                    for(Object tempSObject : objects) {
+                        String key = valueReader.getValue(tempSObject);
+                        if(isKeyIgnoreNull && key == NULL) {continue;}
+                        if(isKeyIncludeOnly && !keySet.contains(String.valueOf(key))) {continue;}
+                        // insert into map no matter whether in object exist yet or not
+                        result.put(key, tempSObject);
+                    }
+                    return result;
+                }
+                when RETAIN_ALL {
+                    Map<String, List<Object>> result = new Map<String, List<Object>>();
+                    for(Object tempSObject : objects) {
+                        String key = valueReader.getValue(tempSObject);
+                        if(isKeyIgnoreNull && key == NULL) {continue;}
+                        if(isKeyIncludeOnly && !keySet.contains(String.valueOf(key))) {continue;}
+                        List<Object> alreadyMappedObjects = result.get(key);
+                        // check whether the List for the key already exists or not
+                        if(alreadyMappedObjects == NULL) {
+                            alreadyMappedObjects = new List<Object>();
                             result.put(key, alreadyMappedObjects);
                         }
                         alreadyMappedObjects.add(tempSObject);
