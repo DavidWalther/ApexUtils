@@ -191,6 +191,30 @@ public class Utilities {
         }
     }
 
+
+    //----------------------------
+    // MappingLogicFactory
+    //----------------------------
+
+    public class MappingLogicFactory {
+        public IMappingLogic getProduct(MAP_RETAIN_MODE retainingMode) {
+            switch on retainingMode {
+                when RETAIN_FIRST {
+                    return new MappingLogicSObjectRetainFirst();
+                }
+                when RETAIN_LAST {
+                    return new MappingLogicSObjectRetainLast();
+                }
+                when RETAIN_ALL {
+                    return new MappingLogicSObjectRetainAll();
+                }
+                when else {
+                    throw new SObjectUtilities_Exception('Retaining option is not implemented yet.');
+                }
+            }
+        }
+    }
+
     private interface IMappingLogic {
         Object execute(List<Object> objects, IValueReader valueReader, Set<MAP_OPTIONS> mapOptions, Set<String> keySet);
     }
@@ -250,25 +274,6 @@ public class Utilities {
                 result.put(key, tempSObject);
             }
             return result;
-        }
-    }
-
-    public class MappingLogicFactory {
-        public IMappingLogic getProduct(MAP_RETAIN_MODE retainingMode) {
-            switch on retainingMode {
-                when RETAIN_FIRST {
-                    return new MappingLogicSObjectRetainFirst();
-                }
-                when RETAIN_LAST {
-                    return new MappingLogicSObjectRetainLast();
-                }
-                when RETAIN_ALL {
-                    return new MappingLogicSObjectRetainAll();
-                }
-                when else {
-                    throw new SObjectUtilities_Exception('Retaining option is not implemented yet.');
-                }
-            }
         }
     }
 }
