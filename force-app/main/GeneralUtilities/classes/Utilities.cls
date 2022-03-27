@@ -119,11 +119,10 @@ public class Utilities {
                     return result;
                 }
                 when RETAIN_ALL {
-                    Map<String, List<SObject>> result = new Map<String, List<SObject>>();
                     IMappingLogic mappingLogic = new MappingLogicSObjectRetainAll();
-                    
                     Map<String, List<Object>> tempMap = (Map<String, List<Object>>)mappingLogic.execute(sObjects, valueReader, mapOptions, keySet); 
                     
+                    Map<String, List<SObject>> result = new Map<String, List<SObject>>();
                     for(String mapKey : tempMap.keySet()) {
                         List<SObject> keyList = new List<SObject>();
                         for(Object tmpObj : tempMap.get(mapKey)) {
@@ -161,33 +160,15 @@ public class Utilities {
             // Instead of checking the retainOption in every iteration we check only once
             switch on retainingMode {
                 when RETAIN_FIRST {
-                    Map<String, Object> result = new Map<String, Object>();
-                    for(Object tempObject : objects) {
-                        String key = valueReader.getValue(tempObject);
-                        if(isKeyIgnoreNull && key == NULL) {continue;}
-                        if(isKeyIncludeOnly && !keySet.contains(String.valueOf(key))) {continue;}
-                        // only insert into map if key does not exist yet
-                        if(!result.containsKey(key)) {
-                            result.put(key, tempObject);
-                        }
-                    }
-                    return result;
+                    IMappingLogic mappingLogic = new MappingLogicSObjectRetainFirst();
+                    return (Map<String, Object>)mappingLogic.execute(objects, valueReader, mapOptions, keySet); 
                 }
                 when RETAIN_LAST {
-                    Map<String, Object> result = new Map<String, Object>();
-                    for(Object tempSObject : objects) {
-                        String key = valueReader.getValue(tempSObject);
-                        if(isKeyIgnoreNull && key == NULL) {continue;}
-                        if(isKeyIncludeOnly && !keySet.contains(String.valueOf(key))) {continue;}
-                        // insert into map no matter whether in object exist yet or not
-                        result.put(key, tempSObject);
-                    }
-                    return result;
+                    IMappingLogic mappingLogic = new MappingLogicSObjectRetainLast();
+                    return (Map<String, Object>)mappingLogic.execute(objects, valueReader, mapOptions, keySet); 
                 }
                 when RETAIN_ALL {
-                    Map<String, List<SObject>> result = new Map<String, List<SObject>>();
                     IMappingLogic mappingLogic = new MappingLogicSObjectRetainAll();
-                    
                     return (Map<String, List<Object>>)mappingLogic.execute(objects, valueReader, mapOptions, keySet); 
                 }
                 when else {
