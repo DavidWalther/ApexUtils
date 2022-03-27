@@ -117,6 +117,56 @@ public with sharing class UtilitiesTest {
         System.assertEquals(lead5.Id, mappedLeads.get(TESTCOMPANY_3_NAME).get(0).Id);
     }
 
+
+    @IsTest
+    private static void testMappingOfSObjectByFieldWithOptionRetainFirst() {
+        String TESTCOMPANY_1_NAME = 'TestCompany1';
+        String TESTCOMPANY_2_NAME = 'TestCompany2';
+        String TESTCOMPANY_3_NAME = 'TestCompany3';
+        /**
+        * Given
+        * A list of leads with filled company fields
+        */
+        Lead lead1 = new Lead(
+            Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
+        Lead lead2 = new Lead(
+            Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
+        Lead lead3 = new Lead(
+            Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_2_NAME);
+        Lead lead4 = new Lead(
+            Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_2_NAME);
+        Lead lead5 = new Lead(
+            Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_3_NAME);
+        Lead lead6 = new Lead(
+            Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
+
+        List<Lead> leadList = new List<Lead>{lead1, lead2, lead3, lead4, lead5, lead6};
+
+        Test.startTest();
+        /**
+        * When
+        * The map method of sobjectUtilities is called for the leadList and the company field
+        */
+        Map<String, SObject> mappedLeads = (Map<String, SObject>)Utilities.sObjectsUtilities.mapSObjectListByValueReaderResults(
+            leadList, new LeadCompanyReader(), Utilities.MAP_RETAIN_MODE.RETAIN_FIRST);
+        Test.stopTest();
+
+        System.assertEquals(3, mappedLeads.size());
+        System.assertEquals(true, mappedLeads.containsKey(TESTCOMPANY_1_NAME));
+        System.assertEquals(true, mappedLeads.containsKey(TESTCOMPANY_2_NAME));
+        System.assertEquals(true, mappedLeads.containsKey(TESTCOMPANY_3_NAME));
+
+        System.assert(mappedLeads.get(TESTCOMPANY_1_NAME) instanceOf Lead);
+        System.assertEquals(lead1.Id, mappedLeads.get(TESTCOMPANY_1_NAME).Id);
+
+        System.assert(mappedLeads.get(TESTCOMPANY_2_NAME) instanceOf Lead);
+        System.assertEquals(lead3.Id, mappedLeads.get(TESTCOMPANY_2_NAME).Id);
+
+        System.assert(mappedLeads.get(TESTCOMPANY_3_NAME) instanceOf Lead);
+        System.assertEquals(lead5.Id, mappedLeads.get(TESTCOMPANY_3_NAME).Id);
+    }
+
+
     @IsTest
     private static void testMappingOfSObjectByFieldWithOptionRetainLast() {
         String TESTCOMPANY_1_NAME = 'TestCompany1';
