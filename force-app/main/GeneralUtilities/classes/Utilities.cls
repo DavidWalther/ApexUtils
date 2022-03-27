@@ -99,8 +99,9 @@ public class Utilities {
 
             switch on retainingMode {
                 when RETAIN_FIRST {
-                    IMappingLogic mappingLogic = new MappingLogicSObjectRetainFirst();
-                    Map<String, Object> tempMap = (Map<String, Object>)mappingLogic.execute(sObjects, valueReader, mapOptions, keySet);
+                    Map<String, Object> tempMap = (Map<String, Object>)new MappingLogicFactory()
+                        .getProduct(retainingMode)
+                        .execute(sObjects, valueReader, mapOptions, keySet);
                     
                     Map<String, SObject> result = new Map<String, SObject>();
                     for(String mapKey : tempMap.keySet()) {
@@ -109,8 +110,9 @@ public class Utilities {
                     return result;
                 }
                 when RETAIN_LAST {
-                    IMappingLogic mappingLogic = new MappingLogicSObjectRetainLast();
-                    Map<String, Object> tempMap = (Map<String, Object>)mappingLogic.execute(sObjects, valueReader, mapOptions, keySet);
+                    Map<String, Object> tempMap = (Map<String, Object>)new MappingLogicFactory()
+                        .getProduct(retainingMode)
+                        .execute(sObjects, valueReader, mapOptions, keySet);
 
                     Map<String, SObject> result = new Map<String, SObject>();
                     for(String mapKey : tempMap.keySet()) {
@@ -119,8 +121,9 @@ public class Utilities {
                     return result;
                 }
                 when RETAIN_ALL {
-                    IMappingLogic mappingLogic = new MappingLogicSObjectRetainAll();
-                    Map<String, List<Object>> tempMap = (Map<String, List<Object>>)mappingLogic.execute(sObjects, valueReader, mapOptions, keySet); 
+                    Map<String, List<Object>> tempMap = (Map<String, List<Object>>)new MappingLogicFactory()
+                        .getProduct(retainingMode)
+                        .execute(sObjects, valueReader, mapOptions, keySet); 
                     
                     Map<String, List<SObject>> result = new Map<String, List<SObject>>();
                     for(String mapKey : tempMap.keySet()) {
@@ -160,16 +163,19 @@ public class Utilities {
             // Instead of checking the retainOption in every iteration we check only once
             switch on retainingMode {
                 when RETAIN_FIRST {
-                    IMappingLogic mappingLogic = new MappingLogicSObjectRetainFirst();
-                    return (Map<String, Object>)mappingLogic.execute(objects, valueReader, mapOptions, keySet); 
+                    return (Map<String, Object>)new MappingLogicFactory()
+                        .getProduct(retainingMode)
+                        .execute(objects, valueReader, mapOptions, keySet); 
                 }
                 when RETAIN_LAST {
-                    IMappingLogic mappingLogic = new MappingLogicSObjectRetainLast();
-                    return (Map<String, Object>)mappingLogic.execute(objects, valueReader, mapOptions, keySet); 
+                    return (Map<String, Object>)new MappingLogicFactory()
+                        .getProduct(retainingMode)
+                        .execute(objects, valueReader, mapOptions, keySet); 
                 }
                 when RETAIN_ALL {
-                    IMappingLogic mappingLogic = new MappingLogicSObjectRetainAll();
-                    return (Map<String, List<Object>>)mappingLogic.execute(objects, valueReader, mapOptions, keySet); 
+                    return (Map<String, List<Object>>)new MappingLogicFactory()
+                        .getProduct(retainingMode)
+                        .execute(objects, valueReader, mapOptions, keySet); 
                 }
                 when else {
                     throw new SObjectUtilities_Exception('Retaining option is not implemented yet.');
