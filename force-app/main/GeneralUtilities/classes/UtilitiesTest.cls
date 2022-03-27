@@ -1,6 +1,16 @@
 @IsTest
 public with sharing class UtilitiesTest {
+
+    //----------------------------
+    // Mapping of SObjects
+    //----------------------------
     
+    private class LeadCompanyReader extends Utilities.FieldValueReader {
+        public LeadCompanyReader() {
+            super(Lead.Company);
+        }
+    }
+
     @IsTest
     static void mapSObjectListByFieldValuesCreatesPropperMap() {
         String TESTCOMPANY_1_NAME = 'TestCompany1';
@@ -106,6 +116,56 @@ public with sharing class UtilitiesTest {
         System.assertEquals(lead4.Id, mappedLeads.get(TESTCOMPANY_2_NAME).get(1).Id);
         System.assertEquals(lead5.Id, mappedLeads.get(TESTCOMPANY_3_NAME).get(0).Id);
     }
+
+
+    @IsTest
+    private static void testMappingOfSObjectByFieldWithOptionRetainFirst() {
+        String TESTCOMPANY_1_NAME = 'TestCompany1';
+        String TESTCOMPANY_2_NAME = 'TestCompany2';
+        String TESTCOMPANY_3_NAME = 'TestCompany3';
+        /**
+        * Given
+        * A list of leads with filled company fields
+        */
+        Lead lead1 = new Lead(
+            Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
+        Lead lead2 = new Lead(
+            Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
+        Lead lead3 = new Lead(
+            Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_2_NAME);
+        Lead lead4 = new Lead(
+            Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_2_NAME);
+        Lead lead5 = new Lead(
+            Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_3_NAME);
+        Lead lead6 = new Lead(
+            Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
+
+        List<Lead> leadList = new List<Lead>{lead1, lead2, lead3, lead4, lead5, lead6};
+
+        Test.startTest();
+        /**
+        * When
+        * The map method of sobjectUtilities is called for the leadList and the company field
+        */
+        Map<String, SObject> mappedLeads = (Map<String, SObject>)Utilities.sObjectsUtilities.mapSObjectListByValueReaderResults(
+            leadList, new LeadCompanyReader(), Utilities.MAP_RETAIN_MODE.RETAIN_FIRST);
+        Test.stopTest();
+
+        System.assertEquals(3, mappedLeads.size());
+        System.assertEquals(true, mappedLeads.containsKey(TESTCOMPANY_1_NAME));
+        System.assertEquals(true, mappedLeads.containsKey(TESTCOMPANY_2_NAME));
+        System.assertEquals(true, mappedLeads.containsKey(TESTCOMPANY_3_NAME));
+
+        System.assert(mappedLeads.get(TESTCOMPANY_1_NAME) instanceOf Lead);
+        System.assertEquals(lead1.Id, mappedLeads.get(TESTCOMPANY_1_NAME).Id);
+
+        System.assert(mappedLeads.get(TESTCOMPANY_2_NAME) instanceOf Lead);
+        System.assertEquals(lead3.Id, mappedLeads.get(TESTCOMPANY_2_NAME).Id);
+
+        System.assert(mappedLeads.get(TESTCOMPANY_3_NAME) instanceOf Lead);
+        System.assertEquals(lead5.Id, mappedLeads.get(TESTCOMPANY_3_NAME).Id);
+    }
+
 
     @IsTest
     private static void testMappingOfSObjectByFieldWithOptionRetainLast() {
@@ -227,9 +287,164 @@ public with sharing class UtilitiesTest {
         System.assertEquals(NULL, exception_ToCheck);
     }
 
-    private class LeadCompanyReader extends Utilities.FieldValueReader {
-        public LeadCompanyReader() {
-            super(Lead.Company);
+    //----------------------------
+    // Mapping of Objects
+    //----------------------------
+
+    /**
+     * This is a simple example class to be mapped. It's a simple pair of integer values
+     */
+    private class IntegerPair {
+        private Integer valueA;
+        private Integer valueB;
+
+        public IntegerPair(Integer valueA, Integer valueB) {
+            this.valueA = valueA;
+            this.valueB = valueB;
         }
+
+        public Integer getValueA() {return this.valueA;}
+        public Integer getValueB() {return this.valueB;}
+    }
+
+    /**
+     * this reader returns the result of the modulo function as mapping key
+     */
+    private class ModValueReader implements IValueReader {
+        public String getValue(Object objectToGetValueFrom) {
+            if(objectToGetValueFrom instanceOf IntegerPair) {
+                IntegerPair pairInstance = (IntegerPair)objectToGetValueFrom;
+                return String.valueOf(Math.mod(
+                    pairInstance.getValueA(),
+                    pairInstance.getValueB()
+                ));
+            }
+            return NULL;
+        }
+    }
+
+    @IsTest
+    static void mapObjectListByValueReaderResults_CanMapClassInstances() {
+        /**
+         * Given
+         * A List of IntegerPairs
+         */
+        IntegerPair pair1Modulo1 = new IntegerPair(4, 3);
+        IntegerPair pair1Modulo2 = new IntegerPair(5, 3);
+        IntegerPair pair2Modulo1 = new IntegerPair(7, 6);
+
+        List<IntegerPair> integerpairs = new List<IntegerPair>{pair1Modulo1, pair1Modulo2, pair2Modulo1};
+
+        Test.startTest();
+            /**
+             * When
+             * the pairs are mapped by their modulo result and all entries are kept in map
+             */
+            Map<String, List<Object>> mappedLeads2 = (Map<String, List<Object>>)Utilities.sObjectsUtilities.mapObjectListByValueReaderResults(
+                integerpairs,
+                new ModValueReader(),
+                Utilities.MAP_RETAIN_MODE.RETAIN_ALL, 
+                new Set<Utilities.MAP_OPTIONS>(),
+                new Set<String>()
+            );
+        Test.stopTest();
+
+        /**
+         * Then
+         * - pairs (4,3) and (7,6) are mapped by value '1' (4 % 3 == 1 and 7 % 6 == 1) 
+         * - pair (5,3) is mapped by value '2' (5 % 3 == 2) 
+         */
+        System.assertEquals(2, mappedLeads2.size());
+        System.assert(mappedLeads2.containsKey('1'));
+        System.assertEquals(2, mappedLeads2.get('1').size());
+        System.assertEquals(pair1Modulo1.getValueA(), ((IntegerPair)mappedLeads2.get('1')[0]).getValueA());
+        System.assertEquals(pair1Modulo1.getValueB(), ((IntegerPair)mappedLeads2.get('1')[0]).getValueB());
+        System.assertEquals(pair2Modulo1.getValueA(), ((IntegerPair)mappedLeads2.get('1')[1]).getValueA());
+        System.assertEquals(pair2Modulo1.getValueB(), ((IntegerPair)mappedLeads2.get('1')[1]).getValueB());
+        
+        System.assert(mappedLeads2.containsKey('2'));
+        System.assertEquals(1, mappedLeads2.get('2').size());
+        System.assertEquals(pair1Modulo2.getValueA(), ((IntegerPair)mappedLeads2.get('2')[0]).getValueA());
+        System.assertEquals(pair1Modulo2.getValueB(), ((IntegerPair)mappedLeads2.get('2')[0]).getValueB());
+    }
+
+    @IsTest
+    static void mapObjectListByValueReaderResults_CanUseRetainFirstMode() {
+        /**
+         * Given
+         * A List of IntegerPairs
+         */
+        IntegerPair pair1Modulo1 = new IntegerPair(4, 3);
+        IntegerPair pair1Modulo2 = new IntegerPair(5, 3);
+        IntegerPair pair2Modulo1 = new IntegerPair(7, 6);
+
+        List<IntegerPair> integerpairs = new List<IntegerPair>{pair1Modulo1, pair1Modulo2, pair2Modulo1};
+
+        Test.startTest();
+            /**
+             * When
+             * the pairs are mapped by their modulo result and only the first entriy for each key is retained
+             */
+            Map<String, Object> mappedLeads2 = (Map<String, Object>)Utilities.sObjectsUtilities.mapObjectListByValueReaderResults(
+                integerpairs,
+                new ModValueReader(),
+                Utilities.MAP_RETAIN_MODE.RETAIN_FIRST, 
+                new Set<Utilities.MAP_OPTIONS>(),
+                new Set<String>()
+            );
+        Test.stopTest();
+
+        /**
+         * Then
+         * - pair (4,3) is mapped by value '1' (4 % 3 == 1)
+         * - pair (5,3) is mapped by value '2' (5 % 3 == 2) 
+         */
+        System.assert(mappedLeads2.containsKey('1'));
+        System.assertEquals(pair1Modulo1.getValueA(), ((IntegerPair)mappedLeads2.get('1')).getValueA());
+        System.assertEquals(pair1Modulo1.getValueB(), ((IntegerPair)mappedLeads2.get('1')).getValueB());
+        
+        System.assert(mappedLeads2.containsKey('2'));
+        System.assertEquals(pair1Modulo2.getValueA(), ((IntegerPair)mappedLeads2.get('2')).getValueA());
+        System.assertEquals(pair1Modulo2.getValueB(), ((IntegerPair)mappedLeads2.get('2')).getValueB());
+    }
+
+    @IsTest
+    static void mapObjectListByValueReaderResults_CanUseRetainLastMode() {
+        /**
+         * Given
+         * A List of IntegerPairs
+         */
+        IntegerPair pair1Modulo1 = new IntegerPair(4, 3);
+        IntegerPair pair1Modulo2 = new IntegerPair(5, 3);
+        IntegerPair pair2Modulo1 = new IntegerPair(7, 6);
+
+        List<IntegerPair> integerpairs = new List<IntegerPair>{pair1Modulo1, pair1Modulo2, pair2Modulo1};
+
+        Test.startTest();
+            /**
+             * When
+             * the pairs are mapped by their modulo result and only the first entriy for each key is retained
+             */
+            Map<String, Object> mappedLeads2 = (Map<String, Object>)Utilities.sObjectsUtilities.mapObjectListByValueReaderResults(
+                integerpairs,
+                new ModValueReader(),
+                Utilities.MAP_RETAIN_MODE.RETAIN_LAST, 
+                new Set<Utilities.MAP_OPTIONS>(),
+                new Set<String>()
+            );
+        Test.stopTest();
+
+        /**
+         * Then
+         * - pair (4,3) is mapped by value '1' (7 % 6 == 1)
+         * - pair (5,3) is mapped by value '2' (5 % 3 == 2) 
+         */
+        System.assert(mappedLeads2.containsKey('1'));
+        System.assertEquals(pair2Modulo1.getValueA(), ((IntegerPair)mappedLeads2.get('1')).getValueA());
+        System.assertEquals(pair2Modulo1.getValueB(), ((IntegerPair)mappedLeads2.get('1')).getValueB());
+        
+        System.assert(mappedLeads2.containsKey('2'));
+        System.assertEquals(pair1Modulo2.getValueA(), ((IntegerPair)mappedLeads2.get('2')).getValueA());
+        System.assertEquals(pair1Modulo2.getValueB(), ((IntegerPair)mappedLeads2.get('2')).getValueB());
     }
 }
