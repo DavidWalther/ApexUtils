@@ -5,12 +5,15 @@ public with sharing class UtilitiesTest {
     // Mapping of SObjects
     //----------------------------
     
+    /**
+     * This extension of the FieldValueReader reads the Lead.Company field for a mapping key
+     */
     private class LeadCompanyReader extends Utilities.FieldValueReader {
         public LeadCompanyReader() {
             super(Lead.Company);
         }
     }
-    
+
     @IsTest
     static void mapUtil_SObjects_RetainMode_RetainAll() {
         String TESTCOMPANY_1_NAME = 'TestCompany1';
@@ -183,8 +186,8 @@ public with sharing class UtilitiesTest {
             if(objectToGetValueFrom instanceOf IntegerPair) {
                 IntegerPair pairInstance = (IntegerPair)objectToGetValueFrom;
                 return String.valueOf(Math.mod(
-                pairInstance.getValueA(),
-                pairInstance.getValueB()
+                    pairInstance.getValueA(),
+                    pairInstance.getValueB()
                 ));
             }
             return NULL;
@@ -316,6 +319,89 @@ public with sharing class UtilitiesTest {
         System.assertEquals(pair1Modulo2.getValueB(), ((IntegerPair)mappedLeads2.get('2')).getValueB());
     }
     
+//----------------------------
+// Typecast behavior
+//----------------------------
+ 
+    @IsTest
+    static void TypeCastFromObjectToSObjectListCausesNoException() {
+        String TESTCOMPANY_1_NAME = 'TestCompany1';
+        
+        Lead lead1 = new Lead(
+        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
+        Lead lead2 = new Lead(
+        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
+        
+        List<Lead> leadList = new List<Lead>{lead1, lead2};
+        
+        Test.startTest();
+        System.Exception exception_ToCheck = NULL;
+        try {
+            Map<String, List<Lead>> mappedLeads2 = (Map<String, List<Lead>>)Utilities.sObjectsUtilities.mapSObjectListByValueReaderResults(
+            leadList, new LeadCompanyReader());
+        } catch(System.Exception exc) {
+            exception_ToCheck = exc;
+        }
+        Test.stopTest();
+        
+        System.assertEquals(NULL, exception_ToCheck);
+    }
+
+    @IsTest
+    static void TypeCastFromObjectToSingleSObjectCausesException() {
+        /**
+         * Given
+         * A list of leads to map
+         */
+        String TESTCOMPANY_1_NAME = 'TestCompany1';
+        Lead lead1 = new Lead(
+        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
+        
+        List<Lead> leadList = new List<Lead>{lead1};
+        
+        /**
+         * When
+         * 1. the result is casted directly
+         * 2. an entry of the map is casted
+         */
+        Test.startTest();
+        // 1
+        System.Exception exception_direct_Conversion = NULL;
+        try {
+            Map<String, Lead> typecastedLeadMap = (Map<String, Lead>)Utilities.sObjectsUtilities.mapSObjectListByValueReaderResults(
+                leadList, new LeadCompanyReader(), Utilities.MAP_RETAIN_MODE.RETAIN_LAST);
+        } catch(System.Exception exc) {
+            exception_direct_Conversion = exc;
+        }
+
+        // 2
+        Lead leadToCheck;
+        System.Exception exception_indirect_Conversion = NULL;
+        try {
+            Map<String, Object> notTypecastedLeadMap = Utilities.sObjectsUtilities.mapSObjectListByValueReaderResults(
+                leadList, new LeadCompanyReader(), Utilities.MAP_RETAIN_MODE.RETAIN_LAST);
+            leadToCheck = (Lead)notTypecastedLeadMap.values().get(0);
+        } catch (System.Exception exc) {
+            exception_indirect_Conversion = exc;
+        }
+        Test.stopTest();
+        /**
+         * Then
+         * 1. casting the map fails
+         * 2. casting an entry succeeds
+         */
+
+        // 1
+        System.assertNotEquals(NULL, exception_direct_Conversion);
+        System.assert(exception_direct_Conversion instanceOf System.TypeException);
+        System.assertEquals('Invalid conversion from runtime type Map<String,SObject> to Map<String,Lead>', exception_direct_Conversion.getMessage());
+
+        // 2
+        System.assertEquals(NULL, exception_indirect_Conversion);
+        System.assertNotEquals(NULL, leadToCheck);
+        System.assertEquals(lead1.Id, leadToCheck.Id);
+    }
+
     //----------------------------
     // Tests for mapping considerations
     //----------------------------
@@ -376,78 +462,5 @@ public with sharing class UtilitiesTest {
         System.assertEquals(lead3.Id, lead3_ToCheck.Id);
         lead3.LastName = TESTCOMPANY_3_NAME; // setting this value AFTER the mapping was done. if reference is not kept the mapped value won't change.
         System.assertEquals(lead3.LastName, lead3_ToCheck.LastName, 'The refence was not kept during mapping.');
-    }
-    
-    @IsTest
-    static void mappingMethodTypeCastFromObjectToListOfSObjectsIsFine() {
-        String TESTCOMPANY_1_NAME = 'TestCompany1';
-        
-        Lead lead1 = new Lead(
-        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
-        Lead lead2 = new Lead(
-        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
-        
-        List<Lead> leadList = new List<Lead>{lead1, lead2};
-        
-        Test.startTest();
-        System.Exception exception_ToCheck = NULL;
-        try {
-            Map<String, List<Lead>> mappedLeads2 = (Map<String, List<Lead>>)Utilities.sObjectsUtilities.mapSObjectListByValueReaderResults(
-            leadList, new LeadCompanyReader());
-        } catch(System.Exception exc) {
-            exception_ToCheck = exc;
-        }
-        Test.stopTest();
-        
-        System.assertEquals(NULL, exception_ToCheck);
-    }
-    
-    @IsTest
-    static void mappingMethodTypeCastFromObjectToSObjectCausesException() {
-        String TESTCOMPANY_1_NAME = 'TestCompany1';
-        Lead lead1 = new Lead(
-        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
-        
-        List<Lead> leadList = new List<Lead>{lead1};
-        
-        Test.startTest();
-        System.Exception exception_ToCheck = NULL;
-        try {
-            Map<String, Lead> mappedLeads2 = (Map<String, Lead>)Utilities.sObjectsUtilities.mapSObjectListByValueReaderResults(
-            leadList, new LeadCompanyReader(), Utilities.MAP_RETAIN_MODE.RETAIN_LAST);
-        } catch(System.Exception exc) {
-            exception_ToCheck = exc;
-        }
-        Test.stopTest();
-        
-        System.assertNotEquals(NULL, exception_ToCheck);
-        System.assert(exception_ToCheck instanceOf System.TypeException);
-        System.assertEquals('Invalid conversion from runtime type Map<String,SObject> to Map<String,Lead>', exception_ToCheck.getMessage());
-    }
-    
-    @IsTest
-    static void mappingMethodResultCanBeTransformedIntoOriginalType() {
-        String TESTCOMPANY_1_NAME = 'TestCompany1';
-        Lead lead1 = new Lead(
-        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
-        
-        List<Lead> leadList = new List<Lead>{lead1};
-        
-        Lead leadToCheck = NULL;
-        System.Exception exception_ToCheck = NULL;
-        
-        Test.startTest();
-        try {
-            Map<String, Object> mappedLeads2 = Utilities.sObjectsUtilities.mapSObjectListByValueReaderResults(
-            leadList, new LeadCompanyReader(), Utilities.MAP_RETAIN_MODE.RETAIN_LAST);
-            leadToCheck = (Lead)mappedLeads2.values().get(0);
-        } catch(System.Exception exc) {
-            exception_ToCheck = exc;
-        }
-        Test.stopTest();
-        
-        System.assertEquals(NULL, exception_ToCheck);
-        System.assertNotEquals(NULL, leadToCheck);
-        System.assertEquals(lead1.Id, leadToCheck.Id);
-    }    
+    }  
 }
