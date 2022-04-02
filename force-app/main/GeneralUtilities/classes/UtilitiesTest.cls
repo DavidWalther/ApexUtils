@@ -266,7 +266,8 @@ public with sharing class UtilitiesTest {
 
     @IsTest
     static void mappingMethodTypeCastFromObjectToListOfSObjectsIsFine() {
-     String TESTCOMPANY_1_NAME = 'TestCompany1';
+        String TESTCOMPANY_1_NAME = 'TestCompany1';
+
         Lead lead1 = new Lead(
             Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
         Lead lead2 = new Lead(
@@ -324,7 +325,7 @@ public with sharing class UtilitiesTest {
     }
 
     @IsTest
-    static void mapObjectListByValueReaderResults_CanMapClassInstances() {
+    static void mapObjectListByValueReaderResults_CanMapClassInstances_RetainAll() {
         /**
          * Given
          * A List of IntegerPairs
@@ -369,7 +370,7 @@ public with sharing class UtilitiesTest {
     }
 
     @IsTest
-    static void mapObjectListByValueReaderResults_CanUseRetainFirstMode() {
+    static void mapObjectListByValueReaderResults_CanMapClassInstances_RetainFirst() {
         /**
          * Given
          * A List of IntegerPairs
@@ -409,7 +410,7 @@ public with sharing class UtilitiesTest {
     }
 
     @IsTest
-    static void mapObjectListByValueReaderResults_CanUseRetainLastMode() {
+    static void mapObjectListByValueReaderResults_CanMapClassInstances_RetainLast() {
         /**
          * Given
          * A List of IntegerPairs
