@@ -11,8 +11,6 @@ public class Utilities {
 
     public enum MAP_RETAIN_MODE {RETAIN_FIRST, RETAIN_LAST, RETAIN_ALL}
 
-    // TODO: add option for exclude keys.
-    // TODO: what about including and excluding at the same time? extra parameter for secound set of keys or structured parameter?
     public enum MAP_OPTIONS {KEY_IGNORE_NULL, KEY_INCLUDE_ONLY}
 
     public interface ISObjectMappingUtility {
@@ -33,16 +31,6 @@ public class Utilities {
         Map<String, Object> mapSObjectListByValueReaderResults(List<SObject> sObjects, IValueReader valueReader, MAP_RETAIN_MODE retainingMode);
         // retainingMode: RETAIN_ALL, mapOptions: {}, keySet: {}
         Map<String, Object> mapSObjectListByValueReaderResults(List<SObject> sObjects, IValueReader valueReader);
-
-        /**
-         * @param objects A list of class instances to create a map for.
-         * @param valueReader An instance of IValueReader. It is used to read the mapping key for each entry in 'objects'.
-         * @param retainingMode the retaining mode to use RETAIN_FIRST, RETAIN_LAST, RETAIN_ALL
-         * @param mapOptions A Set of options to configure the map creation. Possible values are: KEY_IGNORE_NULL, KEY_INCLUDE_ONLY
-         * @param keySet A Set of keys to exlude or to retain. The keys are compared via String.valueOf
-         *
-         * @return A map of all entries in objects mapped by the key returned by valueReader.getValue. The Structure of the values depend on the reaining option.
-         */
     }
 
     public interface IObjectMappingUtility {
@@ -107,44 +95,48 @@ public class Utilities {
                 when RETAIN_FIRST {
                     Map<String, Object> tempMap = (Map<String, Object>)new MappingLogicFactory()
                         .getProduct(retainingMode)
-                        .execute(sObjects, valueReader, mapOptions, keySet);
+                        .execute(sObjects, valueReader, mapOptions, keySet); 
                     
-                    Map<String, SObject> result = new Map<String, SObject>();
-                    for(String mapKey : tempMap.keySet()) {
-                        result.put(mapKey, (SObject)tempMap.get(mapKey));
-                    }
-                    return result;
+                    return this.convertObjectMapToSObjectMap(tempMap);
                 }
                 when RETAIN_LAST {
                     Map<String, Object> tempMap = (Map<String, Object>)new MappingLogicFactory()
                         .getProduct(retainingMode)
-                        .execute(sObjects, valueReader, mapOptions, keySet);
-
-                    Map<String, SObject> result = new Map<String, SObject>();
-                    for(String mapKey : tempMap.keySet()) {
-                        result.put(mapKey, (SObject)tempMap.get(mapKey));
-                    }
-                    return result;
+                        .execute(sObjects, valueReader, mapOptions, keySet); 
+                    
+                    return this.convertObjectMapToSObjectMap(tempMap);
                 }
                 when RETAIN_ALL {
                     Map<String, List<Object>> tempMap = (Map<String, List<Object>>)new MappingLogicFactory()
                         .getProduct(retainingMode)
                         .execute(sObjects, valueReader, mapOptions, keySet); 
                     
-                    Map<String, List<SObject>> result = new Map<String, List<SObject>>();
-                    for(String mapKey : tempMap.keySet()) {
-                        List<SObject> keyList = new List<SObject>();
-                        for(Object tmpObj : tempMap.get(mapKey)) {
-                            keyList.add((SObject)tmpObj);
-                        }
-                        result.put(mapKey, keyList);
-                    }
-                    return result;
+                    return this.convertObjectMapToSObjectMap(tempMap);
                 }
                 when else {
                     throw new SObjectMappingUtility_Exception('Retaining option is not implemented yet.');
                 }
             }
+        }
+
+        private Map<String,SObject> convertObjectMapToSObjectMap(Map<String, Object> tempMap) {
+            Map<String, SObject> result = new Map<String, SObject>();
+            for(String mapKey : tempMap.keySet()) {
+                result.put(mapKey, (SObject)tempMap.get(mapKey));
+            }
+            return result;
+        }
+
+        private Map<String, List<SObject>> convertObjectMapToSObjectMap(Map<String, List<Object>> tempMap) {
+            Map<String, List<SObject>> result = new Map<String, List<SObject>>();
+            for(String mapKey : tempMap.keySet()) {
+                List<SObject> keyList = new List<SObject>();
+                for(Object tmpObj : tempMap.get(mapKey)) {
+                    keyList.add((SObject)tmpObj);
+                }
+                result.put(mapKey, keyList);
+            }
+            return result;
         }
     }
     
