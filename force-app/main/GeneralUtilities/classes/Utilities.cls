@@ -15,8 +15,6 @@ public class Utilities {
     public enum MAP_OPTIONS {KEY_IGNORE_NULL, KEY_INCLUDE_ONLY}
 
     public interface ISObjectUtilities {
-        Map<String, SObject> mapSObjectListByFieldValues(List<SObject> sObjects, SObjectField field);
-
         /**
          * @param sObjects A list of SObjects to create a map for.
          * @param valueReader An instance of IValueReader. It is used to read the mapping key for each entry in 'sObjects'.
@@ -59,10 +57,6 @@ public class Utilities {
      * store it in a static variable.
      */
     private class SObjectUtilities implements ISObjectUtilities {
-
-        public Map<String, SObject> mapSObjectListByFieldValues(List<SObject> sObjects, SObjectField field) {
-            return (Map<String, SObject>)this.mapSObjectListByValueReaderResults(sObjects, new FieldValueReader(field), MAP_RETAIN_MODE.RETAIN_LAST);
-        }
 
         public Map<String, Object> mapSObjectListByValueReaderResults(List<SObject> sObjects, IValueReader valueReader) {
             return this.mapSObjectListByValueReaderResults(sObjects, valueReader, MAP_RETAIN_MODE.RETAIN_ALL, new Set<MAP_OPTIONS>(), new Set<String>());
