@@ -3,6 +3,7 @@ public class Utilities {
     // public properties
     //----------------------------
     public static ISObjectMappingUtility sObjectsUtilities {get {return new SObjectMappingUtility();} private set;}
+    public static IObjectMappingUtility objectsUtilities {get {return new ObjectMappingUtility();} private set;}
 
     //----------------------------
     // public utility interfaces for quick overview of what can be accessed via properties
@@ -42,6 +43,18 @@ public class Utilities {
          *
          * @return A map of all entries in objects mapped by the key returned by valueReader.getValue. The Structure of the values depend on the reaining option.
          */
+    }
+
+    public interface IObjectMappingUtility {
+        /**
+         * @param objects A list of class instances to create a map for.
+         * @param valueReader An instance of IValueReader. It is used to read the mapping key for each entry in 'objects'.
+         * @param retainingMode the retaining mode to use RETAIN_FIRST, RETAIN_LAST, RETAIN_ALL
+         * @param mapOptions A Set of options to configure the map creation. Possible values are: KEY_IGNORE_NULL, KEY_INCLUDE_ONLY
+         * @param keySet A Set of keys to exlude or to retain. The keys are compared via String.valueOf
+         *
+         * @return A map of all entries in objects mapped by the key returned by valueReader.getValue. The Structure of the values depend on the reaining option.
+         */
         Map<String, Object> mapObjectListByValueReaderResults(List<Object> objects, IValueReader valueReader, MAP_RETAIN_MODE retainingMode, Set<MAP_OPTIONS> mapOptions, Set<String> keySet);
     }
 
@@ -57,7 +70,6 @@ public class Utilities {
      * store it in a static variable.
      */
     private class SObjectMappingUtility implements ISObjectMappingUtility {
-
         public Map<String, Object> mapSObjectListByValueReaderResults(List<SObject> sObjects, IValueReader valueReader) {
             return this.mapSObjectListByValueReaderResults(sObjects, valueReader, MAP_RETAIN_MODE.RETAIN_ALL, new Set<MAP_OPTIONS>(), new Set<String>());
         }
@@ -134,26 +146,28 @@ public class Utilities {
                 }
             }
         }
-
+    }
+    
+    private class ObjectMappingUtility implements IObjectMappingUtility {
         public Map<String, Object> mapObjectListByValueReaderResults(List<Object> objects, IValueReader valueReader, MAP_RETAIN_MODE retainingMode, Set<MAP_OPTIONS> mapOptions, Set<String> keySet) {
-
+    
             //----------------------------
             // Guardians
             //----------------------------
-
+    
             if(objects == NULL) throw new SObjectMappingUtility_Exception('The list of objects to map must not be NULL.');
             if(valueReader == NULL) throw new SObjectMappingUtility_Exception('An Instance of Utilities.IValueReader must be provided.');
             if(retainingMode == NULL) throw new SObjectMappingUtility_Exception('The retaining mode must be provided.');
             if(mapOptions == NULL) throw new SObjectMappingUtility_Exception('A set of mapOptions must be provided');
             if(keySet == NULL) throw new SObjectMappingUtility_Exception('A set of keys to in-/exclude must be provided');
-
+    
             //----------------------------
             // Business logic
             //----------------------------
-
+    
             Boolean isKeyIgnoreNull = mapOptions.contains(MAP_OPTIONS.KEY_IGNORE_NULL);
             Boolean isKeyIncludeOnly = mapOptions.contains(MAP_OPTIONS.KEY_INCLUDE_ONLY);
-
+    
             // Instead of checking the retainOption in every iteration we check only once
             switch on retainingMode {
                 when RETAIN_FIRST {
@@ -177,7 +191,7 @@ public class Utilities {
             }
         }
     }
-
+    
     public class SObjectMappingUtility_Exception extends System.Exception{}
 
     public virtual class FieldValueReader implements IValueReader {

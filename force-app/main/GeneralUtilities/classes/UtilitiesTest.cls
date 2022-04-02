@@ -211,7 +211,7 @@ public with sharing class UtilitiesTest {
         * When
         * the pairs are mapped by their modulo result and all entries are kept in map
         */
-        Map<String, List<Object>> mappedLeads2 = (Map<String, List<Object>>)Utilities.sObjectsUtilities.mapObjectListByValueReaderResults(
+        Map<String, List<Object>> mappedLeads2 = (Map<String, List<Object>>)Utilities.objectsUtilities.mapObjectListByValueReaderResults(
             integerpairs,
             new ModValueReader(),
             Utilities.MAP_RETAIN_MODE.RETAIN_ALL, 
@@ -256,7 +256,7 @@ public with sharing class UtilitiesTest {
         * When
         * the pairs are mapped by their modulo result and only the first entriy for each key is retained
         */
-        Map<String, Object> mappedLeads2 = (Map<String, Object>)Utilities.sObjectsUtilities.mapObjectListByValueReaderResults(
+        Map<String, Object> mappedLeads2 = (Map<String, Object>)Utilities.objectsUtilities.mapObjectListByValueReaderResults(
             integerpairs,
             new ModValueReader(),
             Utilities.MAP_RETAIN_MODE.RETAIN_FIRST, 
@@ -296,7 +296,7 @@ public with sharing class UtilitiesTest {
         * When
         * the pairs are mapped by their modulo result and only the first entriy for each key is retained
         */
-        Map<String, Object> mappedLeads2 = (Map<String, Object>)Utilities.sObjectsUtilities.mapObjectListByValueReaderResults(
+        Map<String, Object> mappedLeads2 = (Map<String, Object>)Utilities.objectsUtilities.mapObjectListByValueReaderResults(
             integerpairs,
             new ModValueReader(),
             Utilities.MAP_RETAIN_MODE.RETAIN_LAST, 
