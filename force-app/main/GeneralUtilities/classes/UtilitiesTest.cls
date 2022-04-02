@@ -1,10 +1,10 @@
 @IsTest
 public with sharing class UtilitiesTest {
-    
+
     //----------------------------
     // Mapping of SObjects
     //----------------------------
-    
+
     /**
      * This extension of the FieldValueReader reads the Lead.Company field for a mapping key
      */
@@ -33,9 +33,9 @@ public with sharing class UtilitiesTest {
         Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_2_NAME);
         Lead lead5 = new Lead(
         Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_3_NAME);
-        
+
         List<Lead> leadList = new List<Lead>{lead1, lead2, lead3, lead4, lead5};
-        
+
         Test.startTest();
         /**
         * When
@@ -43,25 +43,25 @@ public with sharing class UtilitiesTest {
         */
         Map<String, List<SObject>> mappedLeads = (Map<String, List<SObject>>)Utilities.sObjectsUtilities.mapSObjectListByValueReaderResults(
         leadList, new LeadCompanyReader());
-        
+
         Test.stopTest();
-        
+
         System.assertEquals(3, mappedLeads.size());
         System.assertEquals(true, mappedLeads.containsKey(TESTCOMPANY_1_NAME));
         System.assertEquals(true, mappedLeads.containsKey(TESTCOMPANY_2_NAME));
         System.assertEquals(true, mappedLeads.containsKey(TESTCOMPANY_3_NAME));
-        
+
         System.assertEquals(2, mappedLeads.get(TESTCOMPANY_1_NAME).size());
         System.assertEquals(2, mappedLeads.get(TESTCOMPANY_2_NAME).size());
         System.assertEquals(1, mappedLeads.get(TESTCOMPANY_3_NAME).size());
-        
+
         System.assertEquals(lead1.Id, mappedLeads.get(TESTCOMPANY_1_NAME).get(0).Id);
         System.assertEquals(lead2.Id, mappedLeads.get(TESTCOMPANY_1_NAME).get(1).Id);
         System.assertEquals(lead3.Id, mappedLeads.get(TESTCOMPANY_2_NAME).get(0).Id);
         System.assertEquals(lead4.Id, mappedLeads.get(TESTCOMPANY_2_NAME).get(1).Id);
         System.assertEquals(lead5.Id, mappedLeads.get(TESTCOMPANY_3_NAME).get(0).Id);
     }
-    
+
     @IsTest
     private static void mapUtil_SObjects_RetainMode_RetainFirst() {
         String TESTCOMPANY_1_NAME = 'TestCompany1';
@@ -83,9 +83,9 @@ public with sharing class UtilitiesTest {
         Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_3_NAME);
         Lead lead6 = new Lead(
         Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
-        
+
         List<Lead> leadList = new List<Lead>{lead1, lead2, lead3, lead4, lead5, lead6};
-        
+
         Test.startTest();
         /**
         * When
@@ -94,22 +94,22 @@ public with sharing class UtilitiesTest {
         Map<String, SObject> mappedLeads = (Map<String, SObject>)Utilities.sObjectsUtilities.mapSObjectListByValueReaderResults(
             leadList, new LeadCompanyReader(), Utilities.MAP_RETAIN_MODE.RETAIN_FIRST);
         Test.stopTest();
-        
+
         System.assertEquals(3, mappedLeads.size());
         System.assertEquals(true, mappedLeads.containsKey(TESTCOMPANY_1_NAME));
         System.assertEquals(true, mappedLeads.containsKey(TESTCOMPANY_2_NAME));
         System.assertEquals(true, mappedLeads.containsKey(TESTCOMPANY_3_NAME));
-        
+
         System.assert(mappedLeads.get(TESTCOMPANY_1_NAME) instanceOf Lead);
         System.assertEquals(lead1.Id, mappedLeads.get(TESTCOMPANY_1_NAME).Id);
-        
+
         System.assert(mappedLeads.get(TESTCOMPANY_2_NAME) instanceOf Lead);
         System.assertEquals(lead3.Id, mappedLeads.get(TESTCOMPANY_2_NAME).Id);
-        
+
         System.assert(mappedLeads.get(TESTCOMPANY_3_NAME) instanceOf Lead);
         System.assertEquals(lead5.Id, mappedLeads.get(TESTCOMPANY_3_NAME).Id);
     }
-    
+
     @IsTest
     private static void mapUtil_SObjects_RetainMode_RetainLast() {
         String TESTCOMPANY_1_NAME = 'TestCompany1';
@@ -131,9 +131,9 @@ public with sharing class UtilitiesTest {
         Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_3_NAME);
         Lead lead6 = new Lead(
         Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
-        
+
         List<Lead> leadList = new List<Lead>{lead1, lead2, lead3, lead4, lead5, lead6};
-        
+
         Test.startTest();
         /**
         * When
@@ -142,42 +142,42 @@ public with sharing class UtilitiesTest {
         Map<String, SObject> mappedLeads = (Map<String, SObject>)Utilities.sObjectsUtilities.mapSObjectListByValueReaderResults(
             leadList, new LeadCompanyReader(), Utilities.MAP_RETAIN_MODE.RETAIN_LAST);
         Test.stopTest();
-        
+
         System.assertEquals(3, mappedLeads.size());
         System.assertEquals(true, mappedLeads.containsKey(TESTCOMPANY_1_NAME));
         System.assertEquals(true, mappedLeads.containsKey(TESTCOMPANY_2_NAME));
         System.assertEquals(true, mappedLeads.containsKey(TESTCOMPANY_3_NAME));
-        
+
         System.assert(mappedLeads.get(TESTCOMPANY_1_NAME) instanceOf Lead);
         System.assertEquals(lead6.Id, mappedLeads.get(TESTCOMPANY_1_NAME).Id);
-        
+
         System.assert(mappedLeads.get(TESTCOMPANY_2_NAME) instanceOf Lead);
         System.assertEquals(lead4.Id, mappedLeads.get(TESTCOMPANY_2_NAME).Id);
-        
+
         System.assert(mappedLeads.get(TESTCOMPANY_3_NAME) instanceOf Lead);
         System.assertEquals(lead5.Id, mappedLeads.get(TESTCOMPANY_3_NAME).Id);
     }
-    
+
     //----------------------------
     // Mapping of Objects
     //----------------------------
-    
+
     /**
     * This is a simple example class to be mapped. It's a simple pair of integer values
     */
     private class IntegerPair {
         private Integer valueA;
         private Integer valueB;
-        
+
         public IntegerPair(Integer valueA, Integer valueB) {
             this.valueA = valueA;
             this.valueB = valueB;
         }
-        
+
         public Integer getValueA() {return this.valueA;}
         public Integer getValueB() {return this.valueB;}
     }
-    
+
     /**
     * this reader returns the result of the modulo function as mapping key
     */
@@ -193,7 +193,7 @@ public with sharing class UtilitiesTest {
             return NULL;
         }
     }
-    
+
     @IsTest
     static void mapUtil_Objects_RetainMode_RetainAll() {
         /**
@@ -203,9 +203,9 @@ public with sharing class UtilitiesTest {
         IntegerPair pair1Modulo1 = new IntegerPair(4, 3);
         IntegerPair pair1Modulo2 = new IntegerPair(5, 3);
         IntegerPair pair2Modulo1 = new IntegerPair(7, 6);
-        
+
         List<IntegerPair> integerpairs = new List<IntegerPair>{pair1Modulo1, pair1Modulo2, pair2Modulo1};
-        
+
         Test.startTest();
         /**
         * When
@@ -219,7 +219,7 @@ public with sharing class UtilitiesTest {
             new Set<String>()
         );
         Test.stopTest();
-        
+
         /**
         * Then
         * - pairs (4,3) and (7,6) are mapped by value '1' (4 % 3 == 1 and 7 % 6 == 1) 
@@ -232,13 +232,13 @@ public with sharing class UtilitiesTest {
         System.assertEquals(pair1Modulo1.getValueB(), ((IntegerPair)mappedLeads2.get('1')[0]).getValueB());
         System.assertEquals(pair2Modulo1.getValueA(), ((IntegerPair)mappedLeads2.get('1')[1]).getValueA());
         System.assertEquals(pair2Modulo1.getValueB(), ((IntegerPair)mappedLeads2.get('1')[1]).getValueB());
-        
+
         System.assert(mappedLeads2.containsKey('2'));
         System.assertEquals(1, mappedLeads2.get('2').size());
         System.assertEquals(pair1Modulo2.getValueA(), ((IntegerPair)mappedLeads2.get('2')[0]).getValueA());
         System.assertEquals(pair1Modulo2.getValueB(), ((IntegerPair)mappedLeads2.get('2')[0]).getValueB());
     }
-    
+
     @IsTest
     static void mapUtil_Objects_RetainMode_RetainFirst() {
         /**
@@ -248,9 +248,9 @@ public with sharing class UtilitiesTest {
         IntegerPair pair1Modulo1 = new IntegerPair(4, 3);
         IntegerPair pair1Modulo2 = new IntegerPair(5, 3);
         IntegerPair pair2Modulo1 = new IntegerPair(7, 6);
-        
+
         List<IntegerPair> integerpairs = new List<IntegerPair>{pair1Modulo1, pair1Modulo2, pair2Modulo1};
-        
+
         Test.startTest();
         /**
         * When
@@ -264,7 +264,7 @@ public with sharing class UtilitiesTest {
             new Set<String>()
         );
         Test.stopTest();
-        
+
         /**
         * Then
         * - pair (4,3) is mapped by value '1' (4 % 3 == 1)
@@ -273,12 +273,12 @@ public with sharing class UtilitiesTest {
         System.assert(mappedLeads2.containsKey('1'));
         System.assertEquals(pair1Modulo1.getValueA(), ((IntegerPair)mappedLeads2.get('1')).getValueA());
         System.assertEquals(pair1Modulo1.getValueB(), ((IntegerPair)mappedLeads2.get('1')).getValueB());
-        
+
         System.assert(mappedLeads2.containsKey('2'));
         System.assertEquals(pair1Modulo2.getValueA(), ((IntegerPair)mappedLeads2.get('2')).getValueA());
         System.assertEquals(pair1Modulo2.getValueB(), ((IntegerPair)mappedLeads2.get('2')).getValueB());
     }
-    
+
     @IsTest
     static void mapUtil_Objects_RetainMode_RetainLast() {
         /**
@@ -288,9 +288,9 @@ public with sharing class UtilitiesTest {
         IntegerPair pair1Modulo1 = new IntegerPair(4, 3);
         IntegerPair pair1Modulo2 = new IntegerPair(5, 3);
         IntegerPair pair2Modulo1 = new IntegerPair(7, 6);
-        
+
         List<IntegerPair> integerpairs = new List<IntegerPair>{pair1Modulo1, pair1Modulo2, pair2Modulo1};
-        
+
         Test.startTest();
         /**
         * When
@@ -304,7 +304,7 @@ public with sharing class UtilitiesTest {
             new Set<String>()
         );
         Test.stopTest();
-        
+
         /**
         * Then
         * - pair (4,3) is mapped by value '1' (7 % 6 == 1)
@@ -313,27 +313,27 @@ public with sharing class UtilitiesTest {
         System.assert(mappedLeads2.containsKey('1'));
         System.assertEquals(pair2Modulo1.getValueA(), ((IntegerPair)mappedLeads2.get('1')).getValueA());
         System.assertEquals(pair2Modulo1.getValueB(), ((IntegerPair)mappedLeads2.get('1')).getValueB());
-        
+
         System.assert(mappedLeads2.containsKey('2'));
         System.assertEquals(pair1Modulo2.getValueA(), ((IntegerPair)mappedLeads2.get('2')).getValueA());
         System.assertEquals(pair1Modulo2.getValueB(), ((IntegerPair)mappedLeads2.get('2')).getValueB());
     }
-    
+
 //----------------------------
 // Typecast behavior
 //----------------------------
- 
+
     @IsTest
     static void TypeCastFromObjectToSObjectListCausesNoException() {
         String TESTCOMPANY_1_NAME = 'TestCompany1';
-        
+
         Lead lead1 = new Lead(
         Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
         Lead lead2 = new Lead(
         Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
-        
+
         List<Lead> leadList = new List<Lead>{lead1, lead2};
-        
+
         Test.startTest();
         System.Exception exception_ToCheck = NULL;
         try {
@@ -343,7 +343,7 @@ public with sharing class UtilitiesTest {
             exception_ToCheck = exc;
         }
         Test.stopTest();
-        
+
         System.assertEquals(NULL, exception_ToCheck);
     }
 
@@ -356,9 +356,9 @@ public with sharing class UtilitiesTest {
         String TESTCOMPANY_1_NAME = 'TestCompany1';
         Lead lead1 = new Lead(
         Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
-        
+
         List<Lead> leadList = new List<Lead>{lead1};
-        
+
         /**
          * When
          * 1. the result is casted directly
@@ -400,5 +400,48 @@ public with sharing class UtilitiesTest {
         System.assertEquals(NULL, exception_indirect_Conversion);
         System.assertNotEquals(NULL, leadToCheck);
         System.assertEquals(lead1.Id, leadToCheck.Id);
+    }
+
+//----------------------------
+// Mapping Options
+//----------------------------
+
+    @IsTest
+    static void 
+    mapUtil_MapOptions_KEY_IGNORE_NULL() {
+        String TESTCOMPANY_1_NAME = 'TestCompany1';
+        String TESTCOMPANY_2_NAME = 'TestCompany2';
+        /**
+        * Given
+        * - two leads with a set Company field
+        * - one lead without a value for Company
+        */
+
+        Lead lead1 = new Lead(Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
+        Lead lead2 = new Lead(Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_2_NAME);
+        Lead lead3 = new Lead(Id = fflib_IDGenerator.generate(Lead.getSObjectType()));
+
+        List<Lead> leadList = new List<Lead>{lead1, lead2, lead3};
+
+        Test.startTest();
+        /**
+         * When
+         * the lead list is mapped with the option to ignore NULL as key
+         */
+        Map<String, Object> mappedLeads = Utilities.sObjectsUtilities.mapSObjectListByValueReaderResults(
+            leadList,
+            new LeadCompanyReader(),
+            Utilities.MAP_RETAIN_MODE.RETAIN_LAST, 
+            new Set<Utilities.MAP_OPTIONS>{Utilities.MAP_OPTIONS.KEY_IGNORE_NULL}
+        );
+        Test.stopTest();
+
+        /**
+         * Then
+         * Only the two leads with a defined value are in the resulting map
+         */
+        System.assertEquals(2, mappedLeads.size(), 'Only two leads must be in resulting map');
+        System.assert(mappedLeads.containsKey(TESTCOMPANY_1_NAME), 'A lead with defined company value must be inside the map');
+        System.assert(mappedLeads.containsKey(TESTCOMPANY_2_NAME), 'A lead with defined company value must be inside the map');
     }
 }
