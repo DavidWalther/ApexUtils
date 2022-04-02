@@ -319,9 +319,9 @@ public with sharing class UtilitiesTest {
         System.assertEquals(pair1Modulo2.getValueB(), ((IntegerPair)mappedLeads2.get('2')).getValueB());
     }
 
-//----------------------------
-// Typecast behavior
-//----------------------------
+    //----------------------------
+    // Typecast behavior
+    //----------------------------
 
     @IsTest
     static void TypeCastFromObjectToSObjectListCausesNoException() {
@@ -402,13 +402,12 @@ public with sharing class UtilitiesTest {
         System.assertEquals(lead1.Id, leadToCheck.Id);
     }
 
-//----------------------------
-// Mapping Options
-//----------------------------
+    //----------------------------
+    // Mapping Options
+    //----------------------------
 
     @IsTest
-    static void 
-    mapUtil_MapOptions_KEY_IGNORE_NULL() {
+    static void mapUtil_MapOptions_KEY_IGNORE_NULL() {
         String TESTCOMPANY_1_NAME = 'TestCompany1';
         String TESTCOMPANY_2_NAME = 'TestCompany2';
         /**
@@ -443,5 +442,53 @@ public with sharing class UtilitiesTest {
         System.assertEquals(2, mappedLeads.size(), 'Only two leads must be in resulting map');
         System.assert(mappedLeads.containsKey(TESTCOMPANY_1_NAME), 'A lead with defined company value must be inside the map');
         System.assert(mappedLeads.containsKey(TESTCOMPANY_2_NAME), 'A lead with defined company value must be inside the map');
+    }
+
+    @IsTest
+    static void mapUtil_MapOptions_KEY_INCLUDE_ONLY() {
+        String TESTCOMPANY_1_NAME = 'TestCompany1';
+        String TESTCOMPANY_2_NAME = 'TestCompany2';
+        String TESTCOMPANY_3_NAME = 'TestCompany3';
+        String TESTCOMPANY_4_NAME = 'TestCompany4';
+        /**
+        * Given
+        * - five leads with a set Company field
+        * - two of them having the same value
+        */
+
+        Lead lead1 = new Lead(Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
+        Lead lead2 = new Lead(Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_2_NAME);
+        Lead lead3 = new Lead(Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_3_NAME);
+        Lead lead4 = new Lead(Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_4_NAME);
+        Lead lead5 = new Lead(Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_4_NAME);
+
+        List<Lead> leadList = new List<Lead>{lead1, lead2, lead3, lead4, lead5};
+
+        Test.startTest();
+        /**
+         * When
+         * the lead list is mapped with the option to contain only certain values
+         */
+        Set<String> keysForMapping = new Set<String>{TESTCOMPANY_2_NAME, TESTCOMPANY_4_NAME};
+        Map<String, List<SObject>> mappedLeads = (Map<String, List<SObject>>)Utilities.sObjectsUtilities.mapSObjectListByValueReaderResults(
+            leadList,
+            new LeadCompanyReader(),
+            Utilities.MAP_RETAIN_MODE.RETAIN_ALL, 
+            new Set<Utilities.MAP_OPTIONS>{Utilities.MAP_OPTIONS.KEY_INCLUDE_ONLY},
+            keysForMapping
+        );
+        Test.stopTest();
+
+        /**
+         * Then
+         * the resulting map contains only the defined keys
+         */
+        Boolean isSizeOfMapEqual = keysForMapping.size() == mappedLeads.size();
+        Boolean isMapContainingAllKeysFromDefindedSet = mappedLeads.keySet().containsAll(keysForMapping);
+        System.assert(isSizeOfMapEqual && isMapContainingAllKeysFromDefindedSet, 'Only the map contains only the keys defined by set');
+
+        System.assertEquals(lead2.Id, mappedLeads.get(TESTCOMPANY_2_NAME)[0].Id);
+        System.assertEquals(lead4.Id, mappedLeads.get(TESTCOMPANY_4_NAME)[0].Id);
+        System.assertEquals(lead5.Id, mappedLeads.get(TESTCOMPANY_4_NAME)[1].Id);
     }
 }
