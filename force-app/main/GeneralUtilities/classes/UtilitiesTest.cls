@@ -8,7 +8,7 @@ public with sharing class UtilitiesTest {
     /**
      * This extension of the FieldValueReader reads the Lead.Company field for a mapping key
      */
-    private class LeadCompanyReader extends Utilities.FieldValueReader {
+    private virtual class LeadCompanyReader extends Utilities.FieldValueReader {
         public LeadCompanyReader() {
             super(Lead.Company);
         }
@@ -39,7 +39,7 @@ public with sharing class UtilitiesTest {
         Test.startTest();
         /**
         * When
-        * The map method of sobjectUtilities is called for the leadList and the company field
+        * The map method of SObjectMappingUtility is called for the leadList and the company field
         */
         Map<String, List<SObject>> mappedLeads = (Map<String, List<SObject>>)Utilities.sObjectsUtilities.mapSObjectListByValueReaderResults(
         leadList, new LeadCompanyReader());
@@ -89,7 +89,7 @@ public with sharing class UtilitiesTest {
         Test.startTest();
         /**
         * When
-        * The map method of sobjectUtilities is called for the leadList and the company field
+        * The map method of SObjectMappingUtility is called for the leadList and the company field
         */
         Map<String, SObject> mappedLeads = (Map<String, SObject>)Utilities.sObjectsUtilities.mapSObjectListByValueReaderResults(
             leadList, new LeadCompanyReader(), Utilities.MAP_RETAIN_MODE.RETAIN_FIRST);
@@ -137,7 +137,7 @@ public with sharing class UtilitiesTest {
         Test.startTest();
         /**
         * When
-        * The map method of sobjectUtilities is called for the leadList and the company field
+        * The map method of SObjectMappingUtility is called for the leadList and the company field
         */
         Map<String, SObject> mappedLeads = (Map<String, SObject>)Utilities.sObjectsUtilities.mapSObjectListByValueReaderResults(
             leadList, new LeadCompanyReader(), Utilities.MAP_RETAIN_MODE.RETAIN_LAST);
