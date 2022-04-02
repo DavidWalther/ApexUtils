@@ -70,7 +70,7 @@ public with sharing class UtilitiesTest {
     }
 
     @IsTest
-    static void testMappingOfSObjectByFieldWithOptionRetainAll() {
+    static void mapSObjectListByValueReaderResults_CanMapClassInstances_RetainAll() {
         String TESTCOMPANY_1_NAME = 'TestCompany1';
         String TESTCOMPANY_2_NAME = 'TestCompany2';
         String TESTCOMPANY_3_NAME = 'TestCompany3';
@@ -119,7 +119,7 @@ public with sharing class UtilitiesTest {
 
 
     @IsTest
-    private static void testMappingOfSObjectByFieldWithOptionRetainFirst() {
+    private static void mapSObjectListByValueReaderResults_CanMapClassInstances_RetainFirst() {
         String TESTCOMPANY_1_NAME = 'TestCompany1';
         String TESTCOMPANY_2_NAME = 'TestCompany2';
         String TESTCOMPANY_3_NAME = 'TestCompany3';
@@ -168,7 +168,7 @@ public with sharing class UtilitiesTest {
 
 
     @IsTest
-    private static void testMappingOfSObjectByFieldWithOptionRetainLast() {
+    private static void mapSObjectListByValueReaderResults_CanMapClassInstances_RetainLast() {
         String TESTCOMPANY_1_NAME = 'TestCompany1';
         String TESTCOMPANY_2_NAME = 'TestCompany2';
         String TESTCOMPANY_3_NAME = 'TestCompany3';
