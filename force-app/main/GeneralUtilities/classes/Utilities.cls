@@ -142,19 +142,23 @@ public class Utilities {
             // Instead of checking the retainOption in every iteration we check only once
             switch on retainingMode {
                 when RETAIN_FIRST {
-                    return (Map<String, Object>)new MappingLogicFactory()
+                    Map<String, Object> tempMap = (Map<String, Object>)new MappingLogicFactory()
                         .getProduct(retainingMode)
-                        .execute(objects, valueReader, mapOptions, keySet); 
+                        .execute(objects, valueReader, mapOptions, keySet);
+                    return new ConvertMapObjectIntoMapOfObject().convertMappingResult(tempMap);
                 }
                 when RETAIN_LAST {
-                    return (Map<String, Object>)new MappingLogicFactory()
+                    Map<String, Object> tempMap = (Map<String, Object>)new MappingLogicFactory()
                         .getProduct(retainingMode)
-                        .execute(objects, valueReader, mapOptions, keySet); 
+                        .execute(objects, valueReader, mapOptions, keySet);
+                    return new ConvertMapObjectIntoMapOfObject().convertMappingResult(tempMap);
                 }
                 when RETAIN_ALL {
-                    return (Map<String, List<Object>>)new MappingLogicFactory()
+                    Map<String, List<Object>> tempMap = (Map<String, List<Object>>)new MappingLogicFactory()
                         .getProduct(retainingMode)
                         .execute(objects, valueReader, mapOptions, keySet); 
+                    return new ConvertMapObjectIntoMapOfObjectLists().convertMappingResult(tempMap);
+                        
                 }
                 when else {
                     throw new MappingUtility_Exception('Retaining option is not implemented yet.');
@@ -267,6 +271,19 @@ public class Utilities {
     
     private interface ITypeConverter {
         Map<String, Object> convertMappingResult(Map<String, Object> tempMap);
+    }
+
+    private class ConvertMapObjectIntoMapOfObject implements ITypeConverter {
+        public Map<String, Object> convertMappingResult(Map<String, Object> tempMap) {
+            return tempMap;
+        }
+    }
+
+    private class ConvertMapObjectIntoMapOfObjectLists implements ITypeConverter {
+        public Map<String, Object> convertMappingResult(Map<String, Object> tempMap) {
+            Map<String, List<Object>> workingMap = (Map<String, List<Object>>)tempMap;
+            return workingMap;
+        }
     }
 
     private class ConvertMapObjectIntoMapOfSObject implements ITypeConverter {
