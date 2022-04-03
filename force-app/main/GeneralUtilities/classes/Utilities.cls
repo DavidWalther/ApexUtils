@@ -86,36 +86,13 @@ public class Utilities {
             // Business logic
             //----------------------------
 
-            /**
-             * direct casting from Object into result doesn't work here.
-             * => createing new Collection of mapped entries
-             */
+            IMappingLogic mappingLogic = new MappingLogicFactory().getProduct(retainingMode);
+            Map<String, Object> tempMap = (Map<String, Object>)mappingLogic
+                .execute(sObjects, valueReader, mapOptions, keySet); 
 
-            switch on retainingMode {
-                when RETAIN_FIRST {
-                    Map<String, Object> tempMap = (Map<String, Object>)new MappingLogicFactory()
-                        .getProduct(retainingMode)
-                        .execute(sObjects, valueReader, mapOptions, keySet); 
-                    
-                    return new ConvertMapObjectIntoMapOfSObject().convertMappingResult(tempMap);
-                }
-                when RETAIN_LAST {
-                    Map<String, Object> tempMap = (Map<String, Object>)new MappingLogicFactory()
-                        .getProduct(retainingMode)
-                        .execute(sObjects, valueReader, mapOptions, keySet); 
-                    
-                    return new ConvertMapObjectIntoMapOfSObject().convertMappingResult(tempMap);
-                }
-                when RETAIN_ALL {
-                    Map<String, List<Object>> tempMap = (Map<String, List<Object>>)new MappingLogicFactory()
-                        .getProduct(retainingMode)
-                        .execute(sObjects, valueReader, mapOptions, keySet); 
-                    return new ConvertMapObjectIntoMapOfSObjectLists().convertMappingResult(tempMap);
-                }
-                when else {
-                    throw new MappingUtility_Exception('Retaining option is not implemented yet.');
-                }
-            }
+
+            ITypeConverter typeConverter = new TypeConverterFactory().getProduct(retainingMode, sObjects);
+            return typeConverter.convertMappingResult(tempMap);
         }
     }
     
@@ -157,7 +134,9 @@ public class Utilities {
                     Map<String, List<Object>> tempMap = (Map<String, List<Object>>)new MappingLogicFactory()
                         .getProduct(retainingMode)
                         .execute(objects, valueReader, mapOptions, keySet); 
-                    return new ConvertMapObjectIntoMapOfObjectLists().convertMappingResult(tempMap);
+                    return new TypeConverterFactory()
+                        .getProduct(retainingMode, objects)
+                        .convertMappingResult(tempMap);
                         
                 }
                 when else {
@@ -269,6 +248,10 @@ public class Utilities {
     // Result Map type converter
     //----------------------------
     
+    /**
+     * Directly casting Objects into SObjects or lists of SObjects causes exceptions.
+     * For that reason a special casting logic is needed for these cases
+     */
     private interface ITypeConverter {
         Map<String, Object> convertMappingResult(Map<String, Object> tempMap);
     }
@@ -303,7 +286,7 @@ public class Utilities {
                 }
             }
 
-            throw new MappingUtility_Exception();
+            throw new MappingUtility_Exception('Unknown parameters for mapping');
         }
     }
 
