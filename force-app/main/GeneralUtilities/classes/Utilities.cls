@@ -273,6 +273,40 @@ public class Utilities {
         Map<String, Object> convertMappingResult(Map<String, Object> tempMap);
     }
 
+    private class TypeConverterFactory {
+        public ITypeConverter getProduct(MAP_RETAIN_MODE retainingMode, Object objectsToMap) {
+            if(objectsToMap instanceOf List<SObject>) {
+                switch on retainingMode {   
+                    when RETAIN_FIRST {
+                        return new ConvertMapObjectIntoMapOfSObject();
+                    }
+                    when RETAIN_LAST {
+                        return new ConvertMapObjectIntoMapOfSObject();
+                    }
+                    when RETAIN_ALL {
+                        return new ConvertMapObjectIntoMapOfSObjectLists();
+                    }
+                }
+            }
+
+            if(objectsToMap instanceOf List<Object>) {
+                switch on retainingMode {   
+                    when RETAIN_FIRST {
+                        return new ConvertMapObjectIntoMapOfObject();
+                    }
+                    when RETAIN_LAST {
+                        return new ConvertMapObjectIntoMapOfObject();
+                    }
+                    when RETAIN_ALL {
+                        return new ConvertMapObjectIntoMapOfObjectLists();
+                    }
+                }
+            }
+
+            throw new MappingUtility_Exception();
+        }
+    }
+
     private class ConvertMapObjectIntoMapOfObject implements ITypeConverter {
         public Map<String, Object> convertMappingResult(Map<String, Object> tempMap) {
             return tempMap;
