@@ -2,8 +2,8 @@ public class Utilities {
     //----------------------------
     // public properties
     //----------------------------
-    public static IMappingUtility_SObjects sObjectsUtilities {get {return new MappingUtility_SObjects();} private set;}
-    public static IMappingUtility_Objects objectsUtilities {get {return new MappingUtility_Objects();} private set;}
+    public static IMappingUtility_SObjects mapping_SObject {get {return new MappingUtility_SObjects();} private set;}
+    public static IMappingUtility_Objects mapping_Object {get {return new MappingUtility_Objects();} private set;}
 
     //----------------------------
     // public utility interfaces for quick overview of what can be accessed via properties
