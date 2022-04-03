@@ -2,8 +2,8 @@ public class Utilities {
     //----------------------------
     // public properties
     //----------------------------
-    public static ISObjectMappingUtility sObjectsUtilities {get {return new SObjectMappingUtility();} private set;}
-    public static IObjectMappingUtility objectsUtilities {get {return new ObjectMappingUtility();} private set;}
+    public static IMappingUtility_SObjects mapping_SObject {get {return new MappingUtility_SObjects();} private set;}
+    public static IMappingUtility_Objects mapping_Object {get {return new MappingUtility_Objects();} private set;}
 
     //----------------------------
     // public utility interfaces for quick overview of what can be accessed via properties
@@ -13,7 +13,7 @@ public class Utilities {
 
     public enum MAP_OPTIONS {KEY_IGNORE_NULL, KEY_INCLUDE_ONLY}
 
-    public interface ISObjectMappingUtility {
+    public interface IMappingUtility_SObjects {
         /**
          * @param sObjects A list of SObjects to create a map for.
          * @param valueReader An instance of IValueReader. It is used to read the mapping key for each entry in 'sObjects'.
@@ -33,7 +33,7 @@ public class Utilities {
         Map<String, Object> mapSObjectListByValueReaderResults(List<SObject> sObjects, IValueReader valueReader);
     }
 
-    public interface IObjectMappingUtility {
+    public interface IMappingUtility_Objects {
         /**
          * @param objects A list of class instances to create a map for.
          * @param valueReader An instance of IValueReader. It is used to read the mapping key for each entry in 'objects'.
@@ -57,7 +57,7 @@ public class Utilities {
      * This class is intended to be stateless. If the necessity of storing data comes up,
      * store it in a static variable.
      */
-    private class SObjectMappingUtility implements ISObjectMappingUtility {
+    private class MappingUtility_SObjects implements IMappingUtility_SObjects {
         public Map<String, Object> mapSObjectListByValueReaderResults(List<SObject> sObjects, IValueReader valueReader) {
             return this.mapSObjectListByValueReaderResults(sObjects, valueReader, MAP_RETAIN_MODE.RETAIN_ALL, new Set<MAP_OPTIONS>(), new Set<String>());
         }
@@ -76,11 +76,11 @@ public class Utilities {
             // Guardians
             //----------------------------
 
-            if(SObjects == NULL) throw new SObjectMappingUtility_Exception('The list of objects to map must not be NULL.');
-            if(valueReader == NULL) throw new SObjectMappingUtility_Exception('An Instance of Utilities.IValueReader must be provided.');
-            if(retainingMode == NULL) throw new SObjectMappingUtility_Exception('The retaining mode must be provided.');
-            if(mapOptions == NULL) throw new SObjectMappingUtility_Exception('A set of mapOptions must be provided');
-            if(keySet == NULL) throw new SObjectMappingUtility_Exception('A set of keys to in-/exclude must be provided');
+            if(SObjects == NULL) throw new MappingUtility_Exception('The list of objects to map must not be NULL.');
+            if(valueReader == NULL) throw new MappingUtility_Exception('An Instance of Utilities.IValueReader must be provided.');
+            if(retainingMode == NULL) throw new MappingUtility_Exception('The retaining mode must be provided.');
+            if(mapOptions == NULL) throw new MappingUtility_Exception('A set of mapOptions must be provided');
+            if(keySet == NULL) throw new MappingUtility_Exception('A set of keys to in-/exclude must be provided');
 
             //----------------------------
             // Business logic
@@ -114,7 +114,7 @@ public class Utilities {
                     return this.convertObjectMapToSObjectMap(tempMap);
                 }
                 when else {
-                    throw new SObjectMappingUtility_Exception('Retaining option is not implemented yet.');
+                    throw new MappingUtility_Exception('Retaining option is not implemented yet.');
                 }
             }
         }
@@ -140,18 +140,18 @@ public class Utilities {
         }
     }
     
-    private class ObjectMappingUtility implements IObjectMappingUtility {
+    private class MappingUtility_Objects implements IMappingUtility_Objects {
         public Map<String, Object> mapObjectListByValueReaderResults(List<Object> objects, IValueReader valueReader, MAP_RETAIN_MODE retainingMode, Set<MAP_OPTIONS> mapOptions, Set<String> keySet) {
     
             //----------------------------
             // Guardians
             //----------------------------
     
-            if(objects == NULL) throw new SObjectMappingUtility_Exception('The list of objects to map must not be NULL.');
-            if(valueReader == NULL) throw new SObjectMappingUtility_Exception('An Instance of Utilities.IValueReader must be provided.');
-            if(retainingMode == NULL) throw new SObjectMappingUtility_Exception('The retaining mode must be provided.');
-            if(mapOptions == NULL) throw new SObjectMappingUtility_Exception('A set of mapOptions must be provided');
-            if(keySet == NULL) throw new SObjectMappingUtility_Exception('A set of keys to in-/exclude must be provided');
+            if(objects == NULL) throw new MappingUtility_Exception('The list of objects to map must not be NULL.');
+            if(valueReader == NULL) throw new MappingUtility_Exception('An Instance of Utilities.IValueReader must be provided.');
+            if(retainingMode == NULL) throw new MappingUtility_Exception('The retaining mode must be provided.');
+            if(mapOptions == NULL) throw new MappingUtility_Exception('A set of mapOptions must be provided');
+            if(keySet == NULL) throw new MappingUtility_Exception('A set of keys to in-/exclude must be provided');
     
             //----------------------------
             // Business logic
@@ -178,13 +178,13 @@ public class Utilities {
                         .execute(objects, valueReader, mapOptions, keySet); 
                 }
                 when else {
-                    throw new SObjectMappingUtility_Exception('Retaining option is not implemented yet.');
+                    throw new MappingUtility_Exception('Retaining option is not implemented yet.');
                 }
             }
         }
     }
     
-    public class SObjectMappingUtility_Exception extends System.Exception{}
+    public class MappingUtility_Exception extends System.Exception{}
 
     public virtual class FieldValueReader implements IValueReader {
         private SObjectField field;
@@ -214,7 +214,7 @@ public class Utilities {
                     return new MappingLogicSObjectRetainAll();
                 }
                 when else {
-                    throw new SObjectMappingUtility_Exception('Retaining option is not implemented yet.');
+                    throw new MappingUtility_Exception('Retaining option is not implemented yet.');
                 }
             }
         }

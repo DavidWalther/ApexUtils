@@ -41,7 +41,7 @@ public with sharing class UtilitiesTest {
         * When
         * The map method of SObjectMappingUtility is called for the leadList and the company field
         */
-        Map<String, List<SObject>> mappedLeads = (Map<String, List<SObject>>)Utilities.sObjectsUtilities.mapSObjectListByValueReaderResults(
+        Map<String, List<SObject>> mappedLeads = (Map<String, List<SObject>>)Utilities.mapping_SObject.mapSObjectListByValueReaderResults(
         leadList, new LeadCompanyReader());
 
         Test.stopTest();
@@ -91,7 +91,7 @@ public with sharing class UtilitiesTest {
         * When
         * The map method of SObjectMappingUtility is called for the leadList and the company field
         */
-        Map<String, SObject> mappedLeads = (Map<String, SObject>)Utilities.sObjectsUtilities.mapSObjectListByValueReaderResults(
+        Map<String, SObject> mappedLeads = (Map<String, SObject>)Utilities.mapping_SObject.mapSObjectListByValueReaderResults(
             leadList, new LeadCompanyReader(), Utilities.MAP_RETAIN_MODE.RETAIN_FIRST);
         Test.stopTest();
 
@@ -139,7 +139,7 @@ public with sharing class UtilitiesTest {
         * When
         * The map method of SObjectMappingUtility is called for the leadList and the company field
         */
-        Map<String, SObject> mappedLeads = (Map<String, SObject>)Utilities.sObjectsUtilities.mapSObjectListByValueReaderResults(
+        Map<String, SObject> mappedLeads = (Map<String, SObject>)Utilities.mapping_SObject.mapSObjectListByValueReaderResults(
             leadList, new LeadCompanyReader(), Utilities.MAP_RETAIN_MODE.RETAIN_LAST);
         Test.stopTest();
 
@@ -211,7 +211,7 @@ public with sharing class UtilitiesTest {
         * When
         * the pairs are mapped by their modulo result and all entries are kept in map
         */
-        Map<String, List<Object>> mappedLeads2 = (Map<String, List<Object>>)Utilities.objectsUtilities.mapObjectListByValueReaderResults(
+        Map<String, List<Object>> mappedLeads2 = (Map<String, List<Object>>)Utilities.mapping_Object.mapObjectListByValueReaderResults(
             integerpairs,
             new ModValueReader(),
             Utilities.MAP_RETAIN_MODE.RETAIN_ALL, 
@@ -256,7 +256,7 @@ public with sharing class UtilitiesTest {
         * When
         * the pairs are mapped by their modulo result and only the first entriy for each key is retained
         */
-        Map<String, Object> mappedLeads2 = (Map<String, Object>)Utilities.objectsUtilities.mapObjectListByValueReaderResults(
+        Map<String, Object> mappedLeads2 = (Map<String, Object>)Utilities.mapping_Object.mapObjectListByValueReaderResults(
             integerpairs,
             new ModValueReader(),
             Utilities.MAP_RETAIN_MODE.RETAIN_FIRST, 
@@ -296,7 +296,7 @@ public with sharing class UtilitiesTest {
         * When
         * the pairs are mapped by their modulo result and only the first entriy for each key is retained
         */
-        Map<String, Object> mappedLeads2 = (Map<String, Object>)Utilities.objectsUtilities.mapObjectListByValueReaderResults(
+        Map<String, Object> mappedLeads2 = (Map<String, Object>)Utilities.mapping_Object.mapObjectListByValueReaderResults(
             integerpairs,
             new ModValueReader(),
             Utilities.MAP_RETAIN_MODE.RETAIN_LAST, 
@@ -337,7 +337,7 @@ public with sharing class UtilitiesTest {
         Test.startTest();
         System.Exception exception_ToCheck = NULL;
         try {
-            Map<String, List<Lead>> mappedLeads2 = (Map<String, List<Lead>>)Utilities.sObjectsUtilities.mapSObjectListByValueReaderResults(
+            Map<String, List<Lead>> mappedLeads2 = (Map<String, List<Lead>>)Utilities.mapping_SObject.mapSObjectListByValueReaderResults(
             leadList, new LeadCompanyReader());
         } catch(System.Exception exc) {
             exception_ToCheck = exc;
@@ -368,7 +368,7 @@ public with sharing class UtilitiesTest {
         // 1
         System.Exception exception_direct_Conversion = NULL;
         try {
-            Map<String, Lead> typecastedLeadMap = (Map<String, Lead>)Utilities.sObjectsUtilities.mapSObjectListByValueReaderResults(
+            Map<String, Lead> typecastedLeadMap = (Map<String, Lead>)Utilities.mapping_SObject.mapSObjectListByValueReaderResults(
                 leadList, new LeadCompanyReader(), Utilities.MAP_RETAIN_MODE.RETAIN_LAST);
         } catch(System.Exception exc) {
             exception_direct_Conversion = exc;
@@ -378,7 +378,7 @@ public with sharing class UtilitiesTest {
         Lead leadToCheck;
         System.Exception exception_indirect_Conversion = NULL;
         try {
-            Map<String, Object> notTypecastedLeadMap = Utilities.sObjectsUtilities.mapSObjectListByValueReaderResults(
+            Map<String, Object> notTypecastedLeadMap = Utilities.mapping_SObject.mapSObjectListByValueReaderResults(
                 leadList, new LeadCompanyReader(), Utilities.MAP_RETAIN_MODE.RETAIN_LAST);
             leadToCheck = (Lead)notTypecastedLeadMap.values().get(0);
         } catch (System.Exception exc) {
@@ -427,7 +427,7 @@ public with sharing class UtilitiesTest {
          * When
          * the lead list is mapped with the option to ignore NULL as key
          */
-        Map<String, Object> mappedLeads = Utilities.sObjectsUtilities.mapSObjectListByValueReaderResults(
+        Map<String, Object> mappedLeads = Utilities.mapping_SObject.mapSObjectListByValueReaderResults(
             leadList,
             new LeadCompanyReader(),
             Utilities.MAP_RETAIN_MODE.RETAIN_LAST, 
@@ -470,7 +470,7 @@ public with sharing class UtilitiesTest {
          * the lead list is mapped with the option to contain only certain values
          */
         Set<String> keysForMapping = new Set<String>{TESTCOMPANY_2_NAME, TESTCOMPANY_4_NAME};
-        Map<String, List<SObject>> mappedLeads = (Map<String, List<SObject>>)Utilities.sObjectsUtilities.mapSObjectListByValueReaderResults(
+        Map<String, List<SObject>> mappedLeads = (Map<String, List<SObject>>)Utilities.mapping_SObject.mapSObjectListByValueReaderResults(
             leadList,
             new LeadCompanyReader(),
             Utilities.MAP_RETAIN_MODE.RETAIN_ALL, 
