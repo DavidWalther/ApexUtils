@@ -71,27 +71,7 @@ public class Utilities {
         }
 
         public Map<String, Object> mapSObjectListByValueReaderResults(List<SObject> sObjects, IValueReader valueReader, MAP_RETAIN_MODE retainingMode, Set<MAP_OPTIONS> mapOptions, Set<String> keySet) {
-
-            //----------------------------
-            // Guardians
-            //----------------------------
-
-            if(SObjects == NULL) throw new MappingUtility_Exception('The list of objects to map must not be NULL.');
-            if(valueReader == NULL) throw new MappingUtility_Exception('An Instance of Utilities.IValueReader must be provided.');
-            if(retainingMode == NULL) throw new MappingUtility_Exception('The retaining mode must be provided.');
-            if(mapOptions == NULL) throw new MappingUtility_Exception('A set of mapOptions must be provided');
-            if(keySet == NULL) throw new MappingUtility_Exception('A set of keys to in-/exclude must be provided');
-
-            //----------------------------
-            // Business logic
-            //----------------------------
-
-            IMappingLogic mappingLogic = new MappingLogicFactory().getProduct(retainingMode);
-            Map<String, Object> tempMap = (Map<String, Object>)mappingLogic
-                .execute(sObjects, valueReader, mapOptions, keySet);
-
-            ITypeConverter typeConverter = new TypeConverterFactory().getProduct(retainingMode, sObjects);
-            return typeConverter.convertMappingResult(tempMap);
+            return new MappingUtility_Objects().mapObjectListByValueReaderResults(sObjects,valueReader, retainingMode, mapOptions, keySet);
         }
     }
 
@@ -233,29 +213,28 @@ public class Utilities {
 
     private class TypeConverterFactory {
         public ITypeConverter getProduct(MAP_RETAIN_MODE retainingMode, Object objectsToMap) {
-            if(objectsToMap instanceOf List<SObject>) {
-                switch on retainingMode {
-                    when RETAIN_FIRST {
+            switch on retainingMode {
+                when RETAIN_FIRST {
+                    if(objectsToMap instanceOf List<SObject>) {
                         return new ConvertMapObjectIntoMapOfSObject();
                     }
-                    when RETAIN_LAST {
-                        return new ConvertMapObjectIntoMapOfSObject();
-                    }
-                    when RETAIN_ALL {
-                        return new ConvertMapObjectIntoMapOfSObjectLists();
+                    if(objectsToMap instanceOf List<Object>) {
+                        return new ConvertMapObjectIntoMapOfObject();
                     }
                 }
-            }
-
-            if(objectsToMap instanceOf List<Object>) {
-                switch on retainingMode {
-                    when RETAIN_FIRST {
+                when RETAIN_LAST {
+                    if(objectsToMap instanceOf List<SObject>) {
+                        return new ConvertMapObjectIntoMapOfSObject();
+                    }
+                    if(objectsToMap instanceOf List<Object>) {
                         return new ConvertMapObjectIntoMapOfObject();
                     }
-                    when RETAIN_LAST {
-                        return new ConvertMapObjectIntoMapOfObject();
+                }
+                when RETAIN_ALL {
+                    if(objectsToMap instanceOf List<SObject>) {
+                        return new ConvertMapObjectIntoMapOfSObjectLists();
                     }
-                    when RETAIN_ALL {
+                    if(objectsToMap instanceOf List<Object>) {
                         return new ConvertMapObjectIntoMapOfObjectLists();
                     }
                 }
@@ -273,8 +252,7 @@ public class Utilities {
 
     private class ConvertMapObjectIntoMapOfObjectLists implements ITypeConverter {
         public Map<String, Object> convertMappingResult(Map<String, Object> tempMap) {
-            Map<String, List<Object>> workingMap = (Map<String, List<Object>>)tempMap;
-            return workingMap;
+            return (Map<String, List<Object>>)tempMap;
         }
     }
 
