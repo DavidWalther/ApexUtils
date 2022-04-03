@@ -2,8 +2,8 @@ public class Utilities {
     //----------------------------
     // public properties
     //----------------------------
-    public static ISObjectMappingUtility sObjectsUtilities {get {return new SObjectMappingUtility();} private set;}
-    public static IObjectMappingUtility objectsUtilities {get {return new ObjectMappingUtility();} private set;}
+    public static IMappingUtility_SObjects sObjectsUtilities {get {return new MappingUtility_SObjects();} private set;}
+    public static IMappingUtility_Objects objectsUtilities {get {return new MappingUtility_Objects();} private set;}
 
     //----------------------------
     // public utility interfaces for quick overview of what can be accessed via properties
@@ -13,7 +13,7 @@ public class Utilities {
 
     public enum MAP_OPTIONS {KEY_IGNORE_NULL, KEY_INCLUDE_ONLY}
 
-    public interface ISObjectMappingUtility {
+    public interface IMappingUtility_SObjects {
         /**
          * @param sObjects A list of SObjects to create a map for.
          * @param valueReader An instance of IValueReader. It is used to read the mapping key for each entry in 'sObjects'.
@@ -33,7 +33,7 @@ public class Utilities {
         Map<String, Object> mapSObjectListByValueReaderResults(List<SObject> sObjects, IValueReader valueReader);
     }
 
-    public interface IObjectMappingUtility {
+    public interface IMappingUtility_Objects {
         /**
          * @param objects A list of class instances to create a map for.
          * @param valueReader An instance of IValueReader. It is used to read the mapping key for each entry in 'objects'.
@@ -57,7 +57,7 @@ public class Utilities {
      * This class is intended to be stateless. If the necessity of storing data comes up,
      * store it in a static variable.
      */
-    private class SObjectMappingUtility implements ISObjectMappingUtility {
+    private class MappingUtility_SObjects implements IMappingUtility_SObjects {
         public Map<String, Object> mapSObjectListByValueReaderResults(List<SObject> sObjects, IValueReader valueReader) {
             return this.mapSObjectListByValueReaderResults(sObjects, valueReader, MAP_RETAIN_MODE.RETAIN_ALL, new Set<MAP_OPTIONS>(), new Set<String>());
         }
@@ -140,7 +140,7 @@ public class Utilities {
         }
     }
     
-    private class ObjectMappingUtility implements IObjectMappingUtility {
+    private class MappingUtility_Objects implements IMappingUtility_Objects {
         public Map<String, Object> mapObjectListByValueReaderResults(List<Object> objects, IValueReader valueReader, MAP_RETAIN_MODE retainingMode, Set<MAP_OPTIONS> mapOptions, Set<String> keySet) {
     
             //----------------------------
