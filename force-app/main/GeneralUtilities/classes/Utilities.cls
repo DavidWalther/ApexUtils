@@ -2,8 +2,8 @@ public class Utilities {
     //----------------------------
     // public properties
     //----------------------------
-    public static ISObjectMappingUtility sObjectsUtilities {get {return new SObjectMappingUtility();} private set;}
-    public static IObjectMappingUtility objectsUtilities {get {return new ObjectMappingUtility();} private set;}
+    public static IMappingUtility_SObjects mapping_SObject {get {return new MappingUtility_SObjects();} private set;}
+    public static IMappingUtility_Objects mapping_Object {get {return new MappingUtility_Objects();} private set;}
 
     //----------------------------
     // public utility interfaces for quick overview of what can be accessed via properties
@@ -13,7 +13,7 @@ public class Utilities {
 
     public enum MAP_OPTIONS {KEY_IGNORE_NULL, KEY_INCLUDE_ONLY}
 
-    public interface ISObjectMappingUtility {
+    public interface IMappingUtility_SObjects {
         /**
          * @param sObjects A list of SObjects to create a map for.
          * @param valueReader An instance of IValueReader. It is used to read the mapping key for each entry in 'sObjects'.
@@ -33,7 +33,7 @@ public class Utilities {
         Map<String, Object> mapSObjectListByValueReaderResults(List<SObject> sObjects, IValueReader valueReader);
     }
 
-    public interface IObjectMappingUtility {
+    public interface IMappingUtility_Objects {
         /**
          * @param objects A list of class instances to create a map for.
          * @param valueReader An instance of IValueReader. It is used to read the mapping key for each entry in 'objects'.
@@ -57,7 +57,7 @@ public class Utilities {
      * This class is intended to be stateless. If the necessity of storing data comes up,
      * store it in a static variable.
      */
-    private class SObjectMappingUtility implements ISObjectMappingUtility {
+    private class MappingUtility_SObjects implements IMappingUtility_SObjects {
         public Map<String, Object> mapSObjectListByValueReaderResults(List<SObject> sObjects, IValueReader valueReader) {
             return this.mapSObjectListByValueReaderResults(sObjects, valueReader, MAP_RETAIN_MODE.RETAIN_ALL, new Set<MAP_OPTIONS>(), new Set<String>());
         }
@@ -71,120 +71,37 @@ public class Utilities {
         }
 
         public Map<String, Object> mapSObjectListByValueReaderResults(List<SObject> sObjects, IValueReader valueReader, MAP_RETAIN_MODE retainingMode, Set<MAP_OPTIONS> mapOptions, Set<String> keySet) {
-
-            //----------------------------
-            // Guardians
-            //----------------------------
-
-            if(SObjects == NULL) throw new SObjectMappingUtility_Exception('The list of objects to map must not be NULL.');
-            if(valueReader == NULL) throw new SObjectMappingUtility_Exception('An Instance of Utilities.IValueReader must be provided.');
-            if(retainingMode == NULL) throw new SObjectMappingUtility_Exception('The retaining mode must be provided.');
-            if(mapOptions == NULL) throw new SObjectMappingUtility_Exception('A set of mapOptions must be provided');
-            if(keySet == NULL) throw new SObjectMappingUtility_Exception('A set of keys to in-/exclude must be provided');
-
-            //----------------------------
-            // Business logic
-            //----------------------------
-
-            /**
-             * direct casting from Object into result doesn't work here.
-             * => createing new Collection of mapped entries
-             */
-
-            switch on retainingMode {
-                when RETAIN_FIRST {
-                    Map<String, Object> tempMap = (Map<String, Object>)new MappingLogicFactory()
-                        .getProduct(retainingMode)
-                        .execute(sObjects, valueReader, mapOptions, keySet); 
-                    
-                    return this.convertObjectMapToSObjectMap(tempMap);
-                }
-                when RETAIN_LAST {
-                    Map<String, Object> tempMap = (Map<String, Object>)new MappingLogicFactory()
-                        .getProduct(retainingMode)
-                        .execute(sObjects, valueReader, mapOptions, keySet); 
-                    
-                    return this.convertObjectMapToSObjectMap(tempMap);
-                }
-                when RETAIN_ALL {
-                    Map<String, List<Object>> tempMap = (Map<String, List<Object>>)new MappingLogicFactory()
-                        .getProduct(retainingMode)
-                        .execute(sObjects, valueReader, mapOptions, keySet); 
-                    
-                    return this.convertObjectMapToSObjectMap(tempMap);
-                }
-                when else {
-                    throw new SObjectMappingUtility_Exception('Retaining option is not implemented yet.');
-                }
-            }
-        }
-
-        private Map<String,SObject> convertObjectMapToSObjectMap(Map<String, Object> tempMap) {
-            Map<String, SObject> result = new Map<String, SObject>();
-            for(String mapKey : tempMap.keySet()) {
-                result.put(mapKey, (SObject)tempMap.get(mapKey));
-            }
-            return result;
-        }
-
-        private Map<String, List<SObject>> convertObjectMapToSObjectMap(Map<String, List<Object>> tempMap) {
-            Map<String, List<SObject>> result = new Map<String, List<SObject>>();
-            for(String mapKey : tempMap.keySet()) {
-                List<SObject> keyList = new List<SObject>();
-                for(Object tmpObj : tempMap.get(mapKey)) {
-                    keyList.add((SObject)tmpObj);
-                }
-                result.put(mapKey, keyList);
-            }
-            return result;
+            return new MappingUtility_Objects().mapObjectListByValueReaderResults(sObjects,valueReader, retainingMode, mapOptions, keySet);
         }
     }
-    
-    private class ObjectMappingUtility implements IObjectMappingUtility {
+
+    private class MappingUtility_Objects implements IMappingUtility_Objects {
         public Map<String, Object> mapObjectListByValueReaderResults(List<Object> objects, IValueReader valueReader, MAP_RETAIN_MODE retainingMode, Set<MAP_OPTIONS> mapOptions, Set<String> keySet) {
-    
+
             //----------------------------
             // Guardians
             //----------------------------
-    
-            if(objects == NULL) throw new SObjectMappingUtility_Exception('The list of objects to map must not be NULL.');
-            if(valueReader == NULL) throw new SObjectMappingUtility_Exception('An Instance of Utilities.IValueReader must be provided.');
-            if(retainingMode == NULL) throw new SObjectMappingUtility_Exception('The retaining mode must be provided.');
-            if(mapOptions == NULL) throw new SObjectMappingUtility_Exception('A set of mapOptions must be provided');
-            if(keySet == NULL) throw new SObjectMappingUtility_Exception('A set of keys to in-/exclude must be provided');
-    
+
+            if(objects == NULL) throw new MappingUtility_Exception('The list of objects to map must not be NULL.');
+            if(valueReader == NULL) throw new MappingUtility_Exception('An Instance of Utilities.IValueReader must be provided.');
+            if(retainingMode == NULL) throw new MappingUtility_Exception('The retaining mode must be provided.');
+            if(mapOptions == NULL) throw new MappingUtility_Exception('A set of mapOptions must be provided');
+            if(keySet == NULL) throw new MappingUtility_Exception('A set of keys to in-/exclude must be provided');
+
             //----------------------------
             // Business logic
             //----------------------------
-    
-            Boolean isKeyIgnoreNull = mapOptions.contains(MAP_OPTIONS.KEY_IGNORE_NULL);
-            Boolean isKeyIncludeOnly = mapOptions.contains(MAP_OPTIONS.KEY_INCLUDE_ONLY);
-    
-            // Instead of checking the retainOption in every iteration we check only once
-            switch on retainingMode {
-                when RETAIN_FIRST {
-                    return (Map<String, Object>)new MappingLogicFactory()
-                        .getProduct(retainingMode)
-                        .execute(objects, valueReader, mapOptions, keySet); 
-                }
-                when RETAIN_LAST {
-                    return (Map<String, Object>)new MappingLogicFactory()
-                        .getProduct(retainingMode)
-                        .execute(objects, valueReader, mapOptions, keySet); 
-                }
-                when RETAIN_ALL {
-                    return (Map<String, List<Object>>)new MappingLogicFactory()
-                        .getProduct(retainingMode)
-                        .execute(objects, valueReader, mapOptions, keySet); 
-                }
-                when else {
-                    throw new SObjectMappingUtility_Exception('Retaining option is not implemented yet.');
-                }
-            }
+
+            IMappingLogic mappingLogic = new MappingLogicFactory().getProduct(retainingMode);
+            Map<String, Object> tempMap = (Map<String, Object>)mappingLogic
+                .execute(objects, valueReader, mapOptions, keySet);
+
+            ITypeConverter typeConverter = new TypeConverterFactory().getProduct(retainingMode, objects);
+            return typeConverter.convertMappingResult(tempMap);
         }
     }
-    
-    public class SObjectMappingUtility_Exception extends System.Exception{}
+
+    public class MappingUtility_Exception extends System.Exception{}
 
     public virtual class FieldValueReader implements IValueReader {
         private SObjectField field;
@@ -214,7 +131,7 @@ public class Utilities {
                     return new MappingLogicSObjectRetainAll();
                 }
                 when else {
-                    throw new SObjectMappingUtility_Exception('Retaining option is not implemented yet.');
+                    throw new MappingUtility_Exception('Retaining option is not implemented yet.');
                 }
             }
         }
@@ -269,7 +186,7 @@ public class Utilities {
         public Object execute(List<Object> objects, IValueReader valueReader, Set<MAP_OPTIONS> mapOptions, Set<String> keySet) {
             Boolean isKeyIgnoreNull = mapOptions.contains(MAP_OPTIONS.KEY_IGNORE_NULL);
             Boolean isKeyIncludeOnly = mapOptions.contains(MAP_OPTIONS.KEY_INCLUDE_ONLY);
-            
+
             Map<String, Object> result = new Map<String, Object>();
             for(Object tempSObject : objects) {
                 String key = valueReader.getValue(tempSObject);
@@ -277,6 +194,89 @@ public class Utilities {
                 if(isKeyIncludeOnly && !keySet.contains(String.valueOf(key))) {continue;}
                 // insert into map no matter whether in object exist yet or not
                 result.put(key, tempSObject);
+            }
+            return result;
+        }
+    }
+
+    //----------------------------
+    // Result Map type converter
+    //----------------------------
+
+    /**
+     * Directly casting Objects into SObjects or lists of SObjects causes exceptions.
+     * For that reason a special casting logic is needed for these cases
+     */
+    private interface ITypeConverter {
+        Map<String, Object> convertMappingResult(Map<String, Object> tempMap);
+    }
+
+    private class TypeConverterFactory {
+        public ITypeConverter getProduct(MAP_RETAIN_MODE retainingMode, Object objectsToMap) {
+            switch on retainingMode {
+                when RETAIN_FIRST {
+                    if(objectsToMap instanceOf List<SObject>) {
+                        return new ConvertMapObjectIntoMapOfSObject();
+                    }
+                    if(objectsToMap instanceOf List<Object>) {
+                        return new ConvertMapObjectIntoMapOfObject();
+                    }
+                }
+                when RETAIN_LAST {
+                    if(objectsToMap instanceOf List<SObject>) {
+                        return new ConvertMapObjectIntoMapOfSObject();
+                    }
+                    if(objectsToMap instanceOf List<Object>) {
+                        return new ConvertMapObjectIntoMapOfObject();
+                    }
+                }
+                when RETAIN_ALL {
+                    if(objectsToMap instanceOf List<SObject>) {
+                        return new ConvertMapObjectIntoMapOfSObjectLists();
+                    }
+                    if(objectsToMap instanceOf List<Object>) {
+                        return new ConvertMapObjectIntoMapOfObjectLists();
+                    }
+                }
+            }
+
+            throw new MappingUtility_Exception('Unknown parameters for mapping');
+        }
+    }
+
+    private class ConvertMapObjectIntoMapOfObject implements ITypeConverter {
+        public Map<String, Object> convertMappingResult(Map<String, Object> tempMap) {
+            return tempMap;
+        }
+    }
+
+    private class ConvertMapObjectIntoMapOfObjectLists implements ITypeConverter {
+        public Map<String, Object> convertMappingResult(Map<String, Object> tempMap) {
+            return (Map<String, List<Object>>)tempMap;
+        }
+    }
+
+    private class ConvertMapObjectIntoMapOfSObject implements ITypeConverter {
+        public Map<String, Object> convertMappingResult(Map<String, Object> tempMap) {
+            Map<String, SObject> result = new Map<String, SObject>();
+            for(String mapKey : tempMap.keySet()) {
+                result.put(mapKey, (SObject)tempMap.get(mapKey));
+            }
+            return result;
+        }
+    }
+
+    private class ConvertMapObjectIntoMapOfSObjectLists implements ITypeConverter {
+        public Map<String, Object> convertMappingResult(Map<String, Object> tempMap) {
+            Map<String, List<Object>> workingMap = (Map<String, List<Object>>)tempMap;
+            Map<String, List<SObject>> result = new Map<String, List<SObject>>();
+
+            for(String mapKey : workingMap.keySet()) {
+                List<SObject> keyList = new List<SObject>();
+                for(Object tmpObj : workingMap.get(mapKey)) {
+                    keyList.add((SObject)tmpObj);
+                }
+                result.put(mapKey, keyList);
             }
             return result;
         }
