@@ -97,46 +97,25 @@ public class Utilities {
                         .getProduct(retainingMode)
                         .execute(sObjects, valueReader, mapOptions, keySet); 
                     
-                    return this.convertObjectMapToSObjectMap(tempMap);
+                    return new ConvertMapObjectIntoMapOfSObject().convertMappingResult(tempMap);
                 }
                 when RETAIN_LAST {
                     Map<String, Object> tempMap = (Map<String, Object>)new MappingLogicFactory()
                         .getProduct(retainingMode)
                         .execute(sObjects, valueReader, mapOptions, keySet); 
                     
-                    return this.convertObjectMapToSObjectMap(tempMap);
+                    return new ConvertMapObjectIntoMapOfSObject().convertMappingResult(tempMap);
                 }
                 when RETAIN_ALL {
                     Map<String, List<Object>> tempMap = (Map<String, List<Object>>)new MappingLogicFactory()
                         .getProduct(retainingMode)
                         .execute(sObjects, valueReader, mapOptions, keySet); 
-                    
-                    return this.convertObjectMapToSObjectMap(tempMap);
+                    return new ConvertMapObjectIntoMapOfSObjectLists().convertMappingResult(tempMap);
                 }
                 when else {
                     throw new MappingUtility_Exception('Retaining option is not implemented yet.');
                 }
             }
-        }
-
-        private Map<String,SObject> convertObjectMapToSObjectMap(Map<String, Object> tempMap) {
-            Map<String, SObject> result = new Map<String, SObject>();
-            for(String mapKey : tempMap.keySet()) {
-                result.put(mapKey, (SObject)tempMap.get(mapKey));
-            }
-            return result;
-        }
-
-        private Map<String, List<SObject>> convertObjectMapToSObjectMap(Map<String, List<Object>> tempMap) {
-            Map<String, List<SObject>> result = new Map<String, List<SObject>>();
-            for(String mapKey : tempMap.keySet()) {
-                List<SObject> keyList = new List<SObject>();
-                for(Object tmpObj : tempMap.get(mapKey)) {
-                    keyList.add((SObject)tmpObj);
-                }
-                result.put(mapKey, keyList);
-            }
-            return result;
         }
     }
     
@@ -277,6 +256,40 @@ public class Utilities {
                 if(isKeyIncludeOnly && !keySet.contains(String.valueOf(key))) {continue;}
                 // insert into map no matter whether in object exist yet or not
                 result.put(key, tempSObject);
+            }
+            return result;
+        }
+    }
+
+    //----------------------------
+    // Result Map type converter
+    //----------------------------
+    
+    private interface ITypeConverter {
+        Map<String, Object> convertMappingResult(Map<String, Object> tempMap);
+    }
+
+    private class ConvertMapObjectIntoMapOfSObject implements ITypeConverter {
+        public Map<String, Object> convertMappingResult(Map<String, Object> tempMap) {
+            Map<String, SObject> result = new Map<String, SObject>();
+            for(String mapKey : tempMap.keySet()) {
+                result.put(mapKey, (SObject)tempMap.get(mapKey));
+            }
+            return result;
+        }
+    }
+
+    private class ConvertMapObjectIntoMapOfSObjectLists implements ITypeConverter {
+        public Map<String, Object> convertMappingResult(Map<String, Object> tempMap) {
+            Map<String, List<Object>> workingMap = (Map<String, List<Object>>)tempMap;
+            
+            Map<String, List<SObject>> result = new Map<String, List<SObject>>();
+            for(String mapKey : workingMap.keySet()) {
+                List<SObject> keyList = new List<SObject>();
+                for(Object tmpObj : workingMap.get(mapKey)) {
+                    keyList.add((SObject)tmpObj);
+                }
+                result.put(mapKey, keyList);
             }
             return result;
         }
