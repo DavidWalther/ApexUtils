@@ -8,7 +8,7 @@ public with sharing class UtilitiesTest {
     /**
      * This extension of the FieldValueReader reads the Lead.Company field for a mapping key
      */
-    private virtual class LeadCompanyReader extends Utilities.FieldValueReader {
+    private virtual class LeadCompanyReader extends FieldValueReader {
         public LeadCompanyReader() {
             super(Lead.Company);
         }
@@ -92,7 +92,7 @@ public with sharing class UtilitiesTest {
         * The map method of SObjectMappingUtility is called for the leadList and the company field
         */
         Map<String, SObject> mappedLeads = (Map<String, SObject>)Utilities.mapping_SObject.mapSObjectListByValueReaderResults(
-            leadList, new LeadCompanyReader(), Utilities.MAP_RETAIN_MODE.RETAIN_FIRST);
+            leadList, new LeadCompanyReader(), MAP_RETAIN_MODE.RETAIN_FIRST);
         Test.stopTest();
 
         System.assertEquals(3, mappedLeads.size());
@@ -140,7 +140,7 @@ public with sharing class UtilitiesTest {
         * The map method of SObjectMappingUtility is called for the leadList and the company field
         */
         Map<String, SObject> mappedLeads = (Map<String, SObject>)Utilities.mapping_SObject.mapSObjectListByValueReaderResults(
-            leadList, new LeadCompanyReader(), Utilities.MAP_RETAIN_MODE.RETAIN_LAST);
+            leadList, new LeadCompanyReader(), MAP_RETAIN_MODE.RETAIN_LAST);
         Test.stopTest();
 
         System.assertEquals(3, mappedLeads.size());
@@ -214,16 +214,16 @@ public with sharing class UtilitiesTest {
         Map<String, List<Object>> mappedLeads2 = (Map<String, List<Object>>)Utilities.mapping_Object.mapObjectListByValueReaderResults(
             integerpairs,
             new ModValueReader(),
-            Utilities.MAP_RETAIN_MODE.RETAIN_ALL, 
-            new Set<Utilities.MAP_OPTIONS>(),
+            MAP_RETAIN_MODE.RETAIN_ALL,
+            new Set<MAP_OPTIONS>(),
             new Set<String>()
         );
         Test.stopTest();
 
         /**
         * Then
-        * - pairs (4,3) and (7,6) are mapped by value '1' (4 % 3 == 1 and 7 % 6 == 1) 
-        * - pair (5,3) is mapped by value '2' (5 % 3 == 2) 
+        * - pairs (4,3) and (7,6) are mapped by value '1' (4 % 3 == 1 and 7 % 6 == 1)
+        * - pair (5,3) is mapped by value '2' (5 % 3 == 2)
         */
         System.assertEquals(2, mappedLeads2.size());
         System.assert(mappedLeads2.containsKey('1'));
@@ -259,8 +259,8 @@ public with sharing class UtilitiesTest {
         Map<String, Object> mappedLeads2 = (Map<String, Object>)Utilities.mapping_Object.mapObjectListByValueReaderResults(
             integerpairs,
             new ModValueReader(),
-            Utilities.MAP_RETAIN_MODE.RETAIN_FIRST, 
-            new Set<Utilities.MAP_OPTIONS>(),
+            MAP_RETAIN_MODE.RETAIN_FIRST,
+            new Set<MAP_OPTIONS>(),
             new Set<String>()
         );
         Test.stopTest();
@@ -268,7 +268,7 @@ public with sharing class UtilitiesTest {
         /**
         * Then
         * - pair (4,3) is mapped by value '1' (4 % 3 == 1)
-        * - pair (5,3) is mapped by value '2' (5 % 3 == 2) 
+        * - pair (5,3) is mapped by value '2' (5 % 3 == 2)
         */
         System.assert(mappedLeads2.containsKey('1'));
         System.assertEquals(pair1Modulo1.getValueA(), ((IntegerPair)mappedLeads2.get('1')).getValueA());
@@ -299,8 +299,8 @@ public with sharing class UtilitiesTest {
         Map<String, Object> mappedLeads2 = (Map<String, Object>)Utilities.mapping_Object.mapObjectListByValueReaderResults(
             integerpairs,
             new ModValueReader(),
-            Utilities.MAP_RETAIN_MODE.RETAIN_LAST, 
-            new Set<Utilities.MAP_OPTIONS>(),
+            MAP_RETAIN_MODE.RETAIN_LAST,
+            new Set<MAP_OPTIONS>(),
             new Set<String>()
         );
         Test.stopTest();
@@ -308,7 +308,7 @@ public with sharing class UtilitiesTest {
         /**
         * Then
         * - pair (4,3) is mapped by value '1' (7 % 6 == 1)
-        * - pair (5,3) is mapped by value '2' (5 % 3 == 2) 
+        * - pair (5,3) is mapped by value '2' (5 % 3 == 2)
         */
         System.assert(mappedLeads2.containsKey('1'));
         System.assertEquals(pair2Modulo1.getValueA(), ((IntegerPair)mappedLeads2.get('1')).getValueA());
@@ -369,7 +369,7 @@ public with sharing class UtilitiesTest {
         System.Exception exception_direct_Conversion = NULL;
         try {
             Map<String, Lead> typecastedLeadMap = (Map<String, Lead>)Utilities.mapping_SObject.mapSObjectListByValueReaderResults(
-                leadList, new LeadCompanyReader(), Utilities.MAP_RETAIN_MODE.RETAIN_LAST);
+                leadList, new LeadCompanyReader(), MAP_RETAIN_MODE.RETAIN_LAST);
         } catch(System.Exception exc) {
             exception_direct_Conversion = exc;
         }
@@ -379,7 +379,7 @@ public with sharing class UtilitiesTest {
         System.Exception exception_indirect_Conversion = NULL;
         try {
             Map<String, Object> notTypecastedLeadMap = Utilities.mapping_SObject.mapSObjectListByValueReaderResults(
-                leadList, new LeadCompanyReader(), Utilities.MAP_RETAIN_MODE.RETAIN_LAST);
+                leadList, new LeadCompanyReader(), MAP_RETAIN_MODE.RETAIN_LAST);
             leadToCheck = (Lead)notTypecastedLeadMap.values().get(0);
         } catch (System.Exception exc) {
             exception_indirect_Conversion = exc;
@@ -430,8 +430,8 @@ public with sharing class UtilitiesTest {
         Map<String, Object> mappedLeads = Utilities.mapping_SObject.mapSObjectListByValueReaderResults(
             leadList,
             new LeadCompanyReader(),
-            Utilities.MAP_RETAIN_MODE.RETAIN_LAST, 
-            new Set<Utilities.MAP_OPTIONS>{Utilities.MAP_OPTIONS.KEY_IGNORE_NULL}
+            MAP_RETAIN_MODE.RETAIN_LAST,
+            new Set<MAP_OPTIONS>{MAP_OPTIONS.KEY_IGNORE_NULL}
         );
         Test.stopTest();
 
@@ -473,8 +473,8 @@ public with sharing class UtilitiesTest {
         Map<String, List<SObject>> mappedLeads = (Map<String, List<SObject>>)Utilities.mapping_SObject.mapSObjectListByValueReaderResults(
             leadList,
             new LeadCompanyReader(),
-            Utilities.MAP_RETAIN_MODE.RETAIN_ALL, 
-            new Set<Utilities.MAP_OPTIONS>{Utilities.MAP_OPTIONS.KEY_INCLUDE_ONLY},
+            MAP_RETAIN_MODE.RETAIN_ALL,
+            new Set<MAP_OPTIONS>{MAP_OPTIONS.KEY_INCLUDE_ONLY},
             keysForMapping
         );
         Test.stopTest();
