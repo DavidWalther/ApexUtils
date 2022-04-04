@@ -9,10 +9,6 @@ public class Utilities {
     // public utility interfaces for quick overview of what can be accessed via properties
     //----------------------------
 
-    public enum MAP_RETAIN_MODE {RETAIN_FIRST, RETAIN_LAST, RETAIN_ALL}
-
-    public enum MAP_OPTIONS {KEY_IGNORE_NULL, KEY_INCLUDE_ONLY}
-
     public interface IMappingUtility_SObjects {
         /**
          * @param sObjects A list of SObjects to create a map for.
