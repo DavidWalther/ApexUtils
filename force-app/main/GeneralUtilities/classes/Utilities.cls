@@ -99,9 +99,7 @@ public class Utilities {
             ITypeConverter typeConverter = new TypeConverterFactory().getProduct(retainingMode, objects);
             return typeConverter.convertMappingResult(tempMap);
         }
-    }
-
-    public class MapUtility_Exception extends System.Exception{}
+    } 
 
     public virtual class FieldValueReader implements IValueReader {
         private SObjectField field;
