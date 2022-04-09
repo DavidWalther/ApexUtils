@@ -25,6 +25,7 @@
     "packageAliases": {
         "core": "0Ho2o000000fxYOCAY",
         "core@0.1.0-1": "04t2o000000yUURAA2",
-        "mapping": "0Ho2o000000fxYTCAY"
+        "mapping": "0Ho2o000000fxYTCAY",
+        "mapping@0.1.0-1": "04t2o000000yUUWAA2"
     }
 }
