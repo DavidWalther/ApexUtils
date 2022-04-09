@@ -16,7 +16,13 @@
             "package": "mapping",
             "versionName": "ver 0.1",
             "versionNumber": "0.1.0.NEXT",
-            "default": false
+            "default": false,
+            "dependencies": [
+                {
+                   "package": "core@0.1.0-1"
+    
+                }
+            ]
         }
     ],
     "namespace": "",
