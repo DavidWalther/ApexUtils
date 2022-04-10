@@ -27,7 +27,7 @@ public with sharing virtual class TypeConverterFactory {
             }
         }
 
-        throw new MapUtility_MappingException('Unknown parameters for mapping');
+        throw new MapUtility_Exception('Unknown parameters for mapping');
     }
 
     private class ConvertMapObjectIntoMapOfObject implements ITypeConverter {

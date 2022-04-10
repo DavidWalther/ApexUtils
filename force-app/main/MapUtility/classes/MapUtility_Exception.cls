@@ -1,0 +1,1 @@
+public with sharing virtual class MapUtility_Exception extends System.Exception {}

@@ -12,7 +12,7 @@ public with sharing class MappingLogicFactory {
                 return new MappingLogicSObjectRetainAll();
             }
             when else {
-                throw new MapUtility_MappingException('Retaining option is not implemented yet.');
+                throw new MapUtility_Exception('Retaining option is not implemented yet.');
             }
         }
     }
