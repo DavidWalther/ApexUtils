@@ -94,11 +94,11 @@ public class Utilities {
             // Business logic
             //----------------------------
     
-            IMappingLogic mappingLogic = new MappingLogicFactory().getProduct(retainingMode);
+            MapUtility_MappingLogicInterface mappingLogic = new MapUtility_MappingLogicFactory().getProduct(retainingMode);
             Map<String, Object> tempMap = (Map<String, Object>)mappingLogic
                 .execute(objects, valueReader, mapOptions, keySet);
     
-            ITypeConverter typeConverter = new TypeConverterFactory().getProduct(retainingMode, objects);
+            MapUtility_TypeConverterInterface typeConverter = new MapUtility_TypeConverterFactory().getProduct(retainingMode, objects);
             return typeConverter.convertMappingResult(tempMap);
         }
     }
