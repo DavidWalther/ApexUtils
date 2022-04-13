@@ -1,3 +1,4 @@
+@IsTest
 public with sharing class MapUtility_MappingMainTest {
     
     //----------------------------
@@ -7,7 +8,7 @@ public with sharing class MapUtility_MappingMainTest {
     /**
      * This extension of the FieldValueReader reads the Lead.Company field for a mapping key
      */
-    private virtual class LeadCompanyReader implements IValueReader {
+    private virtual class LeadCompanyReader extends FieldValueReader {
         public LeadCompanyReader() {
             super(Lead.Company);
         }
