@@ -55,52 +55,25 @@ public class Utilities {
      */
     private class MappingUtility_SObjects implements IMappingUtility_SObjects {
         public Map<String, Object> mapSObjectListByValueReaderResults(List<SObject> sObjects, IValueReader valueReader) {
-            return new MapUtility().generateMapFromObjectList(sObjects, valueReader, MAP_RETAIN_MODE.RETAIN_ALL, new Set<MAP_OPTIONS>(), new Set<String>());
+            return new MapUtility_MappingMain().generateMapFromObjectList(sObjects, valueReader, MAP_RETAIN_MODE.RETAIN_ALL, new Set<MAP_OPTIONS>(), new Set<String>());
         }
 
         public Map<String, Object> mapSObjectListByValueReaderResults(List<SObject> sObjects, IValueReader valueReader, MAP_RETAIN_MODE retainingMode) {
-            return new MapUtility().generateMapFromObjectList(sObjects, valueReader, retainingMode, new Set<MAP_OPTIONS>(), new Set<String>());
+            return new MapUtility_MappingMain().generateMapFromObjectList(sObjects, valueReader, retainingMode, new Set<MAP_OPTIONS>(), new Set<String>());
         }
 
         public Map<String, Object> mapSObjectListByValueReaderResults(List<SObject> sObjects, IValueReader valueReader, MAP_RETAIN_MODE retainingMode, Set<MAP_OPTIONS> mapOptions) {
-            return new MapUtility().generateMapFromObjectList(sObjects, valueReader, retainingMode, mapOptions, new Set<String>());
+            return new MapUtility_MappingMain().generateMapFromObjectList(sObjects, valueReader, retainingMode, mapOptions, new Set<String>());
         }
 
         public Map<String, Object> mapSObjectListByValueReaderResults(List<SObject> sObjects, IValueReader valueReader, MAP_RETAIN_MODE retainingMode, Set<MAP_OPTIONS> mapOptions, Set<String> keySet) {
-            return new MapUtility().generateMapFromObjectList(sObjects,valueReader, retainingMode, mapOptions, keySet);
+            return new MapUtility_MappingMain().generateMapFromObjectList(sObjects,valueReader, retainingMode, mapOptions, keySet);
         }
     }
 
     private class MappingUtility_Objects implements IMappingUtility_Objects {
         public Map<String, Object> mapObjectListByValueReaderResults(List<Object> objects, IValueReader valueReader, MAP_RETAIN_MODE retainingMode, Set<MAP_OPTIONS> mapOptions, Set<String> keySet) {
-            return new MapUtility().generateMapFromObjectList(objects, valueReader, retainingMode, mapOptions, keySet);
+            return new MapUtility_MappingMain().generateMapFromObjectList(objects, valueReader, retainingMode, mapOptions, keySet);
         }
     } 
-
-    private class MapUtility {
-        public Map<String, Object> generateMapFromObjectList(List<Object> objects, IValueReader valueReader, MAP_RETAIN_MODE retainingMode, Set<MAP_OPTIONS> mapOptions, Set<String> keySet) {
-    
-            //----------------------------
-            // Guardians
-            //----------------------------
-    
-            if(objects == NULL) throw new MapUtility_Exception('The list of objects to map must not be NULL.');
-            if(valueReader == NULL) throw new MapUtility_Exception('An Instance of Utilities.IValueReader must be provided.');
-            if(retainingMode == NULL) throw new MapUtility_Exception('The retaining mode must be provided.');
-            if(mapOptions == NULL) throw new MapUtility_Exception('A set of mapOptions must be provided');
-            if(keySet == NULL) throw new MapUtility_Exception('A set of keys to in-/exclude must be provided');
-    
-            //----------------------------
-            // Business logic
-            //----------------------------
-    
-            MapUtility_MappingLogicInterface mappingLogic = new MapUtility_MappingLogicFactory().getProduct(retainingMode);
-            Map<String, Object> tempMap = (Map<String, Object>)mappingLogic
-                .execute(objects, valueReader, mapOptions, keySet);
-    
-            MapUtility_TypeConverterInterface typeConverter = new MapUtility_TypeConverterFactory().getProduct(retainingMode, objects);
-            return typeConverter.convertMappingResult(tempMap);
-        }
-    }
-    
 }
