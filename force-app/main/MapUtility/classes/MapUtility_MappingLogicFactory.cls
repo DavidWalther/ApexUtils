@@ -1,6 +1,6 @@
-public with sharing class MappingLogicFactory {
+public with sharing class MapUtility_MappingLogicFactory {
 
-    public IMappingLogic getProduct(MAP_RETAIN_MODE retainingMode) {
+    public MapUtility_MappingLogicInterface getProduct(MAP_RETAIN_MODE retainingMode) {
         switch on retainingMode {
             when RETAIN_FIRST {
                 return new MappingLogicSObjectRetainFirst();
@@ -17,7 +17,7 @@ public with sharing class MappingLogicFactory {
         }
     }
 
-    private class MappingLogicSObjectRetainAll implements IMappingLogic {
+    private class MappingLogicSObjectRetainAll implements MapUtility_MappingLogicInterface {
         public Object execute(List<Object> objects, IValueReader valueReader, Set<MAP_OPTIONS> mapOptions, Set<String> keySet) {
             Boolean isKeyIgnoreNull = mapOptions.contains(MAP_OPTIONS.KEY_IGNORE_NULL);
             Boolean isKeyIncludeOnly = mapOptions.contains(MAP_OPTIONS.KEY_INCLUDE_ONLY);
@@ -39,7 +39,7 @@ public with sharing class MappingLogicFactory {
         }
     }
 
-    private class MappingLogicSObjectRetainFirst implements IMappingLogic {
+    private class MappingLogicSObjectRetainFirst implements MapUtility_MappingLogicInterface {
         public Object execute(List<Object> objects, IValueReader valueReader, Set<MAP_OPTIONS> mapOptions, Set<String> keySet) {
             Boolean isKeyIgnoreNull = mapOptions.contains(MAP_OPTIONS.KEY_IGNORE_NULL);
             Boolean isKeyIncludeOnly = mapOptions.contains(MAP_OPTIONS.KEY_INCLUDE_ONLY);
@@ -58,7 +58,7 @@ public with sharing class MappingLogicFactory {
         }
     }
 
-    private class MappingLogicSObjectRetainLast implements IMappingLogic {
+    private class MappingLogicSObjectRetainLast implements MapUtility_MappingLogicInterface {
         public Object execute(List<Object> objects, IValueReader valueReader, Set<MAP_OPTIONS> mapOptions, Set<String> keySet) {
             Boolean isKeyIgnoreNull = mapOptions.contains(MAP_OPTIONS.KEY_IGNORE_NULL);
             Boolean isKeyIncludeOnly = mapOptions.contains(MAP_OPTIONS.KEY_INCLUDE_ONLY);
