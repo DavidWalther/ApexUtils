@@ -16,9 +16,9 @@ public with sharing class MapUtility_MappingMainTest {
 
     @IsTest
     static void mapUtil_SObjects_RetainMode_RetainAll() {
-        String TESTCOMPANY_1_NAME = 'TestCompany1';
-        String TESTCOMPANY_2_NAME = 'TestCompany2';
-        String TESTCOMPANY_3_NAME = 'TestCompany3';
+        final String TESTCOMPANY_1_NAME = 'TestCompany1';
+        final String TESTCOMPANY_2_NAME = 'TestCompany2';
+        final String TESTCOMPANY_3_NAME = 'TestCompany3';
         /**
         * Given
         * A list of leads with filled company fields
@@ -65,9 +65,9 @@ public with sharing class MapUtility_MappingMainTest {
 
     @IsTest
     private static void mapUtil_SObjects_RetainMode_RetainFirst() {
-        String TESTCOMPANY_1_NAME = 'TestCompany1';
-        String TESTCOMPANY_2_NAME = 'TestCompany2';
-        String TESTCOMPANY_3_NAME = 'TestCompany3';
+        final String TESTCOMPANY_1_NAME = 'TestCompany1';
+        final String TESTCOMPANY_2_NAME = 'TestCompany2';
+        final String TESTCOMPANY_3_NAME = 'TestCompany3';
         /**
         * Given
         * A list of leads with filled company fields
@@ -114,9 +114,9 @@ public with sharing class MapUtility_MappingMainTest {
 
     @IsTest
     private static void mapUtil_SObjects_RetainMode_RetainLast() {
-        String TESTCOMPANY_1_NAME = 'TestCompany1';
-        String TESTCOMPANY_2_NAME = 'TestCompany2';
-        String TESTCOMPANY_3_NAME = 'TestCompany3';
+        final String TESTCOMPANY_1_NAME = 'TestCompany1';
+        final String TESTCOMPANY_2_NAME = 'TestCompany2';
+        final String TESTCOMPANY_3_NAME = 'TestCompany3';
         /**
         * Given
         * A list of leads with filled company fields
@@ -328,7 +328,7 @@ public with sharing class MapUtility_MappingMainTest {
 
     @IsTest
     static void TypeCastFromObjectToSObjectListCausesNoException() {
-        String TESTCOMPANY_1_NAME = 'TestCompany1';
+        final String TESTCOMPANY_1_NAME = 'TestCompany1';
 
         Lead lead1 = new Lead(
         Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
@@ -357,7 +357,7 @@ public with sharing class MapUtility_MappingMainTest {
          * Given
          * A list of leads to map
          */
-        String TESTCOMPANY_1_NAME = 'TestCompany1';
+        final String TESTCOMPANY_1_NAME = 'TestCompany1';
         Lead lead1 = new Lead(
         Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
 
@@ -418,8 +418,8 @@ public with sharing class MapUtility_MappingMainTest {
 
     @IsTest
     static void mapUtil_MapOptions_KEY_IGNORE_NULL() {
-        String TESTCOMPANY_1_NAME = 'TestCompany1';
-        String TESTCOMPANY_2_NAME = 'TestCompany2';
+        final String TESTCOMPANY_1_NAME = 'TestCompany1';
+        final String TESTCOMPANY_2_NAME = 'TestCompany2';
         /**
         * Given
         * - two leads with a set Company field
@@ -457,10 +457,10 @@ public with sharing class MapUtility_MappingMainTest {
 
     @IsTest
     static void mapUtil_MapOptions_KEY_INCLUDE_ONLY() {
-        String TESTCOMPANY_1_NAME = 'TestCompany1';
-        String TESTCOMPANY_2_NAME = 'TestCompany2';
-        String TESTCOMPANY_3_NAME = 'TestCompany3';
-        String TESTCOMPANY_4_NAME = 'TestCompany4';
+        final String TESTCOMPANY_1_NAME = 'TestCompany1';
+        final String TESTCOMPANY_2_NAME = 'TestCompany2';
+        final String TESTCOMPANY_3_NAME = 'TestCompany3';
+        final String TESTCOMPANY_4_NAME = 'TestCompany4';
         /**
         * Given
         * - five leads with a set Company field
