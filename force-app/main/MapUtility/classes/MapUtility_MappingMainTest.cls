@@ -42,7 +42,11 @@ public with sharing class MapUtility_MappingMainTest {
         * The map method of SObjectMappingUtility is called for the leadList and the company field
         */
         Map<String, List<SObject>> mappedLeads = (Map<String, List<SObject>>)new MapUtility_MappingMain().generateMapFromObjectList(
-            leadList, new LeadCompanyReader(), MAP_RETAIN_MODE.RETAIN_ALL, new Set<MAP_OPTIONS>(), new Set<String>()
+            leadList,
+            new LeadCompanyReader(),
+            MAP_RETAIN_MODE.RETAIN_ALL,
+            new Set<MAP_OPTIONS>(),
+            new Set<String>()
         );
 
         Test.stopTest();
@@ -93,7 +97,11 @@ public with sharing class MapUtility_MappingMainTest {
         * The map method of SObjectMappingUtility is called for the leadList and the company field
         */
         Map<String, SObject> mappedLeads = (Map<String, SObject>)new MapUtility_MappingMain().generateMapFromObjectList(
-            leadList, new LeadCompanyReader(), MAP_RETAIN_MODE.RETAIN_FIRST, new Set<MAP_OPTIONS>(), new Set<String>()
+            leadList,
+            new LeadCompanyReader(),
+            MAP_RETAIN_MODE.RETAIN_FIRST,
+            new Set<MAP_OPTIONS>(),
+            new Set<String>()
         );
         Test.stopTest();
 
@@ -142,7 +150,11 @@ public with sharing class MapUtility_MappingMainTest {
         * The map method of SObjectMappingUtility is called for the leadList and the company field
         */
         Map<String, SObject> mappedLeads = (Map<String, SObject>)new MapUtility_MappingMain().generateMapFromObjectList(
-            leadList, new LeadCompanyReader(), MAP_RETAIN_MODE.RETAIN_LAST, new Set<MAP_OPTIONS>(), new Set<String>()
+            leadList,
+            new LeadCompanyReader(),
+            MAP_RETAIN_MODE.RETAIN_LAST,
+            new Set<MAP_OPTIONS>(),
+            new Set<String>()
         );
         Test.stopTest();
 
@@ -341,7 +353,12 @@ public with sharing class MapUtility_MappingMainTest {
         System.Exception exception_ToCheck = NULL;
         try {
             Map<String, List<Lead>> mappedLeads2 = (Map<String, List<Lead>>)new MapUtility_MappingMain().generateMapFromObjectList(
-                leadList, new LeadCompanyReader(), MAP_RETAIN_MODE.RETAIN_ALL, new Set<MAP_OPTIONS>(), new Set<String>());
+                leadList,
+                new LeadCompanyReader(),
+                MAP_RETAIN_MODE.RETAIN_ALL,
+                new Set<MAP_OPTIONS>(),
+                new Set<String>()
+            );
 
         } catch(System.Exception exc) {
             exception_ToCheck = exc;
@@ -373,7 +390,12 @@ public with sharing class MapUtility_MappingMainTest {
         System.Exception exception_direct_Conversion = NULL;
         try {
             Map<String, Lead> typecastedLeadMap = (Map<String, Lead>)new MapUtility_MappingMain().generateMapFromObjectList(
-                leadList, new LeadCompanyReader(), MAP_RETAIN_MODE.RETAIN_LAST, new Set<MAP_OPTIONS>(), new Set<String>());
+                leadList,
+                new LeadCompanyReader(),
+                MAP_RETAIN_MODE.RETAIN_LAST,
+                new Set<MAP_OPTIONS>(),
+                new Set<String>()
+            );
                 
         } catch(System.Exception exc) {
             exception_direct_Conversion = exc;
