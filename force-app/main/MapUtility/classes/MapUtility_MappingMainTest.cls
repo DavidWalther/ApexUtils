@@ -369,7 +369,7 @@ public with sharing class MapUtility_MappingMainTest {
     }
 
     @IsTest
-    static void TypeCastFromObjectToSingleSObjectCausesException() {
+    static void typeCast_ImplicitTypeCastOfRecordFails() {
         /**
          * Given
          * A list of leads to map
@@ -382,12 +382,10 @@ public with sharing class MapUtility_MappingMainTest {
 
         /**
          * When
-         * 1. the result is casted directly
-         * 2. an entry of the map is casted
+         * the result is casted implicitly from Object to Lead by casting the map
          */
         Test.startTest();
-        // 1
-        System.Exception exception_direct_Conversion = NULL;
+        System.Exception exceptionToCheck = NULL;
         try {
             Map<String, Lead> typecastedLeadMap = (Map<String, Lead>)new MapUtility_MappingMain().generateMapFromObjectList(
                 leadList,
@@ -398,12 +396,38 @@ public with sharing class MapUtility_MappingMainTest {
             );
                 
         } catch(System.Exception exc) {
-            exception_direct_Conversion = exc;
+            exceptionToCheck = exc;
         }
+        Test.stopTest();
 
-        // 2
+        /**
+         * Then
+         * casting the map fails
+         */
+        System.assertNotEquals(NULL, exceptionToCheck);
+        System.assert(exceptionToCheck instanceOf System.TypeException);
+        System.assertEquals('Invalid conversion from runtime type Map<String,SObject> to Map<String,Lead>', exceptionToCheck.getMessage());
+    }
+
+    @IsTest
+    static void typeCast_SpecificTypeCastOfRecordSucceeds() {
+        /**
+         * Given
+         * A list of leads to map
+         */
+        final String TESTCOMPANY_1_NAME = 'TestCompany1';
+        Lead lead1 = new Lead(
+        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
+
+        List<Lead> leadList = new List<Lead>{lead1};
+
+        /**
+         * When
+         * An entry of the map is casted by itself
+         */
+        Test.startTest();
         Lead leadToCheck;
-        System.Exception exception_indirect_Conversion = NULL;
+        System.Exception exceptionToCheck = NULL;
         try {
             Map<String, Object> notTypecastedLeadMap = new MapUtility_MappingMain().generateMapFromObjectList(
                 leadList,
@@ -414,22 +438,15 @@ public with sharing class MapUtility_MappingMainTest {
             );
             leadToCheck = (Lead)notTypecastedLeadMap.values().get(0);
         } catch (System.Exception exc) {
-            exception_indirect_Conversion = exc;
+            exceptionToCheck = exc;
         }
         Test.stopTest();
+
         /**
          * Then
-         * 1. casting the map fails
-         * 2. casting an entry succeeds
+         * casting an entry succeeds
          */
-
-        // 1
-        System.assertNotEquals(NULL, exception_direct_Conversion);
-        System.assert(exception_direct_Conversion instanceOf System.TypeException);
-        System.assertEquals('Invalid conversion from runtime type Map<String,SObject> to Map<String,Lead>', exception_direct_Conversion.getMessage());
-
-        // 2
-        System.assertEquals(NULL, exception_indirect_Conversion);
+        System.assertEquals(NULL, exceptionToCheck);
         System.assertNotEquals(NULL, leadToCheck);
         System.assertEquals(lead1.Id, leadToCheck.Id);
     }
