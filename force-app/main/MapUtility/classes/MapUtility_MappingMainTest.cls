@@ -1,6 +1,6 @@
 @IsTest
 public with sharing class MapUtility_MappingMainTest {
-    
+
     //----------------------------
     // Mapping of SObjects
     //----------------------------
@@ -8,7 +8,7 @@ public with sharing class MapUtility_MappingMainTest {
     /**
      * This extension of the FieldValueReader reads the Lead.Company field for a mapping key
      */
-    private virtual class LeadCompanyReader extends FieldValueReader {
+    private virtual class LeadCompanyReader extends FieldValueReader implements IValueReader {
         public LeadCompanyReader() {
             super(Lead.Company);
         }
@@ -16,13 +16,15 @@ public with sharing class MapUtility_MappingMainTest {
 
     @IsTest
     static void mapUtil_SObjects_RetainMode_RetainAll() {
-        String TESTCOMPANY_1_NAME = 'TestCompany1';
-        String TESTCOMPANY_2_NAME = 'TestCompany2';
-        String TESTCOMPANY_3_NAME = 'TestCompany3';
         /**
-        * Given
-        * A list of leads with filled company fields
-        */
+         * Given
+         * - A list of leads with filled company fields.
+         * - Multiple leads have the same value
+         */
+        final String TESTCOMPANY_1_NAME = 'TestCompany1';
+        final String TESTCOMPANY_2_NAME = 'TestCompany2';
+        final String TESTCOMPANY_3_NAME = 'TestCompany3';
+
         Lead lead1 = new Lead(
         Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
         Lead lead2 = new Lead(
@@ -37,16 +39,25 @@ public with sharing class MapUtility_MappingMainTest {
         List<Lead> leadList = new List<Lead>{lead1, lead2, lead3, lead4, lead5};
 
         Test.startTest();
+
         /**
         * When
         * The map method of SObjectMappingUtility is called for the leadList and the company field
         */
         Map<String, List<SObject>> mappedLeads = (Map<String, List<SObject>>)new MapUtility_MappingMain().generateMapFromObjectList(
-            leadList, new LeadCompanyReader(), MAP_RETAIN_MODE.RETAIN_ALL, new Set<MAP_OPTIONS>(), new Set<String>()
+            leadList,
+            new LeadCompanyReader(),
+            MAP_RETAIN_MODE.RETAIN_ALL,
+            new Set<MAP_OPTIONS>(),
+            new Set<String>()
         );
 
         Test.stopTest();
 
+        /**
+         * Then
+         * A collection of all matching lead in list for every company value in the result
+         */
         System.assertEquals(3, mappedLeads.size());
         System.assertEquals(true, mappedLeads.containsKey(TESTCOMPANY_1_NAME));
         System.assertEquals(true, mappedLeads.containsKey(TESTCOMPANY_2_NAME));
@@ -64,14 +75,16 @@ public with sharing class MapUtility_MappingMainTest {
     }
 
     @IsTest
-    private static void mapUtil_SObjects_RetainMode_RetainFirst() {
-        String TESTCOMPANY_1_NAME = 'TestCompany1';
-        String TESTCOMPANY_2_NAME = 'TestCompany2';
-        String TESTCOMPANY_3_NAME = 'TestCompany3';
+    static void mapUtil_SObjects_RetainMode_RetainFirst() {
         /**
-        * Given
-        * A list of leads with filled company fields
-        */
+         * Given
+         * - A list of leads with filled company fields.
+         * - Multiple leads have the same value
+         */
+        final String TESTCOMPANY_1_NAME = 'TestCompany1';
+        final String TESTCOMPANY_2_NAME = 'TestCompany2';
+        final String TESTCOMPANY_3_NAME = 'TestCompany3';
+
         Lead lead1 = new Lead(
         Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
         Lead lead2 = new Lead(
@@ -88,15 +101,24 @@ public with sharing class MapUtility_MappingMainTest {
         List<Lead> leadList = new List<Lead>{lead1, lead2, lead3, lead4, lead5, lead6};
 
         Test.startTest();
+
         /**
         * When
         * The map method of SObjectMappingUtility is called for the leadList and the company field
         */
         Map<String, SObject> mappedLeads = (Map<String, SObject>)new MapUtility_MappingMain().generateMapFromObjectList(
-            leadList, new LeadCompanyReader(), MAP_RETAIN_MODE.RETAIN_FIRST, new Set<MAP_OPTIONS>(), new Set<String>()
+            leadList,
+            new LeadCompanyReader(),
+            MAP_RETAIN_MODE.RETAIN_FIRST,
+            new Set<MAP_OPTIONS>(),
+            new Set<String>()
         );
         Test.stopTest();
 
+        /**
+         * Then
+         * The first lead in list for every company value in the result
+         */
         System.assertEquals(3, mappedLeads.size());
         System.assertEquals(true, mappedLeads.containsKey(TESTCOMPANY_1_NAME));
         System.assertEquals(true, mappedLeads.containsKey(TESTCOMPANY_2_NAME));
@@ -113,14 +135,16 @@ public with sharing class MapUtility_MappingMainTest {
     }
 
     @IsTest
-    private static void mapUtil_SObjects_RetainMode_RetainLast() {
-        String TESTCOMPANY_1_NAME = 'TestCompany1';
-        String TESTCOMPANY_2_NAME = 'TestCompany2';
-        String TESTCOMPANY_3_NAME = 'TestCompany3';
+    static void mapUtil_SObjects_RetainMode_RetainLast() {
         /**
-        * Given
-        * A list of leads with filled company fields
-        */
+         * Given
+         * - A list of leads with filled company fields.
+         * - Multiple leads have the same value
+         */
+        final String TESTCOMPANY_1_NAME = 'TestCompany1';
+        final String TESTCOMPANY_2_NAME = 'TestCompany2';
+        final String TESTCOMPANY_3_NAME = 'TestCompany3';
+
         Lead lead1 = new Lead(
         Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
         Lead lead2 = new Lead(
@@ -137,15 +161,24 @@ public with sharing class MapUtility_MappingMainTest {
         List<Lead> leadList = new List<Lead>{lead1, lead2, lead3, lead4, lead5, lead6};
 
         Test.startTest();
+
         /**
         * When
         * The map method of SObjectMappingUtility is called for the leadList and the company field
         */
         Map<String, SObject> mappedLeads = (Map<String, SObject>)new MapUtility_MappingMain().generateMapFromObjectList(
-            leadList, new LeadCompanyReader(), MAP_RETAIN_MODE.RETAIN_LAST, new Set<MAP_OPTIONS>(), new Set<String>()
+            leadList,
+            new LeadCompanyReader(),
+            MAP_RETAIN_MODE.RETAIN_LAST,
+            new Set<MAP_OPTIONS>(),
+            new Set<String>()
         );
         Test.stopTest();
 
+        /**
+         * Then
+         * The last lead in list for every company value in the result
+         */
         System.assertEquals(3, mappedLeads.size());
         System.assertEquals(true, mappedLeads.containsKey(TESTCOMPANY_1_NAME));
         System.assertEquals(true, mappedLeads.containsKey(TESTCOMPANY_2_NAME));
@@ -327,8 +360,12 @@ public with sharing class MapUtility_MappingMainTest {
     //----------------------------
 
     @IsTest
-    static void TypeCastFromObjectToSObjectListCausesNoException() {
-        String TESTCOMPANY_1_NAME = 'TestCompany1';
+    static void typeCast_ImplicitTypeCastOfCollectionSucceeds() {
+        /**
+         * Given
+         * A list of leads to map
+         */
+        final String TESTCOMPANY_1_NAME = 'TestCompany1';
 
         Lead lead1 = new Lead(
         Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
@@ -337,27 +374,46 @@ public with sharing class MapUtility_MappingMainTest {
 
         List<Lead> leadList = new List<Lead>{lead1, lead2};
 
+        /**
+         * When
+         * The result is a map containing a collection and is casted to a map of collection of specific
+         */
         Test.startTest();
         System.Exception exception_ToCheck = NULL;
+        Map<String, List<Lead>> mappedLeads2;
         try {
-            Map<String, List<Lead>> mappedLeads2 = (Map<String, List<Lead>>)new MapUtility_MappingMain().generateMapFromObjectList(
-                leadList, new LeadCompanyReader(), MAP_RETAIN_MODE.RETAIN_ALL, new Set<MAP_OPTIONS>(), new Set<String>());
+            mappedLeads2 = (Map<String, List<Lead>>)new MapUtility_MappingMain().generateMapFromObjectList(
+                leadList,
+                new LeadCompanyReader(),
+                MAP_RETAIN_MODE.RETAIN_ALL,
+                new Set<MAP_OPTIONS>(),
+                new Set<String>()
+            );
 
         } catch(System.Exception exc) {
             exception_ToCheck = exc;
         }
         Test.stopTest();
 
+        /**
+         * Then
+         * - No exceptions occurs
+         * - the collection inside the map is accesible
+         */
         System.assertEquals(NULL, exception_ToCheck);
+        System.assertNotEquals(NULL, mappedLeads2);
+        System.assertEquals(2, mappedLeads2.get(TESTCOMPANY_1_NAME).size());
+        System.assertEquals(lead1.Id, mappedLeads2.get(TESTCOMPANY_1_NAME).get(0).Id);
+        System.assertEquals(lead2.Id, mappedLeads2.get(TESTCOMPANY_1_NAME).get(1).Id);
     }
 
     @IsTest
-    static void TypeCastFromObjectToSingleSObjectCausesException() {
+    static void typeCast_ImplicitTypeCastOfRecordFails() {
         /**
          * Given
          * A list of leads to map
          */
-        String TESTCOMPANY_1_NAME = 'TestCompany1';
+        final String TESTCOMPANY_1_NAME = 'TestCompany1';
         Lead lead1 = new Lead(
         Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
 
@@ -365,23 +421,52 @@ public with sharing class MapUtility_MappingMainTest {
 
         /**
          * When
-         * 1. the result is casted directly
-         * 2. an entry of the map is casted
+         * the result is casted implicitly from Object to Lead by casting the map
          */
         Test.startTest();
-        // 1
-        System.Exception exception_direct_Conversion = NULL;
+        System.Exception exceptionToCheck = NULL;
         try {
             Map<String, Lead> typecastedLeadMap = (Map<String, Lead>)new MapUtility_MappingMain().generateMapFromObjectList(
-                leadList, new LeadCompanyReader(), MAP_RETAIN_MODE.RETAIN_LAST, new Set<MAP_OPTIONS>(), new Set<String>());
-                
-        } catch(System.Exception exc) {
-            exception_direct_Conversion = exc;
-        }
+                leadList,
+                new LeadCompanyReader(),
+                MAP_RETAIN_MODE.RETAIN_LAST,
+                new Set<MAP_OPTIONS>(),
+                new Set<String>()
+            );
 
-        // 2
+        } catch(System.Exception exc) {
+            exceptionToCheck = exc;
+        }
+        Test.stopTest();
+
+        /**
+         * Then
+         * casting the map fails
+         */
+        System.assertNotEquals(NULL, exceptionToCheck);
+        System.assert(exceptionToCheck instanceOf System.TypeException);
+        System.assertEquals('Invalid conversion from runtime type Map<String,SObject> to Map<String,Lead>', exceptionToCheck.getMessage());
+    }
+
+    @IsTest
+    static void typeCast_SpecificTypeCastOfRecordSucceeds() {
+        /**
+         * Given
+         * A list of leads to map
+         */
+        final String TESTCOMPANY_1_NAME = 'TestCompany1';
+        Lead lead1 = new Lead(
+        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
+
+        List<Lead> leadList = new List<Lead>{lead1};
+
+        /**
+         * When
+         * An entry of the map is casted by itself
+         */
+        Test.startTest();
         Lead leadToCheck;
-        System.Exception exception_indirect_Conversion = NULL;
+        System.Exception exceptionToCheck = NULL;
         try {
             Map<String, Object> notTypecastedLeadMap = new MapUtility_MappingMain().generateMapFromObjectList(
                 leadList,
@@ -392,22 +477,15 @@ public with sharing class MapUtility_MappingMainTest {
             );
             leadToCheck = (Lead)notTypecastedLeadMap.values().get(0);
         } catch (System.Exception exc) {
-            exception_indirect_Conversion = exc;
+            exceptionToCheck = exc;
         }
         Test.stopTest();
+
         /**
          * Then
-         * 1. casting the map fails
-         * 2. casting an entry succeeds
+         * casting an entry succeeds
          */
-
-        // 1
-        System.assertNotEquals(NULL, exception_direct_Conversion);
-        System.assert(exception_direct_Conversion instanceOf System.TypeException);
-        System.assertEquals('Invalid conversion from runtime type Map<String,SObject> to Map<String,Lead>', exception_direct_Conversion.getMessage());
-
-        // 2
-        System.assertEquals(NULL, exception_indirect_Conversion);
+        System.assertEquals(NULL, exceptionToCheck);
         System.assertNotEquals(NULL, leadToCheck);
         System.assertEquals(lead1.Id, leadToCheck.Id);
     }
@@ -418,8 +496,8 @@ public with sharing class MapUtility_MappingMainTest {
 
     @IsTest
     static void mapUtil_MapOptions_KEY_IGNORE_NULL() {
-        String TESTCOMPANY_1_NAME = 'TestCompany1';
-        String TESTCOMPANY_2_NAME = 'TestCompany2';
+        final String TESTCOMPANY_1_NAME = 'TestCompany1';
+        final String TESTCOMPANY_2_NAME = 'TestCompany2';
         /**
         * Given
         * - two leads with a set Company field
@@ -457,10 +535,10 @@ public with sharing class MapUtility_MappingMainTest {
 
     @IsTest
     static void mapUtil_MapOptions_KEY_INCLUDE_ONLY() {
-        String TESTCOMPANY_1_NAME = 'TestCompany1';
-        String TESTCOMPANY_2_NAME = 'TestCompany2';
-        String TESTCOMPANY_3_NAME = 'TestCompany3';
-        String TESTCOMPANY_4_NAME = 'TestCompany4';
+        final String TESTCOMPANY_1_NAME = 'TestCompany1';
+        final String TESTCOMPANY_2_NAME = 'TestCompany2';
+        final String TESTCOMPANY_3_NAME = 'TestCompany3';
+        final String TESTCOMPANY_4_NAME = 'TestCompany4';
         /**
         * Given
         * - five leads with a set Company field
