@@ -1,4 +1,4 @@
 #!/bin/sh
 
 ALIAS=$1
-sfdx force:org:delete -u $ALIAS -p
+sfdx force:org:delete --targetusername $ALIAS --noprompt
