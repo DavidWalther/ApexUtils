@@ -8,7 +8,7 @@ In this repository i'm storing Ideas in development and Snippets for later use.
 4. MockBase
 5. Query Counter
 6. SelectorFactory & Selector Base
-
+7. MapUtility
 
 ## Query Counter
 
