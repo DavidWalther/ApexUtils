@@ -1,4 +1,4 @@
-public with sharing virtual class FieldValueReader implements IValueReader {
+public with sharing virtual class FieldValueReader {
     private SObjectField field;
     public FieldValueReader(SObjectField field) {
         this.field = field;
