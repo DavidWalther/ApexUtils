@@ -19,7 +19,7 @@
             "default": false,
             "dependencies": [
                 {
-                   "package": "core@0.1.0-2"
+                    "package": "core@0.1.0-3"
                 }
             ]
         }
@@ -34,6 +34,7 @@
         "mapping@0.1.0-1": "04t2o000000yUUWAA2",
         "mapping@0.1.0-2": "04t2o000000yUUbAAM",
         "core@0.1.0-2": "04t2o000000yUUgAAM",
-        "mapping@0.1.0-3": "04t2o000000yUUlAAM"
+        "mapping@0.1.0-3": "04t2o000000yUUlAAM",
+        "core@0.1.0-3": "04t2o000000yUV5AAM"
     }
 }
