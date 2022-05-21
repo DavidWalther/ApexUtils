@@ -58,7 +58,7 @@ Here are some examples:
     Lead testLead = new Lead(Company = COMPANY_NAME);
     System.assertEquals(COMPANY_NAME, new LeadCompanyReader().getValue(testLead));
 
-#### Reading che company field depending on object type  ####    
+#### Reading the company field depending on object type  ####    
 
     public class CompanyReader implements IValueReader{
       public String getValue(Object objectToGetValueFrom) {
@@ -100,3 +100,15 @@ Here are some examples:
 
     
 ### Behavior based on specific keys
+
+Sometimes a special behavior is required on specific 'mapping keys'. This can be defined by using specific values of the Enum `MAP_OPTIONS`. These Options can be combined if required.
+
+    public enum MAP_OPTIONS {KEY_IGNORE_NULL, KEY_INCLUDE_ONLY}
+
+* `KEY_IGNORE_NULL`: option to ignore an item if `IValueReader.getValue` returns `NULL`
+* `KEY_INCLUDE_ONLY`: option to only add an item to map if the result of `IValueReader.getValue` is in a predefined set
+
+_Note:_
+There is currently no option to exclude specific keys. Yet there is a Workaround:
+* set `MAP_OPTIONS.KEY_IGNORE_NULL`  
+* define a custom `IValueReader` with `getValue` returning `NULL` on undesired keys
