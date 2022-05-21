@@ -5,17 +5,17 @@ This utility is designed releave developers from the repetitive and error-prone 
 ## Concept
 Creating a map based on a list of objects is always done by the same steps:
 
-* Decide whether to keep
+1. Decide whether to keep
   * a collection of items
   * only the first item
   * only the last item
-* Loop over the list
-* for each item
-  * read a 'mapping key'
-  * depending on which items to keep
-    * simply put item into map for this mapping key (keeps last item)
-    * only insert into map if mapping key ist not present yet (keeps first item)
-    * add item to the collection / create a new collection for this mapping key
+2. Loop over the list
+  * for each item
+    * read a 'mapping key'
+    * depending on which items to keep
+      * simply put item into map for this mapping key (keeps last item)
+      * only insert into map if mapping key ist not present yet (keeps first item)
+      * add item to the collection for this mapping key OR create a new collection for this mapping key and add item
 
 This reduces mapping of objects down to two core questions on how to map items. Also there is a third one on how to act an certain keys:
 1. Which items of my list I want to retain?
