@@ -13,9 +13,15 @@ Creating a map based on a list of objects is always done by the same steps:
   * for each item
     * read a 'mapping key'
     * depending on which items to keep
+<<<<<<< HEAD
       * simply put item into map for this 'mapping key' (keeps last item)
       * only insert into map if 'mapping key' ist not present yet (keeps first item)
       * add item to the collection for this 'mapping key' OR create a new collection for this 'mapping key' and add item
+=======
+      * simply put item into map for this mapping key (keeps last item)
+      * only insert into map if mapping key ist not present yet (keeps first item)
+      * add item to the collection for this mapping key / create a new collection for this mapping key
+>>>>>>> e27ab5005bbf1797b769c649c2f9bd741d028764
 
 This reduces mapping of objects down to two core questions on how to map items. Also there is a third one on how to act an certain keys:
 1. Which items of my list I want to retain?
