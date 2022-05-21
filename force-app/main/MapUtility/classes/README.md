@@ -24,9 +24,13 @@ This reduces mapping of objects down to two core questions on how to map items. 
 
 ### 1. Different ways to retain objects
 
-Enter the Enum `MAP_RETAIN_MODE`
+There are three mutual exclusive ways to store data inside a map. Each of these ways is represented by a member of the Enum `MAP_RETAIN_MODE`:
 
     public enum MAP_RETAIN_MODE {RETAIN_FIRST, RETAIN_LAST, RETAIN_ALL}
+
+`RETAIN_FIRST`: specifies to keep the first item for a specific 'mapping key'
+`RETAIN_LAST`: specifies to keep the last item for a specific 'mapping key'
+`RETAIN_ALL`: specifies to keep the all items for a specific 'mapping key' in a collection for each one
 
 ### 2. Reading object keys
 
