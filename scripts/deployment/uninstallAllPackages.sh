@@ -3,9 +3,9 @@
 ALIAS=$1
 echo ""
 echo "----------------------"
-echo "uninstall mapping pkg"
+echo "uninstall ApexUtilities-Mapping"
 echo "----------------------"
-sfdx force:package:uninstall --targetusername "$ALIAS" --package="mapping@0.1.0-4" --wait 60
+sfdx force:package:uninstall --targetusername "$ALIAS" --package="ApexUtilities-Mapping@1.0.0-1" --wait 60
 retVal=$?
 if [ $retVal -ne 0 ]; then
   exit $retVal
@@ -13,9 +13,9 @@ fi
 
 echo ""
 echo "--------------------"
-echo "uninstall core pkg"
+echo "uninstall ApexUtilities-Core"
 echo "-------------------"
-sfdx force:package:uninstall --targetusername "$ALIAS" --package="core@0.1.0-4" --wait 60
+sfdx force:package:uninstall --targetusername "$ALIAS" --package="ApexUtilities-Core@1.0.0-1" --wait 60
 retVal=$?
 if [ $retVal -ne 0 ]; then
     exit $retVal
