@@ -22,6 +22,28 @@ This reduces mapping of objects down to two core questions on how to map items. 
 2. What is the key i want to map my items by?
 3. What should i do on key 'XYZ'?
 
+## Use of the Map Util
+
+### Call to the mapping method
+
+    Map<String, Object> result = MapUtility_MappingMain.generateMapFromObjectList(
+      List<Object> objects,
+      IValueReader valueReader,
+      MAP_RETAIN_MODE retainingMode,
+      Set<MAP_OPTIONS> mapOptions,
+      Set<String> keySet
+    )
+**Parameters**
+* `objects`: List of objects to create the map of. This can be SObjects or Objects
+* `valueReader`: the ValueReader **instance** to use for getting mapping keys for each entry in `objects`
+* `retainingMode`: an enum value to specify which items to keep
+* `mapOptions`: a Set of `MAP_OPTIONS` to define more key-specific behavior
+* `keySet`: a Set of value to use for on `MAP_OPTIONS.KEY_INCLUDE_ONLY`
+
+For further informations on use see in class `MapUtility_MappingMainTest`.
+
+## Explanations
+
 ### 1. Different ways to retain objects
 
 There are three mutual exclusive ways to store data inside a map. Each of these ways is represented by a member of the Enum `MAP_RETAIN_MODE`:
