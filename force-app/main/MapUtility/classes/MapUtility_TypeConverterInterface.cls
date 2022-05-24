@@ -3,5 +3,5 @@
  * For that reason a special casting logic is needed for these cases
  */
 public interface MapUtility_TypeConverterInterface {
-    Map<String, Object> convertMappingResult(Map<String, Object> tempMap);
+    Map<Object, Object> convertMappingResult(Map<Object, Object> tempMap);
 }
