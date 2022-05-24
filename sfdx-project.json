@@ -11,8 +11,8 @@
             "path": "force-app/main/MapUtility",
             "default": false,
             "package": "ApexUtilities-Mapping",
-            "versionNumber": "1.0.0.NEXT",
-            "versionName": "version 1",
+            "versionNumber": "1.1.0.NEXT",
+            "versionName": "Map by any kind of key",
             "dependencies": [
                 {
                     "package": "ApexUtilities-Core",
