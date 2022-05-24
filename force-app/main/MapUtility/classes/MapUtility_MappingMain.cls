@@ -1,5 +1,5 @@
 public with sharing class MapUtility_MappingMain {
-    public Map<String, Object> generateMapFromObjectList(List<Object> objects, IValueReader valueReader, MAP_RETAIN_MODE retainingMode, Set<MAP_OPTIONS> mapOptions, Set<String> keySet) {
+    public Map<Object, Object> generateMapFromObjectList(List<Object> objects, IValueReader valueReader, MAP_RETAIN_MODE retainingMode, Set<MAP_OPTIONS> mapOptions, Set<Object> keySet) {
     
         //----------------------------
         // Guardians
@@ -16,7 +16,7 @@ public with sharing class MapUtility_MappingMain {
         //----------------------------
 
         MapUtility_MappingLogicInterface mappingLogic = new MapUtility_MappingLogicFactory().getProduct(retainingMode);
-        Map<String, Object> tempMap = (Map<String, Object>)mappingLogic
+        Map<Object, Object> tempMap = (Map<Object, Object>)mappingLogic
             .execute(objects, valueReader, mapOptions, keySet);
 
         MapUtility_TypeConverterInterface typeConverter = new MapUtility_TypeConverterFactory().getProduct(retainingMode, objects);
