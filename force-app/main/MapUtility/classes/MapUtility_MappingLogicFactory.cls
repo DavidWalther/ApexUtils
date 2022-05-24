@@ -18,15 +18,15 @@ public with sharing class MapUtility_MappingLogicFactory {
     }
 
     private class MappingLogicSObjectRetainAll implements MapUtility_MappingLogicInterface {
-        public Object execute(List<Object> objects, IValueReader valueReader, Set<MAP_OPTIONS> mapOptions, Set<String> keySet) {
+        public Object execute(List<Object> objects, IValueReader valueReader, Set<MAP_OPTIONS> mapOptions, Set<Object> keySet) {
             Boolean isKeyIgnoreNull = mapOptions.contains(MAP_OPTIONS.KEY_IGNORE_NULL);
             Boolean isKeyIncludeOnly = mapOptions.contains(MAP_OPTIONS.KEY_INCLUDE_ONLY);
 
-            Map<String, List<Object>> result = new Map<String, List<Object>>();
+            Map<Object, List<Object>> result = new Map<Object, List<Object>>();
             for(Object tempSObject : objects) {
-                String key = valueReader.getValue(tempSObject);
+                Object key = valueReader.getValue(tempSObject);
                 if(isKeyIgnoreNull && key == NULL) {continue;}
-                if(isKeyIncludeOnly && !keySet.contains(String.valueOf(key))) {continue;}
+                if(isKeyIncludeOnly && !keySet.contains(key)) {continue;}
                 List<Object> alreadyMappedObjects = result.get(key);
                 // check whether the List for the key already exists or not
                 if(alreadyMappedObjects == NULL) {
@@ -40,15 +40,15 @@ public with sharing class MapUtility_MappingLogicFactory {
     }
 
     private class MappingLogicSObjectRetainFirst implements MapUtility_MappingLogicInterface {
-        public Object execute(List<Object> objects, IValueReader valueReader, Set<MAP_OPTIONS> mapOptions, Set<String> keySet) {
+        public Object execute(List<Object> objects, IValueReader valueReader, Set<MAP_OPTIONS> mapOptions, Set<Object> keySet) {
             Boolean isKeyIgnoreNull = mapOptions.contains(MAP_OPTIONS.KEY_IGNORE_NULL);
             Boolean isKeyIncludeOnly = mapOptions.contains(MAP_OPTIONS.KEY_INCLUDE_ONLY);
 
-            Map<String, Object> result = new Map<String, Object>();
+            Map<Object, Object> result = new Map<Object, Object>();
             for(Object tempObject : objects) {
-                String key = valueReader.getValue(tempObject);
+                Object key = valueReader.getValue(tempObject);
                 if(isKeyIgnoreNull && key == NULL) {continue;}
-                if(isKeyIncludeOnly && !keySet.contains(String.valueOf(key))) {continue;}
+                if(isKeyIncludeOnly && !keySet.contains(key)) {continue;}
                 // only insert into map if key does not exist yet
                 if(!result.containsKey(key)) {
                     result.put(key, tempObject);
@@ -59,15 +59,15 @@ public with sharing class MapUtility_MappingLogicFactory {
     }
 
     private class MappingLogicSObjectRetainLast implements MapUtility_MappingLogicInterface {
-        public Object execute(List<Object> objects, IValueReader valueReader, Set<MAP_OPTIONS> mapOptions, Set<String> keySet) {
+        public Object execute(List<Object> objects, IValueReader valueReader, Set<MAP_OPTIONS> mapOptions, Set<Object> keySet) {
             Boolean isKeyIgnoreNull = mapOptions.contains(MAP_OPTIONS.KEY_IGNORE_NULL);
             Boolean isKeyIncludeOnly = mapOptions.contains(MAP_OPTIONS.KEY_INCLUDE_ONLY);
 
-            Map<String, Object> result = new Map<String, Object>();
+            Map<Object, Object> result = new Map<Object, Object>();
             for(Object tempSObject : objects) {
-                String key = valueReader.getValue(tempSObject);
+                Object key = valueReader.getValue(tempSObject);
                 if(isKeyIgnoreNull && key == NULL) {continue;}
-                if(isKeyIncludeOnly && !keySet.contains(String.valueOf(key))) {continue;}
+                if(isKeyIncludeOnly && !keySet.contains(key)) {continue;}
                 // insert into map no matter whether in object exist yet or not
                 result.put(key, tempSObject);
             }
