@@ -31,21 +31,21 @@ public with sharing virtual class MapUtility_TypeConverterFactory {
     }
 
     private class ConvertMapObjectIntoMapOfObject implements MapUtility_TypeConverterInterface {
-        public Map<String, Object> convertMappingResult(Map<String, Object> tempMap) {
+        public Map<Object, Object> convertMappingResult(Map<Object, Object> tempMap) {
             return tempMap;
         }
     }
 
     private class ConvertMapObjectIntoMapOfObjectLists implements MapUtility_TypeConverterInterface {
-        public Map<String, Object> convertMappingResult(Map<String, Object> tempMap) {
-            return (Map<String, List<Object>>)tempMap;
+        public Map<Object, Object> convertMappingResult(Map<Object, Object> tempMap) {
+            return (Map<Object, List<Object>>)tempMap;
         }
     }
 
     private class ConvertMapObjectIntoMapOfSObject implements MapUtility_TypeConverterInterface {
-        public Map<String, Object> convertMappingResult(Map<String, Object> tempMap) {
-            Map<String, SObject> result = new Map<String, SObject>();
-            for(String mapKey : tempMap.keySet()) {
+        public Map<Object, Object> convertMappingResult(Map<Object, Object> tempMap) {
+            Map<Object, SObject> result = new Map<Object, SObject>();
+            for(Object mapKey : tempMap.keySet()) {
                 result.put(mapKey, (SObject)tempMap.get(mapKey));
             }
             return result;
@@ -53,11 +53,11 @@ public with sharing virtual class MapUtility_TypeConverterFactory {
     }
 
     private class ConvertMapObjectIntoMapOfSObjectLists implements MapUtility_TypeConverterInterface {
-        public Map<String, Object> convertMappingResult(Map<String, Object> tempMap) {
-            Map<String, List<Object>> workingMap = (Map<String, List<Object>>)tempMap;
-            Map<String, List<SObject>> result = new Map<String, List<SObject>>();
+        public Map<Object, Object> convertMappingResult(Map<Object, Object> tempMap) {
+            Map<Object, List<Object>> workingMap = (Map<Object, List<Object>>)tempMap;
+            Map<Object, List<SObject>> result = new Map<Object, List<SObject>>();
 
-            for(String mapKey : workingMap.keySet()) {
+            for(Object mapKey : workingMap.keySet()) {
                 List<SObject> keyList = new List<SObject>();
                 for(Object tmpObj : workingMap.get(mapKey)) {
                     keyList.add((SObject)tmpObj);

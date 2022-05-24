@@ -44,12 +44,12 @@ public with sharing class MapUtility_MappingMainTest {
         * When
         * The map method of SObjectMappingUtility is called for the leadList and the company field
         */
-        Map<String, List<SObject>> mappedLeads = (Map<String, List<SObject>>)new MapUtility_MappingMain().generateMapFromObjectList(
+        Map<Object, List<SObject>> mappedLeads = (Map<Object, List<SObject>>)new MapUtility_MappingMain().generateMapFromObjectList(
             leadList,
             new LeadCompanyReader(),
             MAP_RETAIN_MODE.RETAIN_ALL,
             new Set<MAP_OPTIONS>(),
-            new Set<String>()
+            new Set<Object>()
         );
 
         Test.stopTest();
@@ -106,12 +106,12 @@ public with sharing class MapUtility_MappingMainTest {
         * When
         * The map method of SObjectMappingUtility is called for the leadList and the company field
         */
-        Map<String, SObject> mappedLeads = (Map<String, SObject>)new MapUtility_MappingMain().generateMapFromObjectList(
+        Map<Object, SObject> mappedLeads = (Map<Object, SObject>)new MapUtility_MappingMain().generateMapFromObjectList(
             leadList,
             new LeadCompanyReader(),
             MAP_RETAIN_MODE.RETAIN_FIRST,
             new Set<MAP_OPTIONS>(),
-            new Set<String>()
+            new Set<Object>()
         );
         Test.stopTest();
 
@@ -166,12 +166,12 @@ public with sharing class MapUtility_MappingMainTest {
         * When
         * The map method of SObjectMappingUtility is called for the leadList and the company field
         */
-        Map<String, SObject> mappedLeads = (Map<String, SObject>)new MapUtility_MappingMain().generateMapFromObjectList(
+        Map<Object, SObject> mappedLeads = (Map<Object, SObject>)new MapUtility_MappingMain().generateMapFromObjectList(
             leadList,
             new LeadCompanyReader(),
             MAP_RETAIN_MODE.RETAIN_LAST,
             new Set<MAP_OPTIONS>(),
-            new Set<String>()
+            new Set<Object>()
         );
         Test.stopTest();
 
@@ -247,12 +247,12 @@ public with sharing class MapUtility_MappingMainTest {
         * When
         * the pairs are mapped by their modulo result and all entries are kept in map
         */
-        Map<String, List<Object>> mappedLeads2 = (Map<String, List<Object>>)new MapUtility_MappingMain().generateMapFromObjectList(
+        Map<Object, List<Object>> mappedLeads2 = (Map<Object, List<Object>>)new MapUtility_MappingMain().generateMapFromObjectList(
             integerpairs,
             new ModValueReader(),
             MAP_RETAIN_MODE.RETAIN_ALL,
             new Set<MAP_OPTIONS>(),
-            new Set<String>()
+            new Set<Object>()
         );
         Test.stopTest();
 
@@ -292,12 +292,12 @@ public with sharing class MapUtility_MappingMainTest {
         * When
         * the pairs are mapped by their modulo result and only the first entriy for each key is retained
         */
-        Map<String, Object> mappedLeads2 = (Map<String, Object>)new MapUtility_MappingMain().generateMapFromObjectList(
+        Map<Object, Object> mappedLeads2 = (Map<Object, Object>)new MapUtility_MappingMain().generateMapFromObjectList(
             integerpairs,
             new ModValueReader(),
             MAP_RETAIN_MODE.RETAIN_FIRST,
             new Set<MAP_OPTIONS>(),
-            new Set<String>()
+            new Set<Object>()
         );
         Test.stopTest();
 
@@ -332,12 +332,12 @@ public with sharing class MapUtility_MappingMainTest {
         * When
         * the pairs are mapped by their modulo result and only the first entriy for each key is retained
         */
-        Map<String, Object> mappedLeads2 = (Map<String, Object>)new MapUtility_MappingMain().generateMapFromObjectList(
+        Map<Object, Object> mappedLeads2 = (Map<Object, Object>)new MapUtility_MappingMain().generateMapFromObjectList(
             integerpairs,
             new ModValueReader(),
             MAP_RETAIN_MODE.RETAIN_LAST,
             new Set<MAP_OPTIONS>(),
-            new Set<String>()
+            new Set<Object>()
         );
         Test.stopTest();
 
@@ -380,14 +380,14 @@ public with sharing class MapUtility_MappingMainTest {
          */
         Test.startTest();
         System.Exception exception_ToCheck = NULL;
-        Map<String, List<Lead>> mappedLeads2;
+        Map<Object, List<Lead>> mappedLeads2;
         try {
-            mappedLeads2 = (Map<String, List<Lead>>)new MapUtility_MappingMain().generateMapFromObjectList(
+            mappedLeads2 = (Map<Object, List<Lead>>)new MapUtility_MappingMain().generateMapFromObjectList(
                 leadList,
                 new LeadCompanyReader(),
                 MAP_RETAIN_MODE.RETAIN_ALL,
                 new Set<MAP_OPTIONS>(),
-                new Set<String>()
+                new Set<Object>()
             );
 
         } catch(System.Exception exc) {
@@ -426,12 +426,12 @@ public with sharing class MapUtility_MappingMainTest {
         Test.startTest();
         System.Exception exceptionToCheck = NULL;
         try {
-            Map<String, Lead> typecastedLeadMap = (Map<String, Lead>)new MapUtility_MappingMain().generateMapFromObjectList(
+            Map<Object, Lead> typecastedLeadMap = (Map<Object, Lead>)new MapUtility_MappingMain().generateMapFromObjectList(
                 leadList,
                 new LeadCompanyReader(),
                 MAP_RETAIN_MODE.RETAIN_LAST,
                 new Set<MAP_OPTIONS>(),
-                new Set<String>()
+                new Set<Object>()
             );
 
         } catch(System.Exception exc) {
@@ -445,7 +445,7 @@ public with sharing class MapUtility_MappingMainTest {
          */
         System.assertNotEquals(NULL, exceptionToCheck);
         System.assert(exceptionToCheck instanceOf System.TypeException);
-        System.assertEquals('Invalid conversion from runtime type Map<String,SObject> to Map<String,Lead>', exceptionToCheck.getMessage());
+        System.assertEquals('Invalid conversion from runtime type Map<Object,SObject> to Map<Object,Lead>', exceptionToCheck.getMessage());
     }
 
     @IsTest
@@ -468,12 +468,12 @@ public with sharing class MapUtility_MappingMainTest {
         Lead leadToCheck;
         System.Exception exceptionToCheck = NULL;
         try {
-            Map<String, Object> notTypecastedLeadMap = new MapUtility_MappingMain().generateMapFromObjectList(
+            Map<Object, Object> notTypecastedLeadMap = new MapUtility_MappingMain().generateMapFromObjectList(
                 leadList,
                 new LeadCompanyReader(),
                 MAP_RETAIN_MODE.RETAIN_LAST,
                 new Set<MAP_OPTIONS>{MAP_OPTIONS.KEY_IGNORE_NULL},
-                new Set<String>()
+                new Set<Object>()
             );
             leadToCheck = (Lead)notTypecastedLeadMap.values().get(0);
         } catch (System.Exception exc) {
@@ -515,12 +515,12 @@ public with sharing class MapUtility_MappingMainTest {
          * When
          * the lead list is mapped with the option to ignore NULL as key
          */
-        Map<String, Object> mappedLeads = new MapUtility_MappingMain().generateMapFromObjectList(
+        Map<Object, Object> mappedLeads = new MapUtility_MappingMain().generateMapFromObjectList(
             leadList,
             new LeadCompanyReader(),
             MAP_RETAIN_MODE.RETAIN_LAST,
             new Set<MAP_OPTIONS>{MAP_OPTIONS.KEY_IGNORE_NULL},
-            new Set<String>()
+            new Set<Object>()
         );
         Test.stopTest();
 
@@ -558,8 +558,8 @@ public with sharing class MapUtility_MappingMainTest {
          * When
          * the lead list is mapped with the option to contain only certain values
          */
-        Set<String> keysForMapping = new Set<String>{TESTCOMPANY_2_NAME, TESTCOMPANY_4_NAME};
-        Map<String, List<SObject>> mappedLeads = (Map<String, List<SObject>>)new MapUtility_MappingMain().generateMapFromObjectList(
+        Set<Object> keysForMapping = new Set<Object>{TESTCOMPANY_2_NAME, TESTCOMPANY_4_NAME};
+        Map<Object, List<SObject>> mappedLeads = (Map<Object, List<SObject>>)new MapUtility_MappingMain().generateMapFromObjectList(
             leadList,
             new LeadCompanyReader(),
             MAP_RETAIN_MODE.RETAIN_ALL,
@@ -573,7 +573,8 @@ public with sharing class MapUtility_MappingMainTest {
          * the resulting map contains only the defined keys
          */
         Boolean isSizeOfMapEqual = keysForMapping.size() == mappedLeads.size();
-        Boolean isMapContainingAllKeysFromDefindedSet = mappedLeads.keySet().containsAll(keysForMapping);
+        Boolean isMapContainingAllKeysFromDefindedSet = mappedLeads.containsKey(TESTCOMPANY_2_NAME);
+        isMapContainingAllKeysFromDefindedSet &= mappedLeads.containsKey(TESTCOMPANY_4_NAME);
         System.assert(isSizeOfMapEqual && isMapContainingAllKeysFromDefindedSet, 'Only the map contains only the keys defined by set');
 
         System.assertEquals(lead2.Id, mappedLeads.get(TESTCOMPANY_2_NAME)[0].Id);
