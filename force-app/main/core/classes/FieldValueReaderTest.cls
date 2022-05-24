@@ -12,8 +12,8 @@ public with sharing class FieldValueReaderTest {
     lead2.put(leadCompanyField, NULL);
     
     Test.startTest();
-    String value1 = instanceToCheck.getValue(lead1);
-    String value2 = instanceToCheck.getValue(lead2);
+    Object value1 = instanceToCheck.getValue(lead1);
+    Object value2 = instanceToCheck.getValue(lead2);
     Test.stopTest();
     
     System.assertEquals(lead1.get(leadCompanyField), value1);
