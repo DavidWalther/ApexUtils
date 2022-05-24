@@ -445,7 +445,7 @@ public with sharing class MapUtility_MappingMainTest {
          */
         System.assertNotEquals(NULL, exceptionToCheck);
         System.assert(exceptionToCheck instanceOf System.TypeException);
-        System.assertEquals('Invalid conversion from runtime type Map<Object,SObject> to Map<Object,Lead>', exceptionToCheck.getMessage());
+        System.assertEquals('Invalid conversion from runtime type Map<ANY,SObject> to Map<ANY,Lead>', exceptionToCheck.getMessage());
     }
 
     @IsTest
