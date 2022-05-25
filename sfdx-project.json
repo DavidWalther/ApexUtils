@@ -4,7 +4,7 @@
             "path": "force-app/main/core",
             "default": false,
             "package": "ApexUtilities-Core",
-            "versionNumber": "1.0.0.NEXT",
+            "versionNumber": "1.1.0.NEXT",
             "versionName": "Read objects"
         },
         {
@@ -35,6 +35,7 @@
         "ApexUtilities-Core@1.0.0-3": "04t2o000000yUVoAAM",
         "ApexUtilities-Mapping": "0Ho2o000000fxYdCAI",
         "ApexUtilities-Mapping@1.0.0-1": "04t2o000000yUVZAA2",
-        "ApexUtilities-Mapping@1.0.0-2": "04t2o000000yUVeAAM"
+        "ApexUtilities-Mapping@1.0.0-2": "04t2o000000yUVeAAM",
+        "ApexUtilities-Core@1.1.0-1": "04t2o000000yUVyAAM"
     }
 }
