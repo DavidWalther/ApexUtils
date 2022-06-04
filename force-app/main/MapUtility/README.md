@@ -48,9 +48,7 @@ The three highlighted elements are the parts that are special for each map:
 * `mapOptions`: a Set of `MAP_OPTIONS` to define more key-specific behavior
 * `keySet`: a Set of value to use for on `MAP_OPTIONS.KEY_INCLUDE_ONLY`
 
-For further informations on use see in class `MapUtility_MappingMainTest`.
-
-### How to keep entries: `Enum MAP_RETAIN_MODE`
+### `Enum MAP_RETAIN_MODE`
 
 There are three mutual exclusive ways to store data inside a map. Each of these ways is represented by a member of the enum `MAP_RETAIN_MODE`:
 
@@ -60,7 +58,7 @@ There are three mutual exclusive ways to store data inside a map. Each of these 
 * `RETAIN_LAST`: specifies to keep the last item for a specific 'mapping key'
 * `RETAIN_ALL`: specifies to keep the all items for a specific 'mapping key' in a collection for each one
 
-#### Reading object keys: `IValueReader`
+### `IValueReader`
 
 The complexity of reading the 'mapping key' of an object can variy from object to object. It can be as simple as reading the value of a certain sObjectField or it can be the the result of a function call based on multiple values.
 But regardless of the way a 'mapping key' is read it is always the result of an action specific to an individual item. This abstraction is taken into account by the `IValueReader` interface:
@@ -71,7 +69,7 @@ But regardless of the way a 'mapping key' is read it is always the result of an 
 
 This simple interface provides the neccessary abstraction for a generic way to read a 'mapping key' from an object.
 
-#### Behavior based on specific keys `Enum MAP_OPTIONS`
+### `Enum MAP_OPTIONS`
 
 Sometimes a special behavior is required on specific 'mapping keys'. This can be defined by using specific values of the enum `MAP_OPTIONS`. These Options can be combined if required.
 
@@ -148,6 +146,8 @@ a Contacts `Account.Name`-field
     Contact testContact = new Contact(Account = accountOfContact);
     System.assertEquals(COMPANY_NAME_CONTACT, new CompanyReader().getValue(testContact),
       'getValue(Contact) must return its\'s Account\'s Name field.');
+
+For further examples see class `MapUtility_MappingMainTest`.
 
 ## Package versions
 | Packagen | Version | Id| Promoted |
