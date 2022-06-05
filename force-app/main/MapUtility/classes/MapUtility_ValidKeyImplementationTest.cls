@@ -11,14 +11,27 @@ private with sharing class MapUtility_ValidKeyImplementationTest {
 
   @IsTest
   static void mapOption_IncludesOnly() {
+    /**
+     * Given
+     * a set of valid keys with mixed types
+     */
     Set<Object> validKeys = new Set<Object>{
       2,5,7,9, // use interger values for valid keys
       'abc','ef',  // use strings as valid keys
       NULL, // use NULL as valid Key
       new Lead(LastName= 'testLead') // use a sObject as valid key
     };
+
+    /**
+     * When
+     * the evaluator is created with the set of valid keys
+     */
     MapUtility_ValidKeyInterface includeOnlyEvaluator = new MapUtility_ValidKeyImplementation.IncludeOnly(validKeys);
-    
+
+    /**
+     * Then
+     * values in the valid value set evaluate to 'true' else 'false'
+     */
     for(Object validKey : validKeys) {
       System.assertEquals(true, includeOnlyEvaluator.isValidKey(validKey), 'all valid keys must evaluate to \'true\'');
     }
