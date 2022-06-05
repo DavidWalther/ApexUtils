@@ -9,4 +9,8 @@ private with sharing class MapUtility_ValidKeyImplementationTest {
     System.assertEquals(false, ignoreNullEvaluator.isValidKey(NULL), 'NULL must evaluate to \'false\'');
   }
 
+  @IsTest
+  static void MappingKeyEvaluator_MapOption_IncludesOnly() {
+
+  }
 }
