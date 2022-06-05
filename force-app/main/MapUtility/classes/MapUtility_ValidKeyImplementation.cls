@@ -5,4 +5,15 @@ public with sharing class MapUtility_ValidKeyImplementation {
       return keyToEvaluate != NULL;
     }
   }
+
+  public class IncludeOnly implements MapUtility_ValidKeyInterface {
+    private Set<Object> validKeys;
+    public IncludeOnly(Set<Object> validKeys) {
+      this.validKeys = validKeys;
+    }
+
+    public Boolean isValidKey(Object keyToEvaluate) {
+      return this.validKeys.contains(keyToEvaluate);
+    }
+  }
 }
