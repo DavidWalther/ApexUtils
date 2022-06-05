@@ -2,7 +2,7 @@
 private with sharing class MapUtility_ValidKeyImplementationTest {
 
   @IsTest
-  static void MappingKeyEvaluator_MapOption_IgnoreNull() {
+  static void mapOption_IgnoreNull() {
     MapUtility_ValidKeyInterface ignoreNullEvaluator = new MapUtility_ValidKeyImplementation.IgnoreKeyNull();
     
     System.assertEquals(true, ignoreNullEvaluator.isValidKey(Math.random()), 'evaluation any value but NULL must evaluate to \'true\'');
@@ -10,7 +10,7 @@ private with sharing class MapUtility_ValidKeyImplementationTest {
   }
 
   @IsTest
-  static void MappingKeyEvaluator_MapOption_IncludesOnly() {
+  static void mapOption_IncludesOnly() {
 
   }
 }
