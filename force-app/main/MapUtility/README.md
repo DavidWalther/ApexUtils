@@ -32,7 +32,7 @@ The three highlighted elements are the parts that are special for each map:
 
 ## Use of the Map Util
 
-### Call to the mapping method
+### Call to the mapping method: `MapUtility_MappingMain.generateMapFromObjectList 
 
     Map<String, Object> result = MapUtility_MappingMain.generateMapFromObjectList(
       List<Object> objects,
