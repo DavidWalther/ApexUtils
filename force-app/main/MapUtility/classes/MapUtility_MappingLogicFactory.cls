@@ -8,70 +8,103 @@ public with sharing class MapUtility_MappingLogicFactory {
             when RETAIN_LAST {
                 return new MappingLogicSObjectRetainLast();
             }
-            when RETAIN_ALL {
+            when else {
+                // only RETAIN_ALL is left
                 return new MappingLogicSObjectRetainAll();
             }
-            when else {
-                throw new MapUtility_Exception('Retaining option is not implemented yet.');
-            }
         }
     }
 
-    private class MappingLogicSObjectRetainAll implements MapUtility_MappingLogicInterface {
+    /**
+     * this class contains the basic iteration logic for every object type
+     */
+    private abstract class ListInterationBase implements MapUtility_MappingLogicInterface {
+        protected abstract Object createResultMap();
+        protected abstract void addItem(Object resultMap, Object key, Object newItem);
+        
         public Object execute(List<Object> objects, IValueReader valueReader, Set<MAP_OPTIONS> mapOptions, Set<Object> keySet) {
-            Boolean isKeyIgnoreNull = mapOptions.contains(MAP_OPTIONS.KEY_IGNORE_NULL);
-            Boolean isKeyIncludeOnly = mapOptions.contains(MAP_OPTIONS.KEY_INCLUDE_ONLY);
+            List<MapUtility_ValidKeyInterface> keyEvaluators = new List<MapUtility_ValidKeyInterface>();
+            keyEvaluators.addAll(this.createKeyEvaluatorsFromMapOptions(mapOptions, keySet));
 
-            Map<Object, List<Object>> result = new Map<Object, List<Object>>();
+            Object result = this.createResultMap();
             for(Object tempSObject : objects) {
                 Object key = valueReader.getValue(tempSObject);
-                if(isKeyIgnoreNull && key == NULL) {continue;}
-                if(isKeyIncludeOnly && !keySet.contains(key)) {continue;}
-                List<Object> alreadyMappedObjects = result.get(key);
-                // check whether the List for the key already exists or not
-                if(alreadyMappedObjects == NULL) {
-                    alreadyMappedObjects = new List<Object>();
-                    result.put(key, alreadyMappedObjects);
-                }
-                alreadyMappedObjects.add(tempSObject);
-            }
-            return result;
-        }
-    }
+                Boolean isAddItem = this.isValidKey(keyEvaluators, key);
 
-    private class MappingLogicSObjectRetainFirst implements MapUtility_MappingLogicInterface {
-        public Object execute(List<Object> objects, IValueReader valueReader, Set<MAP_OPTIONS> mapOptions, Set<Object> keySet) {
-            Boolean isKeyIgnoreNull = mapOptions.contains(MAP_OPTIONS.KEY_IGNORE_NULL);
-            Boolean isKeyIncludeOnly = mapOptions.contains(MAP_OPTIONS.KEY_INCLUDE_ONLY);
-
-            Map<Object, Object> result = new Map<Object, Object>();
-            for(Object tempObject : objects) {
-                Object key = valueReader.getValue(tempObject);
-                if(isKeyIgnoreNull && key == NULL) {continue;}
-                if(isKeyIncludeOnly && !keySet.contains(key)) {continue;}
-                // only insert into map if key does not exist yet
-                if(!result.containsKey(key)) {
-                    result.put(key, tempObject);
+                if(isAddItem) {
+                    this.addItem(result, key, tempSObject);
                 }
             }
             return result;
         }
+
+        private Boolean isValidKey(List<MapUtility_ValidKeyInterface> keyEvaluators, Object key) {
+            Boolean isValidKey = true;
+            Iterator<MapUtility_ValidKeyInterface> evaluatorIterator = keyEvaluators.iterator();
+            while (evaluatorIterator.hasNext() && isValidKey) {
+                MapUtility_ValidKeyInterface keyEvaluator = evaluatorIterator.next();
+                isValidKey &= keyEvaluator.isValidKey(key);
+            }
+            return isValidKey;
+        }
+
+        private List<MapUtility_ValidKeyInterface> createKeyEvaluatorsFromMapOptions(Set<MAP_OPTIONS> mapOptions, Set<Object> keySet) {
+            List<MapUtility_ValidKeyInterface> keyEvaluators = new List<MapUtility_ValidKeyInterface>();
+
+            if(mapOptions.contains(MAP_OPTIONS.KEY_IGNORE_NULL)) {
+                keyEvaluators.add(new MapUtility_ValidKeyImplementation.IgnoreKeyNull());
+            }
+            if(mapOptions.contains(MAP_OPTIONS.KEY_INCLUDE_ONLY)) {
+                keyEvaluators.add(new MapUtility_ValidKeyImplementation.IncludeOnly(keySet));
+            }
+
+            return keyEvaluators;
+        }
     }
 
-    private class MappingLogicSObjectRetainLast implements MapUtility_MappingLogicInterface {
-        public Object execute(List<Object> objects, IValueReader valueReader, Set<MAP_OPTIONS> mapOptions, Set<Object> keySet) {
-            Boolean isKeyIgnoreNull = mapOptions.contains(MAP_OPTIONS.KEY_IGNORE_NULL);
-            Boolean isKeyIncludeOnly = mapOptions.contains(MAP_OPTIONS.KEY_INCLUDE_ONLY);
+    /**
+     * this class contains the logic for retaining all entries for a key
+     */
+    private class MappingLogicSObjectRetainAll extends ListInterationBase{
+        protected override Object createResultMap() {
+            return new Map<Object, List<Object>>();
+        }
 
-            Map<Object, Object> result = new Map<Object, Object>();
-            for(Object tempSObject : objects) {
-                Object key = valueReader.getValue(tempSObject);
-                if(isKeyIgnoreNull && key == NULL) {continue;}
-                if(isKeyIncludeOnly && !keySet.contains(key)) {continue;}
-                // insert into map no matter whether in object exist yet or not
-                result.put(key, tempSObject);
+        protected override void addItem(Object resultMap, Object key, Object newItem) {
+            List<Object> alreadyMappedObjects = ((Map<Object, List<Object>>)resultMap).get(key);
+            if(alreadyMappedObjects == NULL) {
+                alreadyMappedObjects = new List<Object>();
+                ((Map<Object, Object>)resultMap).put(key, alreadyMappedObjects);
             }
-            return result;
+            alreadyMappedObjects.add(newItem);
+        }
+    }
+
+    /**
+     * this class contains the logic for retaining the first entry for a key
+     */
+    private class MappingLogicSObjectRetainFirst extends ListInterationBase {
+        protected override Object createResultMap() {
+            return new Map<Object, Object>();
+        }
+
+        protected override void addItem(Object resultMap, Object key, Object newItem) {
+            if(!((Map<Object, Object>)resultMap).containsKey(key)) {
+                ((Map<Object, Object>)resultMap).put(key,newItem);
+            }
+        }
+    }
+
+    /**
+     * this class contains the logic for retaining the last entry for a key
+     */
+    private class MappingLogicSObjectRetainLast extends ListInterationBase {
+        protected override Object createResultMap() {
+            return new Map<Object, Object>();
+        }
+
+        protected override void addItem(Object resultMap, Object key, Object newItem) {
+            ((Map<Object, Object>)resultMap).put(key,newItem);
         }
     }
 }
