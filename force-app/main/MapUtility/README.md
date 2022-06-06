@@ -155,7 +155,7 @@ For further examples see class `MapUtility_MappingMainTest`.
 | Core | 1.0.0-2 | 04t2o000000yUVjAAM |yes |
 | Core | 1.1.0-1 | 04t2o000000yUVyAAM |yes |
 | Mapping | 1.0.0-2 | 04t2o000000yUVeAAM |yes| 
-| Mapping | 1.1.0-2 | 04t2o000000yUW3AAM |no |
+| Mapping | 1.1.0-2 | 04t2o000000yUWNAA2 |yes |
 
 ### installation order
  1. Core
