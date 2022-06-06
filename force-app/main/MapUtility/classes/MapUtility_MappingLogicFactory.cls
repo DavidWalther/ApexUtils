@@ -15,18 +15,33 @@ public with sharing class MapUtility_MappingLogicFactory {
         }
     }
 
+    /**
+     * this class contains the basic iteration logic for every object type
+     */
     private abstract class ListInterationBase implements MapUtility_MappingLogicInterface {
         public Object execute(List<Object> objects, IValueReader valueReader, Set<MAP_OPTIONS> mapOptions, Set<Object> keySet) {
-            Boolean isKeyIgnoreNull = mapOptions.contains(MAP_OPTIONS.KEY_IGNORE_NULL);
-            Boolean isKeyIncludeOnly = mapOptions.contains(MAP_OPTIONS.KEY_INCLUDE_ONLY);
+            
+            List<MapUtility_ValidKeyInterface> keyEvaluators = new List<MapUtility_ValidKeyInterface>();
+
+            if(mapOptions.contains(MAP_OPTIONS.KEY_IGNORE_NULL)) {
+                keyEvaluators.add(new MapUtility_ValidKeyImplementation.IgnoreKeyNull());
+            }
+            if(mapOptions.contains(MAP_OPTIONS.KEY_INCLUDE_ONLY)) {
+                keyEvaluators.add(new MapUtility_ValidKeyImplementation.IncludeOnly(keySet));
+            }
 
             Object result = this.createResultMap();
             for(Object tempSObject : objects) {
                 Object key = valueReader.getValue(tempSObject);
-                if(isKeyIgnoreNull && key == NULL) {continue;}
-                if(isKeyIncludeOnly && !keySet.contains(key)) {continue;}
-                
-                this.addItem(result, key, tempSObject);
+                Boolean isAddItem = true;
+                Iterator<MapUtility_ValidKeyInterface> evaluatorIterator = keyEvaluators.iterator();
+                while (evaluatorIterator.hasNext() && isAddItem) {
+                    MapUtility_ValidKeyInterface keyEvaluator = evaluatorIterator.next();
+                    isAddItem &= keyEvaluator.isValidKey(key);
+                }
+                if(isAddItem) {
+                    this.addItem(result, key, tempSObject);
+                }
             }
             return result;
         }
@@ -35,6 +50,9 @@ public with sharing class MapUtility_MappingLogicFactory {
         protected abstract void addItem(Object resultMap, Object key, Object newItem);
     }
 
+    /**
+     * this class contains the logic for retaining all entries for a key
+     */
     private class MappingLogicSObjectRetainAll extends ListInterationBase{
         protected override Object createResultMap() {
             return new Map<Object, List<Object>>();
@@ -50,6 +68,9 @@ public with sharing class MapUtility_MappingLogicFactory {
         }
     }
 
+    /**
+     * this class contains the logic for retaining the first entry for a key
+     */
     private class MappingLogicSObjectRetainFirst extends ListInterationBase {
         protected override Object createResultMap() {
             return new Map<Object, Object>();
@@ -62,6 +83,9 @@ public with sharing class MapUtility_MappingLogicFactory {
         }
     }
 
+    /**
+     * this class contains the logic for retaining the last entry for a key
+     */
     private class MappingLogicSObjectRetainLast extends ListInterationBase {
         protected override Object createResultMap() {
             return new Map<Object, Object>();
