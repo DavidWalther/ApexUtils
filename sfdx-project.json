@@ -11,12 +11,12 @@
             "path": "force-app/main/MapUtility",
             "default": false,
             "package": "ApexUtilities-Mapping",
-            "versionNumber": "1.1.0.NEXT",
-            "versionName": "Map by any kind of key",
+            "versionNumber": "2.0.0.NEXT",
+            "versionName": "Mapping with flexible key Evaluators",
             "dependencies": [
                 {
                     "package": "ApexUtilities-Core",
-                    "versionNumber": "1.0.0.LATEST"
+                    "versionNumber": "1.1.0.LATEST"
                 }
             ]
         },
@@ -37,6 +37,7 @@
         "ApexUtilities-Mapping": "0Ho2o000000fxYdCAI",
         "ApexUtilities-Mapping@1.0.0-1": "04t2o000000yUVZAA2",
         "ApexUtilities-Mapping@1.0.0-2": "04t2o000000yUVeAAM",
-        "ApexUtilities-Mapping@1.1.0-2": "04t2o000000yUW3AAM"
+        "ApexUtilities-Mapping@1.1.0-2": "04t2o000000yUW3AAM",
+        "ApexUtilities-Mapping@2.0.0-1": "04t2o000000yUWSAA2"
     }
 }

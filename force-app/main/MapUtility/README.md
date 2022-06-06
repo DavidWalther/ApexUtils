@@ -150,12 +150,13 @@ a Contacts `Account.Name`-field
 For further examples see class `MapUtility_MappingMainTest`.
 
 ## Package versions
-| Packagen | Version | Id| Promoted |
-| --- | --- | --- | --- |
-| Core | 1.0.0-2 | 04t2o000000yUVjAAM |yes |
-| Core | 1.1.0-1 | 04t2o000000yUVyAAM |yes |
-| Mapping | 1.0.0-2 | 04t2o000000yUVeAAM |yes| 
-| Mapping | 1.1.0-2 | 04t2o000000yUW3AAM |no |
+| Packagen | Version | Id| Promoted | Highlight |
+| --- | --- | --- | --- | --- |
+| Core | 1.0.0-2 | 04t2o000000yUVjAAM |yes | Original logic |
+| Core | 1.1.0-1 | 04t2o000000yUVyAAM |yes | make value reader return 'Object' instead of 'String' |
+| Mapping | 1.0.0-2 | 04t2o000000yUVeAAM |yes| Original logic |
+| Mapping | 1.1.0-2 | 04t2o000000yUW3AAM |no | create map with 'Object' key instead of 'String' |
+| Mapping | 2.0.0-1 | 04t2o000000yUWSAA2 |no | create map with 'Object' key instead of 'String' |
 
 ### installation order
  1. Core

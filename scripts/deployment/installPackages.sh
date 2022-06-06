@@ -16,7 +16,7 @@ echo ""
 echo "----------------------"
 echo "Installing ApexUtilities-Mapping"
 echo "----------------------"
-sfdx force:package:install --targetusername "$ALIAS" --package="ApexUtilities-Mapping@1.1.0-2" --wait 60
+sfdx force:package:install --targetusername "$ALIAS" --package="ApexUtilities-Mapping@2.0.0-1" --wait 60
 
 retVal=$?
 if [ $retVal -ne 0 ]; then
