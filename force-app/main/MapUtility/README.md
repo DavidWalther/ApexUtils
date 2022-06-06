@@ -156,7 +156,7 @@ For further examples see class `MapUtility_MappingMainTest`.
 | Core | 1.1.0-1 | 04t2o000000yUVyAAM |yes | make value reader return 'Object' instead of 'String' |
 | Mapping | 1.0.0-2 | 04t2o000000yUVeAAM |yes| Original logic |
 | Mapping | 1.1.0-2 | 04t2o000000yUW3AAM |yes | create map with 'Object' key instead of 'String' |
-| Mapping | 2.0.0-1 | 04t2o000000yUWSAA2 |no | replace mappping map options |
+| Mapping | 2.0.0-1 | 04t2o000000yUWSAA2 |no | replace map options |
 
 ### installation order
  1. Core
