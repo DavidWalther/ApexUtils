@@ -8,11 +8,9 @@ public with sharing class MapUtility_MappingLogicFactory {
             when RETAIN_LAST {
                 return new MappingLogicSObjectRetainLast();
             }
-            when RETAIN_ALL {
-                return new MappingLogicSObjectRetainAll();
-            }
             when else {
-                throw new MapUtility_Exception('Retaining option is not implemented yet.');
+                // only RETAIN_ALL is left
+                return new MappingLogicSObjectRetainAll();
             }
         }
     }
