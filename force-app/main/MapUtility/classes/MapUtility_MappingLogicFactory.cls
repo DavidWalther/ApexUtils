@@ -22,7 +22,7 @@ public with sharing class MapUtility_MappingLogicFactory {
             Boolean isKeyIgnoreNull = mapOptions.contains(MAP_OPTIONS.KEY_IGNORE_NULL);
             Boolean isKeyIncludeOnly = mapOptions.contains(MAP_OPTIONS.KEY_INCLUDE_ONLY);
 
-            Map<Object, List<Object>> result = new Map<Object, List<Object>>();
+            Object result = this.createResultMap();
             for(Object tempSObject : objects) {
                 Object key = valueReader.getValue(tempSObject);
                 if(isKeyIgnoreNull && key == NULL) {continue;}
@@ -33,15 +33,23 @@ public with sharing class MapUtility_MappingLogicFactory {
             return result;
         }
 
+        protected abstract Object createResultMap();
         protected abstract void addItem(Object resultMap, Object key, Object newItem);
     }
-                if(alreadyMappedObjects == NULL) {
-                    alreadyMappedObjects = new List<Object>();
-                    result.put(key, alreadyMappedObjects);
-                }
-                alreadyMappedObjects.add(tempSObject);
+
+    private class MappingLogicSObjectRetainAll extends ListInterationBase{
+
+        protected override Object createResultMap() {
+            return new Map<Object, List<Object>>();
+        }
+
+        protected override void addItem(Object resultMap, Object key, Object newItem) {
+            List<Object> alreadyMappedObjects = ((Map<Object, List<Object>>)resultMap).get(key);
+            if(alreadyMappedObjects == NULL) {
+                alreadyMappedObjects = new List<Object>();
+                ((Map<Object, Object>)resultMap).put(key, alreadyMappedObjects);
             }
-            return result;
+            alreadyMappedObjects.add(newItem);
         }
     }
 
