@@ -19,8 +19,36 @@ public with sharing class MapUtility_MappingLogicFactory {
      * this class contains the basic iteration logic for every object type
      */
     private abstract class ListInterationBase implements MapUtility_MappingLogicInterface {
+        protected abstract Object createResultMap();
+        protected abstract void addItem(Object resultMap, Object key, Object newItem);
+        
         public Object execute(List<Object> objects, IValueReader valueReader, Set<MAP_OPTIONS> mapOptions, Set<Object> keySet) {
-            
+            List<MapUtility_ValidKeyInterface> keyEvaluators = new List<MapUtility_ValidKeyInterface>();
+            keyEvaluators.addAll(this.createKeyEvaluatorsFromMapOptions(mapOptions, keySet));
+
+            Object result = this.createResultMap();
+            for(Object tempSObject : objects) {
+                Object key = valueReader.getValue(tempSObject);
+                Boolean isAddItem = this.isValidKey(keyEvaluators, key);
+
+                if(isAddItem) {
+                    this.addItem(result, key, tempSObject);
+                }
+            }
+            return result;
+        }
+
+        private Boolean isValidKey(List<MapUtility_ValidKeyInterface> keyEvaluators, Object key) {
+            Boolean isValidKey = true;
+            Iterator<MapUtility_ValidKeyInterface> evaluatorIterator = keyEvaluators.iterator();
+            while (evaluatorIterator.hasNext() && isValidKey) {
+                MapUtility_ValidKeyInterface keyEvaluator = evaluatorIterator.next();
+                isValidKey &= keyEvaluator.isValidKey(key);
+            }
+            return isValidKey;
+        }
+
+        private List<MapUtility_ValidKeyInterface> createKeyEvaluatorsFromMapOptions(Set<MAP_OPTIONS> mapOptions, Set<Object> keySet) {
             List<MapUtility_ValidKeyInterface> keyEvaluators = new List<MapUtility_ValidKeyInterface>();
 
             if(mapOptions.contains(MAP_OPTIONS.KEY_IGNORE_NULL)) {
@@ -30,24 +58,8 @@ public with sharing class MapUtility_MappingLogicFactory {
                 keyEvaluators.add(new MapUtility_ValidKeyImplementation.IncludeOnly(keySet));
             }
 
-            Object result = this.createResultMap();
-            for(Object tempSObject : objects) {
-                Object key = valueReader.getValue(tempSObject);
-                Boolean isAddItem = true;
-                Iterator<MapUtility_ValidKeyInterface> evaluatorIterator = keyEvaluators.iterator();
-                while (evaluatorIterator.hasNext() && isAddItem) {
-                    MapUtility_ValidKeyInterface keyEvaluator = evaluatorIterator.next();
-                    isAddItem &= keyEvaluator.isValidKey(key);
-                }
-                if(isAddItem) {
-                    this.addItem(result, key, tempSObject);
-                }
-            }
-            return result;
+            return keyEvaluators;
         }
-
-        protected abstract Object createResultMap();
-        protected abstract void addItem(Object resultMap, Object key, Object newItem);
     }
 
     /**
