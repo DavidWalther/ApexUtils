@@ -617,7 +617,7 @@ public with sharing class MapUtility_MappingMainTest {
         * When
         * The map method of SObjectMappingUtility is called for the leadList and the company field
         */
-        Map<Object, List<Object>> mappedLeads = (Map<Object, List<Object>>)new MapUtility_MappingMain().generateMapFromObjectList(
+        Map<Object, List<SObject>> mappedLeads = (Map<Object, List<SObject>>)new MapUtility_MappingMain().generateMapFromObjectList(
             leadList,
             new LeadCompanyReader(),
             MAP_RETAIN_MODE.RETAIN_ALL,
@@ -639,10 +639,10 @@ public with sharing class MapUtility_MappingMainTest {
         System.assertEquals(2, mappedLeads.get(TESTCOMPANY_2_NAME).size());
         System.assertEquals(1, mappedLeads.get(TESTCOMPANY_3_NAME).size());
 
-        System.assertEquals(lead1.Id, ((Lead)mappedLeads.get(TESTCOMPANY_1_NAME).get(0)).Id);
-        System.assertEquals(lead2.Id, ((Lead)mappedLeads.get(TESTCOMPANY_1_NAME).get(1)).Id);
-        System.assertEquals(lead3.Id, ((Lead)mappedLeads.get(TESTCOMPANY_2_NAME).get(0)).Id);
-        System.assertEquals(lead4.Id, ((Lead)mappedLeads.get(TESTCOMPANY_2_NAME).get(1)).Id);
-        System.assertEquals(lead5.Id, ((Lead)mappedLeads.get(TESTCOMPANY_3_NAME).get(0)).Id);
+        System.assertEquals(lead1.Id, mappedLeads.get(TESTCOMPANY_1_NAME).get(0).Id);
+        System.assertEquals(lead2.Id, mappedLeads.get(TESTCOMPANY_1_NAME).get(1).Id);
+        System.assertEquals(lead3.Id, mappedLeads.get(TESTCOMPANY_2_NAME).get(0).Id);
+        System.assertEquals(lead4.Id, mappedLeads.get(TESTCOMPANY_2_NAME).get(1).Id);
+        System.assertEquals(lead5.Id, mappedLeads.get(TESTCOMPANY_3_NAME).get(0).Id);
     }
 }
