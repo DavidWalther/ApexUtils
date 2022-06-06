@@ -38,7 +38,6 @@ public with sharing class MapUtility_MappingLogicFactory {
     }
 
     private class MappingLogicSObjectRetainAll extends ListInterationBase{
-
         protected override Object createResultMap() {
             return new Map<Object, List<Object>>();
         }
@@ -53,6 +52,18 @@ public with sharing class MapUtility_MappingLogicFactory {
         }
     }
 
+    private class MappingLogicSObjectRetainFirst extends ListInterationBase {
+        protected override Object createResultMap() {
+            return new Map<Object, Object>();
+        }
+
+        protected override void addItem(Object resultMap, Object key, Object newItem) {
+            if(!((Map<Object, Object>)resultMap).containsKey(key)) {
+                ((Map<Object, Object>)resultMap).put(key,newItem);
+            }
+        }
+    }
+/*
     private class MappingLogicSObjectRetainFirst implements MapUtility_MappingLogicInterface {
         public Object execute(List<Object> objects, IValueReader valueReader, Set<MAP_OPTIONS> mapOptions, Set<Object> keySet) {
             Boolean isKeyIgnoreNull = mapOptions.contains(MAP_OPTIONS.KEY_IGNORE_NULL);
@@ -71,7 +82,7 @@ public with sharing class MapUtility_MappingLogicFactory {
             return result;
         }
     }
-
+*/
     private class MappingLogicSObjectRetainLast implements MapUtility_MappingLogicInterface {
         public Object execute(List<Object> objects, IValueReader valueReader, Set<MAP_OPTIONS> mapOptions, Set<Object> keySet) {
             Boolean isKeyIgnoreNull = mapOptions.contains(MAP_OPTIONS.KEY_IGNORE_NULL);
