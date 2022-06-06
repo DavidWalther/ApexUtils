@@ -17,7 +17,7 @@ public with sharing class MapUtility_MappingLogicFactory {
         }
     }
 
-    private class MappingLogicSObjectRetainAll implements MapUtility_MappingLogicInterface {
+    private abstract class ListInterationBase implements MapUtility_MappingLogicInterface {
         public Object execute(List<Object> objects, IValueReader valueReader, Set<MAP_OPTIONS> mapOptions, Set<Object> keySet) {
             Boolean isKeyIgnoreNull = mapOptions.contains(MAP_OPTIONS.KEY_IGNORE_NULL);
             Boolean isKeyIncludeOnly = mapOptions.contains(MAP_OPTIONS.KEY_INCLUDE_ONLY);
@@ -27,8 +27,14 @@ public with sharing class MapUtility_MappingLogicFactory {
                 Object key = valueReader.getValue(tempSObject);
                 if(isKeyIgnoreNull && key == NULL) {continue;}
                 if(isKeyIncludeOnly && !keySet.contains(key)) {continue;}
-                List<Object> alreadyMappedObjects = result.get(key);
-                // check whether the List for the key already exists or not
+                
+                this.addItem(result, key, tempSObject);
+            }
+            return result;
+        }
+
+        protected abstract void addItem(Object resultMap, Object key, Object newItem);
+    }
                 if(alreadyMappedObjects == NULL) {
                     alreadyMappedObjects = new List<Object>();
                     result.put(key, alreadyMappedObjects);
