@@ -17,61 +17,60 @@ public with sharing class MapUtility_MappingLogicFactory {
         }
     }
 
-    private class MappingLogicSObjectRetainAll implements MapUtility_MappingLogicInterface {
+    private abstract class ListInterationBase implements MapUtility_MappingLogicInterface {
         public Object execute(List<Object> objects, IValueReader valueReader, Set<MAP_OPTIONS> mapOptions, Set<Object> keySet) {
             Boolean isKeyIgnoreNull = mapOptions.contains(MAP_OPTIONS.KEY_IGNORE_NULL);
             Boolean isKeyIncludeOnly = mapOptions.contains(MAP_OPTIONS.KEY_INCLUDE_ONLY);
 
-            Map<Object, List<Object>> result = new Map<Object, List<Object>>();
+            Object result = this.createResultMap();
             for(Object tempSObject : objects) {
                 Object key = valueReader.getValue(tempSObject);
                 if(isKeyIgnoreNull && key == NULL) {continue;}
                 if(isKeyIncludeOnly && !keySet.contains(key)) {continue;}
-                List<Object> alreadyMappedObjects = result.get(key);
-                // check whether the List for the key already exists or not
-                if(alreadyMappedObjects == NULL) {
-                    alreadyMappedObjects = new List<Object>();
-                    result.put(key, alreadyMappedObjects);
-                }
-                alreadyMappedObjects.add(tempSObject);
+                
+                this.addItem(result, key, tempSObject);
             }
             return result;
         }
+
+        protected abstract Object createResultMap();
+        protected abstract void addItem(Object resultMap, Object key, Object newItem);
     }
 
-    private class MappingLogicSObjectRetainFirst implements MapUtility_MappingLogicInterface {
-        public Object execute(List<Object> objects, IValueReader valueReader, Set<MAP_OPTIONS> mapOptions, Set<Object> keySet) {
-            Boolean isKeyIgnoreNull = mapOptions.contains(MAP_OPTIONS.KEY_IGNORE_NULL);
-            Boolean isKeyIncludeOnly = mapOptions.contains(MAP_OPTIONS.KEY_INCLUDE_ONLY);
+    private class MappingLogicSObjectRetainAll extends ListInterationBase{
+        protected override Object createResultMap() {
+            return new Map<Object, List<Object>>();
+        }
 
-            Map<Object, Object> result = new Map<Object, Object>();
-            for(Object tempObject : objects) {
-                Object key = valueReader.getValue(tempObject);
-                if(isKeyIgnoreNull && key == NULL) {continue;}
-                if(isKeyIncludeOnly && !keySet.contains(key)) {continue;}
-                // only insert into map if key does not exist yet
-                if(!result.containsKey(key)) {
-                    result.put(key, tempObject);
-                }
+        protected override void addItem(Object resultMap, Object key, Object newItem) {
+            List<Object> alreadyMappedObjects = ((Map<Object, List<Object>>)resultMap).get(key);
+            if(alreadyMappedObjects == NULL) {
+                alreadyMappedObjects = new List<Object>();
+                ((Map<Object, Object>)resultMap).put(key, alreadyMappedObjects);
             }
-            return result;
+            alreadyMappedObjects.add(newItem);
         }
     }
 
-    private class MappingLogicSObjectRetainLast implements MapUtility_MappingLogicInterface {
-        public Object execute(List<Object> objects, IValueReader valueReader, Set<MAP_OPTIONS> mapOptions, Set<Object> keySet) {
-            Boolean isKeyIgnoreNull = mapOptions.contains(MAP_OPTIONS.KEY_IGNORE_NULL);
-            Boolean isKeyIncludeOnly = mapOptions.contains(MAP_OPTIONS.KEY_INCLUDE_ONLY);
+    private class MappingLogicSObjectRetainFirst extends ListInterationBase {
+        protected override Object createResultMap() {
+            return new Map<Object, Object>();
+        }
 
-            Map<Object, Object> result = new Map<Object, Object>();
-            for(Object tempSObject : objects) {
-                Object key = valueReader.getValue(tempSObject);
-                if(isKeyIgnoreNull && key == NULL) {continue;}
-                if(isKeyIncludeOnly && !keySet.contains(key)) {continue;}
-                // insert into map no matter whether in object exist yet or not
-                result.put(key, tempSObject);
+        protected override void addItem(Object resultMap, Object key, Object newItem) {
+            if(!((Map<Object, Object>)resultMap).containsKey(key)) {
+                ((Map<Object, Object>)resultMap).put(key,newItem);
             }
-            return result;
+        }
+    }
+
+    private class MappingLogicSObjectRetainLast extends ListInterationBase {
+        protected override Object createResultMap() {
+            return new Map<Object, Object>();
+        }
+
+        protected override void addItem(Object resultMap, Object key, Object newItem) {
+            ((Map<Object, Object>)resultMap).put(key,newItem);
         }
     }
 }
