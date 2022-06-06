@@ -63,40 +63,14 @@ public with sharing class MapUtility_MappingLogicFactory {
             }
         }
     }
-/*
-    private class MappingLogicSObjectRetainFirst implements MapUtility_MappingLogicInterface {
-        public Object execute(List<Object> objects, IValueReader valueReader, Set<MAP_OPTIONS> mapOptions, Set<Object> keySet) {
-            Boolean isKeyIgnoreNull = mapOptions.contains(MAP_OPTIONS.KEY_IGNORE_NULL);
-            Boolean isKeyIncludeOnly = mapOptions.contains(MAP_OPTIONS.KEY_INCLUDE_ONLY);
 
-            Map<Object, Object> result = new Map<Object, Object>();
-            for(Object tempObject : objects) {
-                Object key = valueReader.getValue(tempObject);
-                if(isKeyIgnoreNull && key == NULL) {continue;}
-                if(isKeyIncludeOnly && !keySet.contains(key)) {continue;}
-                // only insert into map if key does not exist yet
-                if(!result.containsKey(key)) {
-                    result.put(key, tempObject);
-                }
-            }
-            return result;
+    private class MappingLogicSObjectRetainLast extends ListInterationBase {
+        protected override Object createResultMap() {
+            return new Map<Object, Object>();
         }
-    }
-*/
-    private class MappingLogicSObjectRetainLast implements MapUtility_MappingLogicInterface {
-        public Object execute(List<Object> objects, IValueReader valueReader, Set<MAP_OPTIONS> mapOptions, Set<Object> keySet) {
-            Boolean isKeyIgnoreNull = mapOptions.contains(MAP_OPTIONS.KEY_IGNORE_NULL);
-            Boolean isKeyIncludeOnly = mapOptions.contains(MAP_OPTIONS.KEY_INCLUDE_ONLY);
 
-            Map<Object, Object> result = new Map<Object, Object>();
-            for(Object tempSObject : objects) {
-                Object key = valueReader.getValue(tempSObject);
-                if(isKeyIgnoreNull && key == NULL) {continue;}
-                if(isKeyIncludeOnly && !keySet.contains(key)) {continue;}
-                // insert into map no matter whether in object exist yet or not
-                result.put(key, tempSObject);
-            }
-            return result;
+        protected override void addItem(Object resultMap, Object key, Object newItem) {
+            ((Map<Object, Object>)resultMap).put(key,newItem);
         }
     }
 }
