@@ -38,6 +38,19 @@ public with sharing class MapUtility_MappingLogicFactory {
             return result;
         }
 
+        public Object execute(List<Object> objects, IValueReader valueReader, List<MapUtility_ValidKeyInterface> keyEvaluators) {
+            Object result = this.createResultMap();
+            for(Object tempSObject : objects) {
+                Object key = valueReader.getValue(tempSObject);
+                Boolean isAddItem = this.isValidKey(keyEvaluators, key);
+
+                if(isAddItem) {
+                    this.addItem(result, key, tempSObject);
+                }
+            }
+            return result;
+        }
+
         private Boolean isValidKey(List<MapUtility_ValidKeyInterface> keyEvaluators, Object key) {
             Boolean isValidKey = true;
             Iterator<MapUtility_ValidKeyInterface> evaluatorIterator = keyEvaluators.iterator();

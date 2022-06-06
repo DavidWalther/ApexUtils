@@ -581,4 +581,68 @@ public with sharing class MapUtility_MappingMainTest {
         System.assertEquals(lead4.Id, mappedLeads.get(TESTCOMPANY_4_NAME)[0].Id);
         System.assertEquals(lead5.Id, mappedLeads.get(TESTCOMPANY_4_NAME)[1].Id);
     }
+
+
+    //----------------------------
+    // Tests with evaluator List
+    //----------------------------
+
+    @IsTest
+    static void mapUtil_SObjects_Evaluators_RetainMode_RetainAll() {
+        /**
+         * Given
+         * - A list of leads with filled company fields.
+         * - Multiple leads have the same value
+         */
+        final String TESTCOMPANY_1_NAME = 'TestCompany1';
+        final String TESTCOMPANY_2_NAME = 'TestCompany2';
+        final String TESTCOMPANY_3_NAME = 'TestCompany3';
+
+        Lead lead1 = new Lead(
+        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
+        Lead lead2 = new Lead(
+        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
+        Lead lead3 = new Lead(
+        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_2_NAME);
+        Lead lead4 = new Lead(
+        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_2_NAME);
+        Lead lead5 = new Lead(
+        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_3_NAME);
+
+        List<Lead> leadList = new List<Lead>{lead1, lead2, lead3, lead4, lead5};
+
+        Test.startTest();
+
+        /**
+        * When
+        * The map method of SObjectMappingUtility is called for the leadList and the company field
+        */
+        Map<Object, List<Object>> mappedLeads = (Map<Object, List<Object>>)new MapUtility_MappingMain().generateMapFromObjectList(
+            leadList,
+            new LeadCompanyReader(),
+            MAP_RETAIN_MODE.RETAIN_ALL,
+            new List<MapUtility_ValidKeyInterface>()
+        );
+
+        Test.stopTest();
+
+        /**
+         * Then
+         * A collection of all matching lead in list for every company value in the result
+         */
+        System.assertEquals(3, mappedLeads.size());
+        System.assertEquals(true, mappedLeads.containsKey(TESTCOMPANY_1_NAME));
+        System.assertEquals(true, mappedLeads.containsKey(TESTCOMPANY_2_NAME));
+        System.assertEquals(true, mappedLeads.containsKey(TESTCOMPANY_3_NAME));
+
+        System.assertEquals(2, mappedLeads.get(TESTCOMPANY_1_NAME).size());
+        System.assertEquals(2, mappedLeads.get(TESTCOMPANY_2_NAME).size());
+        System.assertEquals(1, mappedLeads.get(TESTCOMPANY_3_NAME).size());
+
+        System.assertEquals(lead1.Id, ((Lead)mappedLeads.get(TESTCOMPANY_1_NAME).get(0)).Id);
+        System.assertEquals(lead2.Id, ((Lead)mappedLeads.get(TESTCOMPANY_1_NAME).get(1)).Id);
+        System.assertEquals(lead3.Id, ((Lead)mappedLeads.get(TESTCOMPANY_2_NAME).get(0)).Id);
+        System.assertEquals(lead4.Id, ((Lead)mappedLeads.get(TESTCOMPANY_2_NAME).get(1)).Id);
+        System.assertEquals(lead5.Id, ((Lead)mappedLeads.get(TESTCOMPANY_3_NAME).get(0)).Id);
+    }
 }
