@@ -22,10 +22,7 @@ public with sharing class MapUtility_MappingLogicFactory {
         protected abstract Object createResultMap();
         protected abstract void addItem(Object resultMap, Object key, Object newItem);
         
-        public Object execute(List<Object> objects, IValueReader valueReader, Set<MAP_OPTIONS> mapOptions, Set<Object> keySet) {
-            List<MapUtility_ValidKeyInterface> keyEvaluators = new List<MapUtility_ValidKeyInterface>();
-            keyEvaluators.addAll(this.createKeyEvaluatorsFromMapOptions(mapOptions, keySet));
-
+        public Object execute(List<Object> objects, IValueReader valueReader, List<MapUtility_ValidKeyInterface> keyEvaluators) {
             Object result = this.createResultMap();
             for(Object tempSObject : objects) {
                 Object key = valueReader.getValue(tempSObject);
@@ -46,19 +43,6 @@ public with sharing class MapUtility_MappingLogicFactory {
                 isValidKey &= keyEvaluator.isValidKey(key);
             }
             return isValidKey;
-        }
-
-        private List<MapUtility_ValidKeyInterface> createKeyEvaluatorsFromMapOptions(Set<MAP_OPTIONS> mapOptions, Set<Object> keySet) {
-            List<MapUtility_ValidKeyInterface> keyEvaluators = new List<MapUtility_ValidKeyInterface>();
-
-            if(mapOptions.contains(MAP_OPTIONS.KEY_IGNORE_NULL)) {
-                keyEvaluators.add(new MapUtility_ValidKeyImplementation.IgnoreKeyNull());
-            }
-            if(mapOptions.contains(MAP_OPTIONS.KEY_INCLUDE_ONLY)) {
-                keyEvaluators.add(new MapUtility_ValidKeyImplementation.IncludeOnly(keySet));
-            }
-
-            return keyEvaluators;
         }
     }
 

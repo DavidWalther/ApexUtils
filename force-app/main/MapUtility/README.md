@@ -1,9 +1,9 @@
-# MapUtility
+# **MapUtility**
 
-## Purpose
+## **Purpose**
 This utility is designed releave developers from the repetitive and error-prone task of creating maps of objects. This is done over and over again with only slight changes. By generalized by providing a basic logic and ways to options to define certain criteria.
 
-## Concept
+## **Concept**
 Creating a map from a list of objects is always done by the same steps:
 
 1. **Decide whether to keep**
@@ -28,19 +28,35 @@ The three highlighted elements are the parts that are special for each map:
     This is achieved via the interface `IValueReader`
   * 'Skip/add' each entry after evaluation
 
-    This is achieved via the interface `MAP_OPTIONS`
+  *  This is achieved via the interface `MapUtility_ValidKeyInterface`
 
-## Use of the Map Util
+## **Use of the Map Util**
 
-### Call to the mapping method: `MapUtility_MappingMain.generateMapFromObjectList 
+### **Call to the mapping method: `MapUtility_MappingMain.generateMapFromObjectList`**
 
-    Map<String, Object> result = MapUtility_MappingMain.generateMapFromObjectList(
-      List<Object> objects,
-      IValueReader valueReader,
-      MAP_RETAIN_MODE retainingMode,
-      Set<MAP_OPTIONS> mapOptions,
-      Set<String> keySet
-    )
+      Map<String, Object> result = MapUtility_MappingMain.generateMapFromObjectList(
+        List<Object> objects,
+        IValueReader valueReader,
+        MAP_RETAIN_MODE retainingMode,
+        List<MapUtility_ValidKeyInterface> keyEvaluators
+      )
+
+**Parameters**
+* `objects`: List of objects to create the map of. This can be SObjects or Objects
+* `valueReader`: the ValueReader **instance** to use for getting mapping keys for each entry in `objects`
+* `retainingMode`: an enum value to specify which items to keep
+* `keyEvaluators`: a List of `MapUtility_ValidKeyInterface` to define more key-specific behavior
+
+**_Depricated:_**
+
+      Map<String, Object> result = MapUtility_MappingMain.generateMapFromObjectList(
+        List<Object> objects,
+        IValueReader valueReader,
+        MAP_RETAIN_MODE retainingMode,
+        Set<MAP_OPTIONS> mapOptions,
+        Set<String> keySet
+      )
+
 **Parameters**
 * `objects`: List of objects to create the map of. This can be SObjects or Objects
 * `valueReader`: the ValueReader **instance** to use for getting mapping keys for each entry in `objects`
@@ -48,7 +64,7 @@ The three highlighted elements are the parts that are special for each map:
 * `mapOptions`: a Set of `MAP_OPTIONS` to define more key-specific behavior
 * `keySet`: a Set of value to use for on `MAP_OPTIONS.KEY_INCLUDE_ONLY`
 
-### `Enum MAP_RETAIN_MODE`
+#### **1. `enum: MAP_RETAIN_MODE`**
 
 There are three mutual exclusive ways to store data inside a map. Each of these ways is represented by a member of the enum `MAP_RETAIN_MODE`:
 
@@ -58,7 +74,7 @@ There are three mutual exclusive ways to store data inside a map. Each of these 
 * `RETAIN_LAST`: specifies to keep the last item for a specific 'mapping key'
 * `RETAIN_ALL`: specifies to keep the all items for a specific 'mapping key' in a collection for each one
 
-### `IValueReader`
+#### **2. `interface: IValueReader`**
 
 The complexity of reading the 'mapping key' of an object can variy from object to object. It can be as simple as reading the value of a certain sObjectField or it can be the the result of a function call based on multiple values.
 But regardless of the way a 'mapping key' is read it is always the result of an action specific to an individual item. This abstraction is taken into account by the `IValueReader` interface:
@@ -69,7 +85,16 @@ But regardless of the way a 'mapping key' is read it is always the result of an 
 
 This simple interface provides the neccessary abstraction for a generic way to read a 'mapping key' from an object.
 
-### `Enum MAP_OPTIONS`
+#### **3. `interface: MapUtility_ValidKeyInterface`**
+
+This interface is used to identify whether to include a calculated key in the mapping or not.
+
+    public Interface MapUtility_ValidKeyInterface {
+      Boolean isValidKey(Object keyToEvaluate);
+    }
+
+#### **(`enum: MAP_OPTIONS`)**
+**_Depricated_** use ```MapUtility_ValidKeyInterface``` instead
 
 Sometimes a special behavior is required on specific 'mapping keys'. This can be defined by using specific values of the enum `MAP_OPTIONS`. These Options can be combined if required.
 
@@ -149,16 +174,16 @@ a Contacts `Account.Name`-field
 
 For further examples see class `MapUtility_MappingMainTest`.
 
-## Package versions
+## **Package versions**
 | Packagen | Version | Id| Promoted | Highlight |
 | --- | --- | --- | --- | --- |
 | Core | 1.0.0-2 | 04t2o000000yUVjAAM |yes | Original logic |
 | Core | 1.1.0-1 | 04t2o000000yUVyAAM |yes | make value reader return 'Object' instead of 'String' |
 | Mapping | 1.0.0-2 | 04t2o000000yUVeAAM |yes| Original logic |
 | Mapping | 1.1.0-2 | 04t2o000000yUW3AAM |yes | create map with 'Object' key instead of 'String' |
-| Mapping | 2.0.0-1 | 04t2o000000yUWSAA2 |no | replace map options |
+| Mapping | 2.0.0-1 | 04t2o000000yUWSAA2 |yes | replace map options |
 
-### installation order
+### Installation order
  1. Core
  1. Mapping
 

@@ -11,13 +11,8 @@
             "path": "force-app/main/MapUtility",
             "default": false,
             "package": "ApexUtilities-Mapping",
-<<<<<<< HEAD
-            "versionNumber": "1.1.1.NEXT",
-            "versionName": "Map by any kind of key",
-=======
             "versionNumber": "2.0.0.NEXT",
             "versionName": "Mapping with flexible key Evaluators",
->>>>>>> 17-map-option-for-evaluating-whether-a-key-should-be-taken
             "dependencies": [
                 {
                     "package": "ApexUtilities-Core",
@@ -32,7 +27,7 @@
     ],
     "namespace": "",
     "sfdcLoginUrl": "https://login.salesforce.com",
-    "sourceApiVersion": "47.0",
+    "sourceApiVersion": "53.0",
     "packageAliases": {
         "ApexUtilities-Core": "0Ho2o000000fxYYCAY",
         "ApexUtilities-Core@1.0.0-1": "04t2o000000yUVUAA2",

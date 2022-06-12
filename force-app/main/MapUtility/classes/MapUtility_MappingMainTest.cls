@@ -581,4 +581,243 @@ public with sharing class MapUtility_MappingMainTest {
         System.assertEquals(lead4.Id, mappedLeads.get(TESTCOMPANY_4_NAME)[0].Id);
         System.assertEquals(lead5.Id, mappedLeads.get(TESTCOMPANY_4_NAME)[1].Id);
     }
+
+
+    //----------------------------
+    // Tests with evaluator List
+    //----------------------------
+
+    @IsTest
+    static void mapUtil_SObjects_Evaluators_RetainMode_RetainAll() {
+        /**
+         * Given
+         * - A list of leads with filled company fields.
+         * - Multiple leads have the same value
+         */
+        final String TESTCOMPANY_1_NAME = 'TestCompany1';
+        final String TESTCOMPANY_2_NAME = 'TestCompany2';
+        final String TESTCOMPANY_3_NAME = 'TestCompany3';
+
+        Lead lead1 = new Lead(
+        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
+        Lead lead2 = new Lead(
+        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
+        Lead lead3 = new Lead(
+        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_2_NAME);
+        Lead lead4 = new Lead(
+        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_2_NAME);
+        Lead lead5 = new Lead(
+        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_3_NAME);
+
+        List<Lead> leadList = new List<Lead>{lead1, lead2, lead3, lead4, lead5};
+
+        Test.startTest();
+
+        /**
+        * When
+        * The map method of SObjectMappingUtility is called for the leadList and the company field
+        */
+        Map<Object, List<SObject>> mappedLeads = (Map<Object, List<SObject>>)new MapUtility_MappingMain().generateMapFromObjectList(
+            leadList,
+            new LeadCompanyReader(),
+            MAP_RETAIN_MODE.RETAIN_ALL,
+            new List<MapUtility_ValidKeyInterface>()
+        );
+
+        Test.stopTest();
+
+        /**
+         * Then
+         * A collection of all matching lead in list for every company value in the result
+         */
+        System.assertEquals(3, mappedLeads.size());
+        System.assertEquals(true, mappedLeads.containsKey(TESTCOMPANY_1_NAME));
+        System.assertEquals(true, mappedLeads.containsKey(TESTCOMPANY_2_NAME));
+        System.assertEquals(true, mappedLeads.containsKey(TESTCOMPANY_3_NAME));
+
+        System.assertEquals(2, mappedLeads.get(TESTCOMPANY_1_NAME).size());
+        System.assertEquals(2, mappedLeads.get(TESTCOMPANY_2_NAME).size());
+        System.assertEquals(1, mappedLeads.get(TESTCOMPANY_3_NAME).size());
+
+        System.assertEquals(lead1.Id, mappedLeads.get(TESTCOMPANY_1_NAME).get(0).Id);
+        System.assertEquals(lead2.Id, mappedLeads.get(TESTCOMPANY_1_NAME).get(1).Id);
+        System.assertEquals(lead3.Id, mappedLeads.get(TESTCOMPANY_2_NAME).get(0).Id);
+        System.assertEquals(lead4.Id, mappedLeads.get(TESTCOMPANY_2_NAME).get(1).Id);
+        System.assertEquals(lead5.Id, mappedLeads.get(TESTCOMPANY_3_NAME).get(0).Id);
+    }
+
+    //----------------------------
+    // complex mapping szenario 
+    //----------------------------
+    
+    /**
+     * - In this Szenario we'll map OpportunityLineItems by their Products's family field.
+     * - we'll include only certain families
+     * - Also we'll exclude all LineItems with a closed Opportunity
+     */
+    private static final String FAMILY_ONE = 'familiy one';
+    private static final String FAMILY_TWO = 'familiy two';
+    private static final String FAMILY_THREE = 'familiy three'; // will be excluded
+
+    private static final String PRODUCT_NAME_ONE = 'Product 1';
+    private static final String PRODUCT_NAME_TWO = 'Product 2';
+    private static final String PRODUCT_NAME_THREE = 'Product 3';
+    private static final String PRODUCT_NAME_FOUR = 'Product 4';
+    
+    private static final List<Id> OLI_IDS = new List<Id>{
+        fflib_IDGenerator.generate(OpportunityLineItem.getSObjectType()), // 'familiy one' => mapped
+        fflib_IDGenerator.generate(OpportunityLineItem.getSObjectType()), // 'familiy two' => mapped
+        fflib_IDGenerator.generate(OpportunityLineItem.getSObjectType()), // 'familiy two' => mapped
+        fflib_IDGenerator.generate(OpportunityLineItem.getSObjectType()), // 'familiy three' => excluded
+        fflib_IDGenerator.generate(OpportunityLineItem.getSObjectType()), // opportunity will be closed => excluded
+        fflib_IDGenerator.generate(OpportunityLineItem.getSObjectType())  // opportunity will be closed => excluded
+    };
+
+    /**
+     * This method creates Data. The strukture is:
+        
+        Opportunity (CloseDate: Today +10)
+            OpportunityLineItem
+                PricebookEntry
+                    Product(Name: PRODUCT_NAME_ONE, Family: FAMILY_ONE)
+            OpportunityLineItem
+                PricebookEntry
+                    Product(Name: PRODUCT_NAME_TWO, Family: FAMILY_TWO)
+            OpportunityLineItem
+                PricebookEntry
+                    Product(Name: PRODUCT_NAME_THREE, Family: FAMILY_TWO)
+            OpportunityLineItem
+                PricebookEntry
+                    Product(Name: PRODUCT_NAME_FOUR, Family: FAMILY_THREE)
+        
+        Opportunity (CloseDate: Today -1)
+            OpportunityLineItem
+                PricebookEntry
+                    Product(Name: PRODUCT_NAME_THREE, Family: FAMILY_TWO)
+            OpportunityLineItem
+                PricebookEntry
+                    Product(Name: PRODUCT_NAME_FOUR, Family: FAMILY_THREE)
+     */
+    private static List<OpportunityLineItem> createOppurtunityLineItemsWithData() {
+        // FAMILY_ONE
+        PricebookEntry pbeOne = new PricebookEntry(
+            Product2 = new Product2(
+                Id = fflib_IDGenerator.generate(Product2.getSObjectType()),
+                Name = PRODUCT_NAME_ONE,
+                Family = FAMILY_ONE
+        ));
+
+        // FAMILY_TWO
+        PricebookEntry pbeTwo = new PricebookEntry(
+            Product2 = new Product2(
+                Id = fflib_IDGenerator.generate(Product2.getSObjectType()),
+                Name = PRODUCT_NAME_TWO,
+                Family = FAMILY_TWO
+        ));
+
+        PricebookEntry pbeThree = new PricebookEntry(
+            Product2 = new Product2(
+                Id = fflib_IDGenerator.generate(Product2.getSObjectType()),
+                Name = PRODUCT_NAME_THREE,
+                Family = FAMILY_TWO
+        ));
+
+        // FAMILY_THREE
+        PricebookEntry pbeFour = new PricebookEntry(
+            Product2 = new Product2(
+                Id = fflib_IDGenerator.generate(Product2.getSObjectType()),
+                Name = PRODUCT_NAME_FOUR,
+                Family = FAMILY_THREE
+        ));
+
+        Opportunity opportunityOpen = new Opportunity(
+            Id = fflib_IDGenerator.generate(Opportunity.getSObjectType()),
+            CloseDate = Date.today().addDays(10)
+        );
+
+        Opportunity opportunityClosed = new Opportunity(
+            Id = fflib_IDGenerator.generate(Opportunity.getSObjectType()),
+            CloseDate = Date.today().addDays(-1)
+        );
+
+        List<OpportunityLineItem> result = new List<OpportunityLineItem>{
+            new OpportunityLineItem(Opportunity = opportunityOpen, PriceBookEntry = pbeOne, Id = OLI_IDS[0]),
+            new OpportunityLineItem(Opportunity = opportunityOpen, PriceBookEntry = pbeTwo, Id = OLI_IDS[1]),
+            new OpportunityLineItem(Opportunity = opportunityOpen, PriceBookEntry = pbeThree, Id = OLI_IDS[2]),
+            new OpportunityLineItem(Opportunity = opportunityOpen, PriceBookEntry = pbeFour, Id = OLI_IDS[3]),
+            new OpportunityLineItem(Opportunity = opportunityClosed, PriceBookEntry = pbeThree, Id = OLI_IDS[4]),
+            new OpportunityLineItem(Opportunity = opportunityClosed, PriceBookEntry = pbeFour, Id = OLI_IDS[5])
+        };
+
+        return result;
+    }
+
+    //----------------------------
+    // Variant 1
+    // Use MapUtility_ValidKeyImplementation.IgnoreKeyNull and IValueReader.getValue to exclude Keys
+    //----------------------------
+    
+    /**
+     * This class will do two things:
+     * 1. Read the LineItem's Products Family field
+     * 2. Check the LineItem's Opportunity for having a CloseDate in the future
+     */
+    private class KeyReaderVariant1 implements IValueReader{
+        public Object getValue(Object objectToGetValueFrom) {
+            OpportunityLineItem oli = (OpportunityLineItem)objectToGetValueFrom;
+            
+            if(oli?.Opportunity?.CloseDate <= Date.Today()) {
+                // returning NULL will result in oli not being mapped
+                return NULL;
+            }
+            
+            // this String might be NULL
+            String productFamily = oli?.PriceBookEntry?.Product2?.Family;
+            return productFamily;
+        }      
+    }
+
+
+    @IsTest
+    private static void testComplexSzenarioVariant1() {
+        /**
+         * Given
+         * Test data created by factory method
+         */
+        List<OpportunityLineItem> lineItemsToCreateMapFrom = createOppurtunityLineItemsWithData();
+        
+        List<MapUtility_ValidKeyInterface> keyFilters = new List<MapUtility_ValidKeyInterface>{
+            new MapUtility_ValidKeyImplementation.IgnoreKeyNull(),
+            new MapUtility_ValidKeyImplementation.IncludeOnly(new Set<Object>{FAMILY_ONE, FAMILY_TWO})
+        };
+
+        /**
+         * When
+         * the map utility is called
+         */
+        Map<Object, Object> mappedData = new MapUtility_MappingMain().generateMapFromObjectList(
+            lineItemsToCreateMapFrom, new KeyReaderVariant1(), MAP_RETAIN_MODE.RETAIN_ALL, keyFilters
+        );
+
+        /**
+         * Then
+         * data is mapped according to specs
+         */
+        System.assertEquals(2, mappedData.size());
+        System.assert(mappedData.containsKey(FAMILY_ONE), 'Map must contain ' + FAMILY_ONE);
+        System.assert(mappedData.containsKey(FAMILY_TWO), 'Map must contain ' + FAMILY_TWO);
+        System.assert(!mappedData.containsKey(FAMILY_THREE), 'Map must not contain ' + FAMILY_THREE);
+
+        System.assertEquals(1, ((List<Object>)mappedData.get(FAMILY_ONE)).size(), 'A single record was created for \'' + FAMILY_ONE + '\'. The mapping by family was not correct!');
+        
+        OpportunityLineItem testOli1 = (OpportunityLineItem)((List<Object>)mappedData.get(FAMILY_ONE)).get(0);
+        System.assertEquals(OLI_IDS[0], testOli1.Id, 'The there was a different OpportunityLineItem mapped for this family');
+        
+        System.assertEquals(2, ((List<Object>)mappedData.get(FAMILY_TWO)).size(), 'Two records were created for \'' + FAMILY_TWO + '\'. The mapping by family was not correct!');
+        OpportunityLineItem testOli2 = (OpportunityLineItem)((List<Object>)mappedData.get(FAMILY_TWO)).get(0);
+        System.assertEquals(OLI_IDS[1], testOli2.Id, 'The there was a different OpportunityLineItem mapped for this family');
+        
+        OpportunityLineItem testOli3 = (OpportunityLineItem)((List<Object>)mappedData.get(FAMILY_TWO)).get(1);
+        System.assertEquals(OLI_IDS[2], testOli3.Id, 'The there was a different OpportunityLineItem mapped for this family');
+    }
 }
