@@ -1,6 +1,6 @@
 public with sharing class MapUtility_MappingLogicFactory {
 
-    public MapUtility_MappingLogicInterface getProduct(MAP_RETAIN_MODE retainingMode) {
+    public MapUtility_MappingMain.MapUtility_MappingLogicInterface getProduct(MAP_RETAIN_MODE retainingMode) {
         switch on retainingMode {
             when RETAIN_FIRST {
                 return new MappingLogicSObjectRetainFirst();
@@ -18,11 +18,11 @@ public with sharing class MapUtility_MappingLogicFactory {
     /**
      * this class contains the basic iteration logic for every object type
      */
-    private abstract class ListInterationBase implements MapUtility_MappingLogicInterface {
+    private abstract class ListInterationBase implements MapUtility_MappingMain.MapUtility_MappingLogicInterface {
         protected abstract Object createResultMap();
         protected abstract void addItem(Object resultMap, Object key, Object newItem);
         
-        public Object execute(List<Object> objects, IValueReader valueReader, List<MapUtility_ValidKeyInterface> keyEvaluators) {
+        public Object execute(List<Object> objects, IValueReader valueReader, List<MapUtility_MappingMain.MapUtility_ValidKeyInterface> keyEvaluators) {
             Object result = this.createResultMap();
             for(Object tempSObject : objects) {
                 Object key = valueReader.getValue(tempSObject);
@@ -35,11 +35,11 @@ public with sharing class MapUtility_MappingLogicFactory {
             return result;
         }
 
-        private Boolean isValidKey(List<MapUtility_ValidKeyInterface> keyEvaluators, Object key) {
+        private Boolean isValidKey(List<MapUtility_MappingMain.MapUtility_ValidKeyInterface> keyEvaluators, Object key) {
             Boolean isValidKey = true;
-            Iterator<MapUtility_ValidKeyInterface> evaluatorIterator = keyEvaluators.iterator();
+            Iterator<MapUtility_MappingMain.MapUtility_ValidKeyInterface> evaluatorIterator = keyEvaluators.iterator();
             while (evaluatorIterator.hasNext() && isValidKey) {
-                MapUtility_ValidKeyInterface keyEvaluator = evaluatorIterator.next();
+                MapUtility_MappingMain.MapUtility_ValidKeyInterface keyEvaluator = evaluatorIterator.next();
                 isValidKey &= keyEvaluator.isValidKey(key);
             }
             return isValidKey;
