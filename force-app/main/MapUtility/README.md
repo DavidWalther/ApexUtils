@@ -28,7 +28,7 @@ The three highlighted elements are the parts that are special for each map:
     This is achieved via the interface `IValueReader`
   * 'Skip/add' each entry after evaluation
 
-  *  This is achieved via the interface `MapUtility_ValidKeyInterface`
+  *  This is achieved via the interface `MapUtility_MappingMain.MapUtility_ValidKeyInterface`
 
 ## **Use of the Map Util**
 
@@ -38,14 +38,14 @@ The three highlighted elements are the parts that are special for each map:
         List<Object> objects,
         IValueReader valueReader,
         MAP_RETAIN_MODE retainingMode,
-        List<MapUtility_ValidKeyInterface> keyEvaluators
+        List<MapUtility_MappingMain.MapUtility_ValidKeyInterface> keyEvaluators
       )
 
 **Parameters**
 * `objects`: List of objects to create the map of. This can be SObjects or Objects
 * `valueReader`: the ValueReader **instance** to use for getting mapping keys for each entry in `objects`
 * `retainingMode`: an enum value to specify which items to keep
-* `keyEvaluators`: a List of `MapUtility_ValidKeyInterface` to define more key-specific behavior
+* `keyEvaluators`: a List of `MapUtility_MappingMain.MapUtility_ValidKeyInterface` to define more key-specific behavior
 
 **_Depricated:_**
 
@@ -85,16 +85,16 @@ But regardless of the way a 'mapping key' is read it is always the result of an 
 
 This simple interface provides the neccessary abstraction for a generic way to read a 'mapping key' from an object.
 
-#### **3. `interface: MapUtility_ValidKeyInterface`**
+#### **3. `interface: MapUtility_MappingMain.MapUtility_ValidKeyInterface`**
 
 This interface is used to identify whether to include a calculated key in the mapping or not.
 
-    public Interface MapUtility_ValidKeyInterface {
+    public Interface MapUtility_MappingMain.MapUtility_ValidKeyInterface {
       Boolean isValidKey(Object keyToEvaluate);
     }
 
 #### **(`enum: MAP_OPTIONS`)**
-**_Depricated_** use ```MapUtility_ValidKeyInterface``` instead
+**_Depricated_** use ```MapUtility_MappingMain.MapUtility_ValidKeyInterface``` instead
 
 Sometimes a special behavior is required on specific 'mapping keys'. This can be defined by using specific values of the enum `MAP_OPTIONS`. These Options can be combined if required.
 

@@ -1,4 +1,18 @@
 public with sharing class MapUtility_MappingMain {
+    
+    
+    //----------------------------
+    // Interfaces
+    //----------------------------
+    
+    public interface MapUtility_ValidKeyInterface {
+        Boolean isValidKey(Object keyToEvaluate);
+    }
+
+    //----------------------------
+    // Logic
+    //----------------------------
+
     public Map<Object, Object> generateMapFromObjectList(List<Object> objects, IValueReader valueReader, MAP_RETAIN_MODE retainingMode, Set<MAP_OPTIONS> mapOptions, Set<Object> keySet) {
     
         //----------------------------

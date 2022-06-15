@@ -22,7 +22,7 @@ public with sharing class MapUtility_MappingLogicFactory {
         protected abstract Object createResultMap();
         protected abstract void addItem(Object resultMap, Object key, Object newItem);
         
-        public Object execute(List<Object> objects, IValueReader valueReader, List<MapUtility_ValidKeyInterface> keyEvaluators) {
+        public Object execute(List<Object> objects, IValueReader valueReader, List<MapUtility_MappingMain.MapUtility_ValidKeyInterface> keyEvaluators) {
             Object result = this.createResultMap();
             for(Object tempSObject : objects) {
                 Object key = valueReader.getValue(tempSObject);
@@ -35,11 +35,11 @@ public with sharing class MapUtility_MappingLogicFactory {
             return result;
         }
 
-        private Boolean isValidKey(List<MapUtility_ValidKeyInterface> keyEvaluators, Object key) {
+        private Boolean isValidKey(List<MapUtility_MappingMain.MapUtility_ValidKeyInterface> keyEvaluators, Object key) {
             Boolean isValidKey = true;
-            Iterator<MapUtility_ValidKeyInterface> evaluatorIterator = keyEvaluators.iterator();
+            Iterator<MapUtility_MappingMain.MapUtility_ValidKeyInterface> evaluatorIterator = keyEvaluators.iterator();
             while (evaluatorIterator.hasNext() && isValidKey) {
-                MapUtility_ValidKeyInterface keyEvaluator = evaluatorIterator.next();
+                MapUtility_MappingMain.MapUtility_ValidKeyInterface keyEvaluator = evaluatorIterator.next();
                 isValidKey &= keyEvaluator.isValidKey(key);
             }
             return isValidKey;

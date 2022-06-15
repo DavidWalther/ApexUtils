@@ -621,7 +621,7 @@ public with sharing class MapUtility_MappingMainTest {
             leadList,
             new LeadCompanyReader(),
             MAP_RETAIN_MODE.RETAIN_ALL,
-            new List<MapUtility_ValidKeyInterface>()
+            new List<MapUtility_MappingMain.MapUtility_ValidKeyInterface>()
         );
 
         Test.stopTest();
@@ -786,7 +786,7 @@ public with sharing class MapUtility_MappingMainTest {
          */
         List<OpportunityLineItem> lineItemsToCreateMapFrom = createOppurtunityLineItemsWithData();
         
-        List<MapUtility_ValidKeyInterface> keyFilters = new List<MapUtility_ValidKeyInterface>{
+        List<MapUtility_MappingMain.MapUtility_ValidKeyInterface> keyFilters = new List<MapUtility_MappingMain.MapUtility_ValidKeyInterface>{
             new MapUtility_ValidKeyImplementation.IgnoreKeyNull(),
             new MapUtility_ValidKeyImplementation.IncludeOnly(new Set<Object>{FAMILY_ONE, FAMILY_TWO})
         };
