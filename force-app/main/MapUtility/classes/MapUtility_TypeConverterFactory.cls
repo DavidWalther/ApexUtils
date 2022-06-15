@@ -1,5 +1,5 @@
 public with sharing virtual class MapUtility_TypeConverterFactory {
-    public MapUtility_TypeConverterInterface getProduct(MAP_RETAIN_MODE retainingMode, Object objectsToMap) {
+    public MapUtility_MappingMain.MapUtility_TypeConverterInterface getProduct(MAP_RETAIN_MODE retainingMode, Object objectsToMap) {
         switch on retainingMode {
             when RETAIN_FIRST {
                 if(objectsToMap instanceOf List<SObject>) {
@@ -30,19 +30,19 @@ public with sharing virtual class MapUtility_TypeConverterFactory {
         throw new MapUtility_Exception('Unknown parameters for mapping');
     }
 
-    private class ConvertMapObjectIntoMapOfObject implements MapUtility_TypeConverterInterface {
+    private class ConvertMapObjectIntoMapOfObject implements MapUtility_MappingMain.MapUtility_TypeConverterInterface {
         public Map<Object, Object> convertMappingResult(Map<Object, Object> tempMap) {
             return tempMap;
         }
     }
 
-    private class ConvertMapObjectIntoMapOfObjectLists implements MapUtility_TypeConverterInterface {
+    private class ConvertMapObjectIntoMapOfObjectLists implements MapUtility_MappingMain.MapUtility_TypeConverterInterface {
         public Map<Object, Object> convertMappingResult(Map<Object, Object> tempMap) {
             return (Map<Object, List<Object>>)tempMap;
         }
     }
 
-    private class ConvertMapObjectIntoMapOfSObject implements MapUtility_TypeConverterInterface {
+    private class ConvertMapObjectIntoMapOfSObject implements MapUtility_MappingMain.MapUtility_TypeConverterInterface {
         public Map<Object, Object> convertMappingResult(Map<Object, Object> tempMap) {
             Map<Object, SObject> result = new Map<Object, SObject>();
             for(Object mapKey : tempMap.keySet()) {
@@ -52,7 +52,7 @@ public with sharing virtual class MapUtility_TypeConverterFactory {
         }
     }
 
-    private class ConvertMapObjectIntoMapOfSObjectLists implements MapUtility_TypeConverterInterface {
+    private class ConvertMapObjectIntoMapOfSObjectLists implements MapUtility_MappingMain.MapUtility_TypeConverterInterface {
         public Map<Object, Object> convertMappingResult(Map<Object, Object> tempMap) {
             Map<Object, List<Object>> workingMap = (Map<Object, List<Object>>)tempMap;
             Map<Object, List<SObject>> result = new Map<Object, List<SObject>>();

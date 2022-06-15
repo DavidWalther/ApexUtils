@@ -13,6 +13,17 @@ public with sharing class MapUtility_MappingMain {
         Object execute(List<Object> objects, IValueReader valueReader, List<MapUtility_ValidKeyInterface> keyEvaluators);
     }
 
+    /**
+     * Objects can be casted into collecteions or Objects
+     * BUT
+     * A special logic is required to cast Objects into sObjects or Collections of sObjects.
+     * 
+     * This interface provides an abstraction
+     */
+    public interface MapUtility_TypeConverterInterface {
+        Map<Object, Object> convertMappingResult(Map<Object, Object> tempMap);
+    }
+
     //----------------------------
     // Logic
     //----------------------------
@@ -52,7 +63,7 @@ public with sharing class MapUtility_MappingMain {
         Map<Object, Object> tempMap = (Map<Object, Object>)mappingLogic
             .execute(objects, valueReader, keyEvaluators);
 
-        MapUtility_TypeConverterInterface typeConverter = new MapUtility_TypeConverterFactory().getProduct(retainingMode, objects);
+        MapUtility_MappingMain.MapUtility_TypeConverterInterface typeConverter = new MapUtility_TypeConverterFactory().getProduct(retainingMode, objects);
         return typeConverter.convertMappingResult(tempMap);
     }
 
