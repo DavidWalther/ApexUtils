@@ -1,6 +1,6 @@
 public with sharing class MapUtility_MappingLogicFactory {
 
-    public MapUtility_MappingLogicInterface getProduct(MAP_RETAIN_MODE retainingMode) {
+    public MapUtility_MappingMain.MapUtility_MappingLogicInterface getProduct(MAP_RETAIN_MODE retainingMode) {
         switch on retainingMode {
             when RETAIN_FIRST {
                 return new MappingLogicSObjectRetainFirst();
@@ -18,7 +18,7 @@ public with sharing class MapUtility_MappingLogicFactory {
     /**
      * this class contains the basic iteration logic for every object type
      */
-    private abstract class ListInterationBase implements MapUtility_MappingLogicInterface {
+    private abstract class ListInterationBase implements MapUtility_MappingMain.MapUtility_MappingLogicInterface {
         protected abstract Object createResultMap();
         protected abstract void addItem(Object resultMap, Object key, Object newItem);
         

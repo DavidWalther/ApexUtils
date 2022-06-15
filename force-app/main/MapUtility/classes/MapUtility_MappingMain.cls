@@ -9,6 +9,10 @@ public with sharing class MapUtility_MappingMain {
         Boolean isValidKey(Object keyToEvaluate);
     }
 
+    public interface MapUtility_MappingLogicInterface {
+        Object execute(List<Object> objects, IValueReader valueReader, List<MapUtility_ValidKeyInterface> keyEvaluators);
+    }
+
     //----------------------------
     // Logic
     //----------------------------
