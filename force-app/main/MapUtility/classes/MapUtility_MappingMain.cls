@@ -1,6 +1,5 @@
 public with sharing class MapUtility_MappingMain {
     
-    
     //----------------------------
     // Interfaces
     //----------------------------
@@ -28,6 +27,7 @@ public with sharing class MapUtility_MappingMain {
     // Logic
     //----------------------------
 
+    // Depricated
     public Map<Object, Object> generateMapFromObjectList(List<Object> objects, IValueReader valueReader, MAP_RETAIN_MODE retainingMode, Set<MAP_OPTIONS> mapOptions, Set<Object> keySet) {
     
         //----------------------------
@@ -51,7 +51,7 @@ public with sharing class MapUtility_MappingMain {
         //----------------------------
 
         if(objects == NULL) throw new MapUtility_Exception('The list of objects to map must not be NULL.');
-        if(valueReader == NULL) throw new MapUtility_Exception('An Instance of Utilities.IValueReader must be provided.');
+        if(valueReader == NULL) throw new MapUtility_Exception('An instance of IValueReader must be provided.');
         if(retainingMode == NULL) throw new MapUtility_Exception('The retaining mode must be provided.');
         if(keyEvaluators == NULL) throw new MapUtility_Exception('A list of \'MapUtility_ValidKeyInterface\' must be provided.');
 
