@@ -2,7 +2,7 @@
 
 ALIAS=$1
 PKG_VERSION_CORE="ApexUtilities-Core@1.1.0-1"
-PKG_VERSION_MAPPING="ApexUtilities-Mapping@2.0.0-1"
+PKG_VERSION_MAPPING="ApexUtilities-Mapping@2.1.0-2"
 
 echo ""
 echo "--------------------"
