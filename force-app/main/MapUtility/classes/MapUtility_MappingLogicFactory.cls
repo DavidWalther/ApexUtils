@@ -22,9 +22,12 @@ public with sharing class MapUtility_MappingLogicFactory {
         protected abstract Object createResultMap();
         protected abstract void addItem(Object resultMap, Object key, Object newItem);
         
-        public Object execute(List<Object> objects, IValueReader valueReader, List<MapUtility_MappingMain.MapUtility_ValidKeyInterface> keyEvaluators) {
+        public Object execute(List<Object> objects, IValueReader valueReader, List<MapUtility_MappingMain.MapUtility_ValidKeyInterface> keyEvaluators, List<MapUtility_MappingMain.IncludeItemInMapInterface> itemFilters) {
             Object result = this.createResultMap();
             for(Object tempSObject : objects) {
+                if(!this.isIncludeItem(itemFilters, tempSObject)) {
+                    continue;
+                }
                 Object key = valueReader.getValue(tempSObject);
                 Boolean isAddItem = this.isValidKey(keyEvaluators, key);
 
@@ -33,6 +36,16 @@ public with sharing class MapUtility_MappingLogicFactory {
                 }
             }
             return result;
+        }
+
+        private Boolean isIncludeItem(List<MapUtility_MappingMain.IncludeItemInMapInterface> itemFilters, Object item) {
+            Boolean isIncludeItem = true;
+            Iterator<MapUtility_MappingMain.IncludeItemInMapInterface> evaluatorIterator = itemFilters.iterator();
+            while (evaluatorIterator.hasNext() && isIncludeItem) {
+                MapUtility_MappingMain.IncludeItemInMapInterface itemEvaluator = evaluatorIterator.next();
+                isIncludeItem &= itemEvaluator.isIncludeItem(item);
+            }
+            return isIncludeItem;
         }
 
         private Boolean isValidKey(List<MapUtility_MappingMain.MapUtility_ValidKeyInterface> keyEvaluators, Object key) {
