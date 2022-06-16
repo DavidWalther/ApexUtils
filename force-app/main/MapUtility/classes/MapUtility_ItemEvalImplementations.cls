@@ -1,4 +1,4 @@
-public with sharing class MapUtility_ValidKeyImplementation {
+public with sharing class MapUtility_ItemEvalImplementations {
   
   public class IgnoreKeyNull implements MapUtility_MappingMain.MapUtility_ValidKeyInterface {
     public Boolean isValidKey(Object keyToEvaluate) {

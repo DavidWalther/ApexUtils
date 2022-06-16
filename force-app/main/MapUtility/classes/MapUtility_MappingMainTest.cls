@@ -754,7 +754,7 @@ public with sharing class MapUtility_MappingMainTest {
 
     //----------------------------
     // Variant 1
-    // Use MapUtility_ValidKeyImplementation.IgnoreKeyNull and IValueReader.getValue to exclude Keys
+    // Use MapUtility_ItemEvalImplementations.IgnoreKeyNull and IValueReader.getValue to exclude Keys
     //----------------------------
     
     /**
@@ -787,8 +787,8 @@ public with sharing class MapUtility_MappingMainTest {
         List<OpportunityLineItem> lineItemsToCreateMapFrom = createOppurtunityLineItemsWithData();
         
         List<MapUtility_MappingMain.MapUtility_ValidKeyInterface> keyFilters = new List<MapUtility_MappingMain.MapUtility_ValidKeyInterface>{
-            new MapUtility_ValidKeyImplementation.IgnoreKeyNull(),
-            new MapUtility_ValidKeyImplementation.IncludeOnly(new Set<Object>{FAMILY_ONE, FAMILY_TWO})
+            new MapUtility_ItemEvalImplementations.IgnoreKeyNull(),
+            new MapUtility_ItemEvalImplementations.IncludeOnly(new Set<Object>{FAMILY_ONE, FAMILY_TWO})
         };
 
         /**

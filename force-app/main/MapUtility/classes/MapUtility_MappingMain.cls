@@ -71,10 +71,10 @@ public with sharing class MapUtility_MappingMain {
         List<MapUtility_ValidKeyInterface> keyEvaluators = new List<MapUtility_ValidKeyInterface>();
 
         if(mapOptions.contains(MAP_OPTIONS.KEY_IGNORE_NULL)) {
-            keyEvaluators.add(new MapUtility_ValidKeyImplementation.IgnoreKeyNull());
+            keyEvaluators.add(new MapUtility_ItemEvalImplementations.IgnoreKeyNull());
         }
         if(mapOptions.contains(MAP_OPTIONS.KEY_INCLUDE_ONLY)) {
-            keyEvaluators.add(new MapUtility_ValidKeyImplementation.IncludeOnly(keySet));
+            keyEvaluators.add(new MapUtility_ItemEvalImplementations.IncludeOnly(keySet));
         }
 
         return keyEvaluators;
