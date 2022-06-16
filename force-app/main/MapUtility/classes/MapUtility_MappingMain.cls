@@ -4,6 +4,10 @@ public with sharing class MapUtility_MappingMain {
     // Interfaces
     //----------------------------
     
+    public interface IncludeItemInMapInterface {
+        Boolean isIncludeItem(Object itemToCheckForInclusion);
+    }
+
     public interface MapUtility_ValidKeyInterface {
         Boolean isValidKey(Object keyToEvaluate);
     }
