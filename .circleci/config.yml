@@ -6,7 +6,18 @@ orbs:
   sfdx: circleci/salesforce-sfdx@2.2.0
   hello: circleci/hello-build@0.0.5
 
+jobs:
+  authenticate:
+     executor: sfdx/default
+     steps:
+      - sfdx/install
+      - sfdx/auth:
+          defaultusername: user@email.com
+
 workflows:
   "authenticate DevHub":
     jobs:
       - hello/hello-build
+      - authenticate:
+          context:
+          - CONTEXT_HEROKU
