@@ -13,35 +13,6 @@ private with sharing class MapUtility_ItemEvalImplementationsTest {
   //--------------------------------------------------------
   // MapUtility_MappingMain.IncludeItemInMapInterface
   //--------------------------------------------------------
-
-  @IsTest
-  static void IncludeItem_AllRecords() {
-    /**
-     * Given
-     * - A Set of items with mixed Types
-     */
-    Set<Object> validItems = OBJECTS_OF_MIXED_TYPES;
-
-    Test.startTest();
-    /**
-     * When
-     * - each item is checked and combined via AND the previous results
-     */
-    MapUtility_MappingMain.IncludeItemInMapInterface itemEvaluator
-      = new MapUtility_ItemEvalImplementations.ItemEvaluatorIncludeAll();
-
-    Boolean resultToCheck = true;
-    for(Object itemToCheck : validItems) {
-      resultToCheck &= itemEvaluator.isIncludeItem(itemToCheck);
-    }
-    Test.stopTest();
-
-    /**
-     * Then
-     * 
-     */
-    System.assertEquals(true, resultToCheck, 'all items must return \'true\'.');
-  }
   
   //--------------------------------------------------------
   // MapUtility_MappingMain.MapUtility_ValidKeyInterface
