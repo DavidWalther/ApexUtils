@@ -183,6 +183,7 @@ For further examples see class `MapUtility_MappingMainTest`.
 | Mapping | 1.1.0-2 | 04t2o000000yUW3AAM |yes | create map with 'Object' key instead of 'String' |
 | Mapping | 2.0.0-1 | 04t2o000000yUWSAA2 |yes | replace map options |
 | Mapping | 2.1.0-2 | 04t2o000000yUWcAAM |no | move interfaces into main class |
+| Mapping | 3.0.0-1 | 04t2o000000yUWmAAM |yes | Create an interface to evaluate entries |
 
 ### Installation order
  1. Core
