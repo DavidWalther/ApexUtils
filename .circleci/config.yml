@@ -10,7 +10,7 @@ jobs:
     steps:
       - checkout
       - apex/setup:
-          defaultusername: user@email.com
+          defaultusername: david@mcga.de
       - run:
           name: Run your SFDX commands here
           command: |
