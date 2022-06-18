@@ -1,18 +1,18 @@
-
-version: 2.1
+version: 2.1 
 orbs:
-  sfdx: circleci/salesforce-sfdx@2.1
+  salesforce-sfdx: circleci/salesforce-sfdx@2.2.0
 
 jobs:
-  install_authenticate:
-    executor: sfdx/default
+  example-job:
+    docker:
+      # replace with your preferred image
+      - image: cimg/base:stable
     steps:
-      - checkout
-      - sfdx/install
-      - sfdx/auth:
-          defaultusername: david@mcga.de
+      - salesforce-sfdx/auth:
+          defaultdevhubusername: david@mcga.de 
+          defaultusername: sc-pkg-dev-org 
 
 workflows:
-  basic-test:
+  example-workflow:
     jobs:
-      - install_authenticate
+      - example-job
