@@ -1,21 +1,20 @@
+
+version: 2.1
+orbs:
+  apex: circleci/salesforce-apex@1.0.1
+
 jobs:
   install_authenticate:
-    executor: sfdx/default
+    docker:
+      - image: cimg/node:14.5
     steps:
       - checkout
-      - sfdx/install
-      - sfdx/auth:
+      - apex/setup:
           defaultusername: user@email.com
       - run:
-          command: >
-            echo You now have access to the sfdx cli and may execute commands
-            against it.
-
-            sfdx auth:list
           name: Run your SFDX commands here
-orbs:
-  sfdx: circleci/salesforce-sfdx@2.2.0
-version: 2.1
+          command: |
+            echo "You now have access to the sfdx cli and may execute commands against it. https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference.htm"
 workflows:
   basic-test:
     jobs:
