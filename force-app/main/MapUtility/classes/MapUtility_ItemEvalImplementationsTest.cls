@@ -1,9 +1,26 @@
 @IsTest
-private with sharing class MapUtility_ValidKeyImplementationTest {
+private with sharing class MapUtility_ItemEvalImplementationsTest {
+  private static Set<Object> OBJECTS_OF_MIXED_TYPES {
+    get { return new Set<Object>{
+      2,5,7,9, // use interger values for valid keys
+      'abc','ef',  // use strings as valid keys
+      NULL, // use NULL as valid Key
+      new Lead(LastName= 'testLead') // use a sObject as valid key;}}= 
+    };}
+    private set;}
+
+
+  //--------------------------------------------------------
+  // MapUtility_MappingMain.IncludeItemInMapInterface
+  //--------------------------------------------------------
+  
+  //--------------------------------------------------------
+  // MapUtility_MappingMain.MapUtility_ValidKeyInterface
+  //--------------------------------------------------------
 
   @IsTest
   static void mapOption_IgnoreNull() {
-    MapUtility_MappingMain.MapUtility_ValidKeyInterface ignoreNullEvaluator = new MapUtility_ValidKeyImplementation.IgnoreKeyNull();
+    MapUtility_MappingMain.MapUtility_ValidKeyInterface ignoreNullEvaluator = new MapUtility_ItemEvalImplementations.IgnoreKeyNull();
     
     System.assertEquals(true, ignoreNullEvaluator.isValidKey(Math.random()), 'evaluation any value but NULL must evaluate to \'true\'');
     System.assertEquals(false, ignoreNullEvaluator.isValidKey(NULL), 'NULL must evaluate to \'false\'');
@@ -15,18 +32,13 @@ private with sharing class MapUtility_ValidKeyImplementationTest {
      * Given
      * a set of valid keys with mixed types
      */
-    Set<Object> validKeys = new Set<Object>{
-      2,5,7,9, // use interger values for valid keys
-      'abc','ef',  // use strings as valid keys
-      NULL, // use NULL as valid Key
-      new Lead(LastName= 'testLead') // use a sObject as valid key
-    };
+    Set<Object> validKeys = OBJECTS_OF_MIXED_TYPES;
 
     /**
      * When
      * the evaluator is created with the set of valid keys
      */
-    MapUtility_MappingMain.MapUtility_ValidKeyInterface includeOnlyEvaluator = new MapUtility_ValidKeyImplementation.IncludeOnly(validKeys);
+    MapUtility_MappingMain.MapUtility_ValidKeyInterface includeOnlyEvaluator = new MapUtility_ItemEvalImplementations.IncludeOnly(validKeys);
 
     /**
      * Then

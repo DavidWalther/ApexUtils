@@ -11,8 +11,8 @@
             "path": "force-app/main/MapUtility",
             "default": false,
             "package": "ApexUtilities-Mapping",
-            "versionNumber": "2.1.0.NEXT",
-            "versionName": "All Interfaces in Main class",
+            "versionNumber": "3.0.0.NEXT",
+            "versionName": "Create an interface to evaluate entries",
             "dependencies": [
                 {
                     "package": "ApexUtilities-Core",
@@ -40,6 +40,7 @@
         "ApexUtilities-Mapping@1.1.0-2": "04t2o000000yUW3AAM",
         "ApexUtilities-Mapping@2.0.0-1": "04t2o000000yUWSAA2",
         "ApexUtilities-Mapping@2.1.0-1": "04t2o000000yUWXAA2",
-        "ApexUtilities-Mapping@2.1.0-2": "04t2o000000yUWcAAM"
+        "ApexUtilities-Mapping@2.1.0-2": "04t2o000000yUWcAAM",
+        "ApexUtilities-Mapping@3.0.0-1": "04t2o000000yUWmAAM"
     }
 }

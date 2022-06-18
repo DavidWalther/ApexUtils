@@ -4,12 +4,16 @@ public with sharing class MapUtility_MappingMain {
     // Interfaces
     //----------------------------
     
+    public interface IncludeItemInMapInterface {
+        Boolean isIncludeItem(Object itemToCheckForInclusion);
+    }
+
     public interface MapUtility_ValidKeyInterface {
         Boolean isValidKey(Object keyToEvaluate);
     }
 
     public interface MapUtility_MappingLogicInterface {
-        Object execute(List<Object> objects, IValueReader valueReader, List<MapUtility_ValidKeyInterface> keyEvaluators);
+        Object execute(List<Object> objects, IValueReader valueReader, List<MapUtility_ValidKeyInterface> keyEvaluators, List<MapUtility_MappingMain.IncludeItemInMapInterface> itemFilters);
     }
 
     /**
@@ -41,10 +45,11 @@ public with sharing class MapUtility_MappingMain {
         // Business logic
         //----------------------------
         List<MapUtility_ValidKeyInterface> keyEvaluators = this.createKeyEvaluatorsFromMapOptions(mapOptions, keySet);
-        return this.generateMapFromObjectList(objects, valueReader, retainingMode, keyEvaluators);
+        List<MapUtility_MappingMain.IncludeItemInMapInterface> itemFilters = new List<MapUtility_MappingMain.IncludeItemInMapInterface>();
+        return this.generateMapFromObjectList(objects, valueReader, retainingMode, keyEvaluators, itemFilters);
     }
 
-    public Map<Object, Object> generateMapFromObjectList(List<Object> objects, IValueReader valueReader, MAP_RETAIN_MODE retainingMode, List<MapUtility_ValidKeyInterface> keyEvaluators) {
+    public Map<Object, Object> generateMapFromObjectList(List<Object> objects, IValueReader valueReader, MAP_RETAIN_MODE retainingMode, List<MapUtility_ValidKeyInterface> keyEvaluators, List<MapUtility_MappingMain.IncludeItemInMapInterface> itemFilters) {
     
         //----------------------------
         // Guardians
@@ -61,7 +66,7 @@ public with sharing class MapUtility_MappingMain {
 
         MapUtility_MappingLogicInterface mappingLogic = new MapUtility_MappingLogicFactory().getProduct(retainingMode);
         Map<Object, Object> tempMap = (Map<Object, Object>)mappingLogic
-            .execute(objects, valueReader, keyEvaluators);
+            .execute(objects, valueReader, keyEvaluators, itemFilters);
 
         MapUtility_MappingMain.MapUtility_TypeConverterInterface typeConverter = new MapUtility_TypeConverterFactory().getProduct(retainingMode, objects);
         return typeConverter.convertMappingResult(tempMap);
@@ -71,10 +76,10 @@ public with sharing class MapUtility_MappingMain {
         List<MapUtility_ValidKeyInterface> keyEvaluators = new List<MapUtility_ValidKeyInterface>();
 
         if(mapOptions.contains(MAP_OPTIONS.KEY_IGNORE_NULL)) {
-            keyEvaluators.add(new MapUtility_ValidKeyImplementation.IgnoreKeyNull());
+            keyEvaluators.add(new MapUtility_ItemEvalImplementations.IgnoreKeyNull());
         }
         if(mapOptions.contains(MAP_OPTIONS.KEY_INCLUDE_ONLY)) {
-            keyEvaluators.add(new MapUtility_ValidKeyImplementation.IncludeOnly(keySet));
+            keyEvaluators.add(new MapUtility_ItemEvalImplementations.IncludeOnly(keySet));
         }
 
         return keyEvaluators;

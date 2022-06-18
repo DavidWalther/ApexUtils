@@ -621,7 +621,8 @@ public with sharing class MapUtility_MappingMainTest {
             leadList,
             new LeadCompanyReader(),
             MAP_RETAIN_MODE.RETAIN_ALL,
-            new List<MapUtility_MappingMain.MapUtility_ValidKeyInterface>()
+            new List<MapUtility_MappingMain.MapUtility_ValidKeyInterface>(),
+            new List<MapUtility_MappingMain.IncludeItemInMapInterface>()
         );
 
         Test.stopTest();
@@ -754,7 +755,7 @@ public with sharing class MapUtility_MappingMainTest {
 
     //----------------------------
     // Variant 1
-    // Use MapUtility_ValidKeyImplementation.IgnoreKeyNull and IValueReader.getValue to exclude Keys
+    // Use MapUtility_ItemEvalImplementations.IgnoreKeyNull and IValueReader.getValue to exclude Keys
     //----------------------------
     
     /**
@@ -787,8 +788,8 @@ public with sharing class MapUtility_MappingMainTest {
         List<OpportunityLineItem> lineItemsToCreateMapFrom = createOppurtunityLineItemsWithData();
         
         List<MapUtility_MappingMain.MapUtility_ValidKeyInterface> keyFilters = new List<MapUtility_MappingMain.MapUtility_ValidKeyInterface>{
-            new MapUtility_ValidKeyImplementation.IgnoreKeyNull(),
-            new MapUtility_ValidKeyImplementation.IncludeOnly(new Set<Object>{FAMILY_ONE, FAMILY_TWO})
+            new MapUtility_ItemEvalImplementations.IgnoreKeyNull(),
+            new MapUtility_ItemEvalImplementations.IncludeOnly(new Set<Object>{FAMILY_ONE, FAMILY_TWO})
         };
 
         /**
@@ -796,7 +797,83 @@ public with sharing class MapUtility_MappingMainTest {
          * the map utility is called
          */
         Map<Object, Object> mappedData = new MapUtility_MappingMain().generateMapFromObjectList(
-            lineItemsToCreateMapFrom, new KeyReaderVariant1(), MAP_RETAIN_MODE.RETAIN_ALL, keyFilters
+            lineItemsToCreateMapFrom, new KeyReaderVariant1(), MAP_RETAIN_MODE.RETAIN_ALL, keyFilters, new List<MapUtility_MappingMain.IncludeItemInMapInterface>()
+        );
+
+        /**
+         * Then
+         * data is mapped according to specs
+         */
+        System.assertEquals(2, mappedData.size());
+        System.assert(mappedData.containsKey(FAMILY_ONE), 'Map must contain ' + FAMILY_ONE);
+        System.assert(mappedData.containsKey(FAMILY_TWO), 'Map must contain ' + FAMILY_TWO);
+        System.assert(!mappedData.containsKey(FAMILY_THREE), 'Map must not contain ' + FAMILY_THREE);
+
+        System.assertEquals(1, ((List<Object>)mappedData.get(FAMILY_ONE)).size(), 'A single record was created for \'' + FAMILY_ONE + '\'. The mapping by family was not correct!');
+        
+        OpportunityLineItem testOli1 = (OpportunityLineItem)((List<Object>)mappedData.get(FAMILY_ONE)).get(0);
+        System.assertEquals(OLI_IDS[0], testOli1.Id, 'The there was a different OpportunityLineItem mapped for this family');
+        
+        System.assertEquals(2, ((List<Object>)mappedData.get(FAMILY_TWO)).size(), 'Two records were created for \'' + FAMILY_TWO + '\'. The mapping by family was not correct!');
+        OpportunityLineItem testOli2 = (OpportunityLineItem)((List<Object>)mappedData.get(FAMILY_TWO)).get(0);
+        System.assertEquals(OLI_IDS[1], testOli2.Id, 'The there was a different OpportunityLineItem mapped for this family');
+        
+        OpportunityLineItem testOli3 = (OpportunityLineItem)((List<Object>)mappedData.get(FAMILY_TWO)).get(1);
+        System.assertEquals(OLI_IDS[2], testOli3.Id, 'The there was a different OpportunityLineItem mapped for this family');
+    }
+
+    
+    //----------------------------
+    // Variant 2
+    // Exclude items with MapUtility_MappingMain.IncludeItemInMapInterface
+    //----------------------------
+      
+    /**
+     * This class will read the LineItem's Products Family field
+     */
+    private class KeyReaderVariant2 implements IValueReader{
+        public Object getValue(Object objectToGetValueFrom) {
+            OpportunityLineItem oli = (OpportunityLineItem)objectToGetValueFrom;
+            String productFamily = oli?.PriceBookEntry?.Product2?.Family;
+            return productFamily;
+        }      
+    }
+
+    /**
+     * This class will exclude LineItems of already closed Opportunites
+     */
+    private class IncludeOnlyLineItemsOfClosedOpportunities implements MapUtility_MappingMain.IncludeItemInMapInterface {
+        public Boolean isIncludeItem(Object itemToCheckForInclusion) {
+            if(itemToCheckForInclusion != NULL && itemToCheckForInclusion instanceOf OpportunityLineItem) {
+                OpportunityLineItem oli = (OpportunityLineItem)itemToCheckForInclusion;
+                return oli?.Opportunity?.CloseDate > Date.Today();
+            }
+            return false;
+        }      
+    }
+
+    @IsTest
+    private static void testComplexSzenarioVariant2() {
+        /**
+         * Given
+         * Test data created by factory method
+         */
+        List<OpportunityLineItem> lineItemsToCreateMapFrom = createOppurtunityLineItemsWithData();
+        
+        List<MapUtility_MappingMain.MapUtility_ValidKeyInterface> keyFilters = new List<MapUtility_MappingMain.MapUtility_ValidKeyInterface>{
+            new MapUtility_ItemEvalImplementations.IncludeOnly(new Set<Object>{FAMILY_ONE, FAMILY_TWO})
+        };
+        
+        List<MapUtility_MappingMain.IncludeItemInMapInterface> itemFilters = new List<MapUtility_MappingMain.IncludeItemInMapInterface>{
+            new IncludeOnlyLineItemsOfClosedOpportunities()
+        };
+
+        /**
+         * When
+         * the map utility is called
+         */
+        Map<Object, Object> mappedData = new MapUtility_MappingMain().generateMapFromObjectList(
+            lineItemsToCreateMapFrom, new KeyReaderVariant2(), MAP_RETAIN_MODE.RETAIN_ALL, keyFilters, itemFilters
         );
 
         /**
