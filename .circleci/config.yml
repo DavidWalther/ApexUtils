@@ -12,7 +12,7 @@ jobs:
      steps:
       - sfdx/install
       - sfdx/auth:
-          defaultusername: user@email.com
+          defaultusername: david@mcga.de
 
 workflows:
   "authenticate DevHub":
