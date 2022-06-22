@@ -18,7 +18,18 @@ jobs:
 
             sfdx auth:list
           name: Run your SFDX commands here
+  run_auth_secound_time:
+    executor: sfdx/default
+    steps:
+      - run:
+          command: >
+            echo You now have access to the sfdx cli and may execute commands
+            against it.
+
+            sfdx auth:list
+          name: Run your SFDX commands here
 workflows:
   basic-test:
     jobs:
       - install_authenticate
+      - run_auth_secound_time
