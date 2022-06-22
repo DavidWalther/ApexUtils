@@ -20,17 +20,17 @@ jobs:
           name: Run your SFDX commands here
   create_scratch_org:
     executor: sfdx/default
-        steps:
-          - checkout
-          - sfdx/install
-          - sfdx/auth:
-              defaultusername: david@mcga.de
-          - run:
-              command: >
-                
-                ./scripts/deployment/createNewScratchOrg.sh sc-pkg-test 
-                sfdx force:org:display -u sc-pkg-test --verbose
-              name: creating scratch org
+    steps:
+      - checkout
+      - sfdx/install
+      - sfdx/auth:
+          defaultusername: david@mcga.de
+      - run:
+          command: >
+            
+            ./scripts/deployment/createNewScratchOrg.sh sc-pkg-test 
+            sfdx force:org:display -u sc-pkg-test --verbose
+          name: creating scratch org
   
   run_auth_secound_time:
     executor: sfdx/default
