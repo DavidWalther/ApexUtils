@@ -28,8 +28,23 @@ jobs:
 
             sfdx auth:list
           name: Run your SFDX commands here
+  third_Job:
+    executor: sfdx/default
+    steps:
+      - checkout
+      - sfdx/install
+
+      - run:
+          command: >
+            
+            node --version
+          name: trying to start node here
+
+
+          
 workflows:
   basic-test:
     jobs:
       - install_authenticate
       - run_auth_secound_time
+      - third_Job
