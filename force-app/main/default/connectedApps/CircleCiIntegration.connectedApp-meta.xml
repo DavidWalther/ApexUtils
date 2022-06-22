@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ConnectedApp xmlns="http://soap.sforce.com/2006/04/metadata">
+    <contactEmail>walthdav@gmail.com</contactEmail>
+    <label>Circle CI - Integration</label>
+    <oauthConfig>
+        <callbackUrl>http://localhost:1717/OauthRedirect</callbackUrl>
+        <certificate>MIIC/jCCAeYCCQDy/cH1qkwGQDANBgkqhkiG9w0BAQsFADBBMQswCQYDVQQGEwJERTEPMA0GA1UECAwGSGVzc2VuMSEwHwYJKoZIhvcNAQkBFhJ3YWx0aGRhdkBnbWFpbC5jb20wHhcNMjIwNjE4MDkyMTQ5WhcNMjMwNjE4MDkyMTQ5WjBBMQswCQYDVQQGEwJERTEPMA0GA1UECAwGSGVzc2VuMSEwHwYJKoZIhvcNAQkBFhJ3YWx0aGRhdkBnbWFpbC5jb20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDjTYxysAImKTQsD/oU6i80FdeFgotZu4FntUZjWhR8IHl0yltUCpfKVtH0NfOLr8BS+pMUKliPVnikKDGfjF5isLFWqJvFMsdiCFsDQ2lrGl9L0pOmQUHTEuLze9dlR3yiyLmRQGzzQBLxnBzuqAKMupj9yt59qF5M7GynlaXQ3HUAtbbG8Lhh0e9AERLsWOJ+WHyEtFuFJea9bHYSBpjZCA9kgBUSr9yh+VS+WFOdwDgxVGUuemf29NcUfUyfNYbko+od2lbJkhTq8h0scZlm3zQMr2QFZ/M9meGI5bljCFMv4VIAq9g2ZmzsnAGhWooj1Thf2dD+cFRf1/XTA5A3AgMBAAEwDQYJKoZIhvcNAQELBQADggEBAKzkebHrDNB29I185JBd1ZZElnSVYJqwFzgkzfGxg26b8deGLkRm065cFJjQa2doyGwOqm/yC+VHsSbABDae5kfYQbQRxoru0H62M3MxfXLN5Zw2hxKbivQg0RdUtFk+86pVlslTRlLXXO8dPYFV41JZhhxnn7mS//csdIPpVNqnzfWrvpNwutrehrl4DVehGrdJvELOF8hY1Hj2MFgyyoUDxRlaf14FQLOkACP7sFP54SFwxKPs8MjRfeRJqOEa9vNhQyETDX+NNog7TzOJRxTlE6SBw6yrfETmMusNJsGb1r7blsQiIy2t7Ius8wFG0WQ1g5MEMOEr+r48es0nhGc=</certificate>
+        <consumerKey>3MVG9Ve.2wqUVx_ZABL3TQ_YwVOZTmh3rp3GbznpOMxR8KsL1aIVPFNrffz.BnR7UbEwTO_qv_9QcaBqdV_fK</consumerKey>
+        <isAdminApproved>true</isAdminApproved>
+        <isConsumerSecretOptional>true</isConsumerSecretOptional>
+        <isIntrospectAllTokens>false</isIntrospectAllTokens>
+        <isSecretRequiredForRefreshToken>false</isSecretRequiredForRefreshToken>
+        <scopes>Api</scopes>
+        <scopes>Web</scopes>
+        <scopes>RefreshToken</scopes>
+    </oauthConfig>
+    <oauthPolicy>
+        <ipRelaxation>ENFORCE</ipRelaxation>
+        <refreshTokenPolicy>infinite</refreshTokenPolicy>
+    </oauthPolicy>
+    <profileName>Minimum Access - Salesforce</profileName>
+    <profileName>Standard Platform User</profileName>
+    <profileName>Custom: Sales Profile</profileName>
+    <profileName>Custom: Marketing Profile</profileName>
+    <profileName>Read Only</profileName>
+    <profileName>Solution Manager</profileName>
+    <profileName>Marketing User</profileName>
+    <profileName>System Administrator</profileName>
+    <profileName>Standard User</profileName>
+    <profileName>Contract Manager</profileName>
+    <profileName>Custom: Support Profile</profileName>
+    <profileName>Customer Community Login User</profileName>
+    <profileName>Authenticated Website</profileName>
+    <profileName>Work.com Only User</profileName>
+    <profileName>Customer Portal Manager Custom</profileName>
+    <profileName>Identity User</profileName>
+    <profileName>Customer Community Plus User</profileName>
+    <profileName>Silver Partner User</profileName>
+    <profileName>High Volume Customer Portal</profileName>
+    <profileName>Gold Partner User</profileName>
+    <profileName>Customer Portal Manager Standard</profileName>
+    <profileName>Force.com - App Subscription User</profileName>
+    <profileName>Customer Community Plus Login User</profileName>
+    <profileName>Partner App Subscription User</profileName>
+    <profileName>External Identity User</profileName>
+    <profileName>Partner Community User</profileName>
+    <profileName>Partner Community Login User</profileName>
+    <profileName>Customer Community User</profileName>
+    <profileName>Force.com - Free User</profileName>
+    <profileName>Chatter Moderator User</profileName>
+    <profileName>Chatter Free User</profileName>
+    <profileName>Chatter External User</profileName>
+    <profileName>High Volume Customer Portal User</profileName>
+    <profileName>Authenticated Website</profileName>
+    <profileName>Analytics Cloud Security User</profileName>
+    <profileName>Analytics Cloud Integration User</profileName>
+    <profileName>Cross Org Data Proxy User</profileName>
+    <profileName>External Apps Login User</profileName>
+</ConnectedApp>
