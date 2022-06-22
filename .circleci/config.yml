@@ -18,6 +18,20 @@ jobs:
 
             sfdx auth:list
           name: Run your SFDX commands here
+  create_scratch_org:
+    executor: sfdx/default
+        steps:
+          - checkout
+          - sfdx/install
+          - sfdx/auth:
+              defaultusername: david@mcga.de
+          - run:
+              command: >
+                
+                ./scripts/deployment/createNewScratchOrg.sh sc-pkg-test 
+                sfdx force:org:display -u sc-pkg-test --verbose
+              name: creating scratch org
+  
   run_auth_secound_time:
     executor: sfdx/default
     steps:
@@ -48,3 +62,4 @@ workflows:
       - install_authenticate
       - run_auth_secound_time
       - third_Job
+      - create_scratch_org
