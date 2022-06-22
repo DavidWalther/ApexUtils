@@ -27,28 +27,15 @@ jobs:
           defaultusername: david@mcga.de
       - run:
           command: >
-            
             ./scripts/deployment/createNewScratchOrg.sh sc-pkg-test 
-            sfdx force:org:display -u sc-pkg-test --verbose
           name: creating scratch org
-
-  third_Job:
-    executor: sfdx/default
-    steps:
-      - checkout
-      - sfdx/install
-
       - run:
           command: >
-            
-            node --version
-          name: trying to start node here
-
-
+            sfdx force:org:display -u sc-pkg-test --verbose
+          name: print VERBOSE org details
           
 workflows:
   basic-test:
     jobs:
       - install_authenticate
-      - third_Job
-#      - create_scratch_org
+      - create_scratch_org
