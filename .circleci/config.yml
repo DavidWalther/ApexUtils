@@ -40,10 +40,12 @@ jobs:
             - "tests"
 
   print-filesystem:
-    - run:
-      command: >
-        ls -la
-      name: printing filelist
+    executor: sfdx/default
+    steps:
+      - run:
+          command: >
+              ls -la
+          name: printing filelist
 
   create_scratch_org:
     executor: sfdx/default
