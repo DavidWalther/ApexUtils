@@ -11,13 +11,21 @@ jobs:
       - sfdx/install
       - sfdx/auth:
           defaultusername: david@mcga.de
+
+      - restore_cache:
+        key: -v1-{{ checksum "tests/authOrgs.json" }}
       - run:
           command: >
             echo You now have access to the sfdx cli and may execute commands
             against it.
 
-            sfdx auth:list
+            sfdx auth:list > tests/authOrgs.json
           name: Run your SFDX commands here
+      - save_cache:
+        key: -v1-{{ checksum "tests/authOrgs.json" }}
+        paths:
+          - "tests"
+  
   create_scratch_org:
     executor: sfdx/default
     steps:
@@ -38,4 +46,4 @@ workflows:
   basic-test:
     jobs:
       - install_authenticate
-      - create_scratch_org
+#      - create_scratch_org
