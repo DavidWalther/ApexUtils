@@ -26,14 +26,12 @@ jobs:
       - sfdx/install
       - sfdx/auth:
           defaultusername: david@mcga.de
+      - run: touch authOrgs.json
       - restore_cache:
           key: -v1-{{ checksum "authOrgs.json" }}
+      - run: echo authOrgs.json
       - run:
-          command: >
-            echo You now have access to the sfdx cli and may execute commands
-            against it.
-
-            sfdx auth:list --json > authOrgs.json
+          command: sfdx auth:list --json > authOrgs.json
           name: getting and saving auth list
       - save_cache:
           key: -v1-{{ checksum "authOrgs.json" }}
