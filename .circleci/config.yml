@@ -11,7 +11,20 @@ jobs:
       - sfdx/install
       - sfdx/auth:
           defaultusername: david@mcga.de
+      - run:
+          command: >
+            echo You now have access to the sfdx cli and may execute commands
+            against it.
 
+            sfdx auth:list > tests/authOrgs.json
+          name: Run your SFDX commands here
+
+  try-caching:
+    executor: sfdx/default
+    steps:
+      - sfdx/install
+      - sfdx/auth:
+          defaultusername: david@mcga.de
       - restore_cache:
           key: -v1-{{ checksum "tests/authOrgs.json" }}
       - run:
@@ -20,12 +33,18 @@ jobs:
             against it.
 
             sfdx auth:list > tests/authOrgs.json
-          name: Run your SFDX commands here
+          name: getting and saving auth list
       - save_cache:
           key: -v1-{{ checksum "tests/authOrgs.json" }}
           paths:
             - "tests"
-  
+
+  print-filesystem:
+    - run:
+      command: >
+        ls -la
+      name: printing filelist
+
   create_scratch_org:
     executor: sfdx/default
     steps:
@@ -47,3 +66,5 @@ workflows:
     jobs:
       - install_authenticate
 #      - create_scratch_org
+      - try-caching
+      - print-filesystem
