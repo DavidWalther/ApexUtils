@@ -16,7 +16,7 @@ jobs:
             echo You now have access to the sfdx cli and may execute commands
             against it.
 
-            sfdx auth:list > tests/authOrgs.json
+            sfdx auth:list
           name: Run your SFDX commands here
 
   try-caching:
@@ -26,18 +26,18 @@ jobs:
       - sfdx/auth:
           defaultusername: david@mcga.de
       - restore_cache:
-          key: -v1-{{ checksum "tests/authOrgs.json" }}
+          key: -v1-{{ checksum "authOrgs.json" }}
       - run:
           command: >
             echo You now have access to the sfdx cli and may execute commands
             against it.
 
-            sfdx auth:list > tests/authOrgs.json
+            sfdx auth:list --json > authOrgs.json
           name: getting and saving auth list
       - save_cache:
-          key: -v1-{{ checksum "tests/authOrgs.json" }}
+          key: -v1-{{ checksum "authOrgs.json" }}
           paths:
-            - "tests"
+            - "authOrgs"
 
   print-filesystem:
     executor: sfdx/default
