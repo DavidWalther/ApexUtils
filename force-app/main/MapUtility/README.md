@@ -186,8 +186,9 @@ For further examples see class `MapUtility_MappingMainTest`.
 | Mapping | 3.0.0-1 | 04t2o000000yUWmAAM |yes | Create an interface to evaluate entries |
 
 ### Installation order
- 1. Core
- 1. Mapping
+  1. fflib
+  1. Core
+  1. Mapping
 
 ### Installation via SFDX
 
