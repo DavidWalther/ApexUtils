@@ -22,6 +22,10 @@
             "versionName": "Create an interface to evaluate entries",
             "dependencies": [
                 {
+                    "package": "ApexUtilities-fflib",
+                    "versionNumber": "1.0.0.LATEST"
+                },
+                {
                     "package": "ApexUtilities-Core",
                     "versionNumber": "1.1.0.LATEST"
                 }
