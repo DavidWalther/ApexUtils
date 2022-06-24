@@ -1,6 +1,13 @@
 {
     "packageDirectories": [
         {
+            "path": "force-app/main/fflib",
+            "default": false,
+            "package": "ApexUtilities-fflib",
+            "versionNumber": "1.0.0.NEXT",
+            "versionName": "create package for fflib elements"
+        },
+        {
             "path": "force-app/main/core",
             "default": false,
             "package": "ApexUtilities-Core",
@@ -29,6 +36,8 @@
     "sfdcLoginUrl": "https://login.salesforce.com",
     "sourceApiVersion": "53.0",
     "packageAliases": {
+        "ApexUtilities-fflib": "0Ho2o000000fxYiCAI",
+        "ApexUtilities-fflib@1.0.0-1": "04t2o000000yUWwAAM",
         "ApexUtilities-Core": "0Ho2o000000fxYYCAY",
         "ApexUtilities-Core@1.0.0-1": "04t2o000000yUVUAA2",
         "ApexUtilities-Core@1.0.0-2": "04t2o000000yUVjAAM",
