@@ -174,20 +174,34 @@ a Contacts `Account.Name`-field
 
 For further examples see class `MapUtility_MappingMainTest`.
 
-## **Package versions**
+
+## **Packages**
+
+### Installation order
+  1. fflib (only required if there is no `fflib_IDGenerator` in your org)
+  1. Core
+  1. Mapping
+
+### **Latest**
+
+| Sandbox | Production | 
+| --- | --- |
+| [fflib](https://test.salesforce.com/packaging/installPackage.apexp?p0=04t2o000000yUWwAAM) | [fflib](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t2o000000yUWwAAM) |
+| [Core](https://test.salesforce.com/packaging/installPackage.apexp?p0=04t2o000000yUX6AAM) | [Core](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t2o000000yUX6AAM) |
+| [Mapping](https://test.salesforce.com/packaging/installPackage.apexp?p0=04t2o000000yUWmAAM) | [Mapping](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t2o000000yUWmAAM) |
+
+### **Package versions**
 | Packagen | Version | Id| Promoted | Highlight |
 | --- | --- | --- | --- | --- |
+| fflib | 1.0.0-1 | 04t2o000000yUWwAAM |yes | package to separate fflib items from core package |
 | Core | 1.0.0-2 | 04t2o000000yUVjAAM |yes | Original logic |
 | Core | 1.1.0-1 | 04t2o000000yUVyAAM |yes | make value reader return 'Object' instead of 'String' |
+| Core | 1.3.0-1 | 04t2o000000yUX6AAM |no | remove fflib items   |
 | Mapping | 1.0.0-2 | 04t2o000000yUVeAAM |yes| Original logic |
 | Mapping | 1.1.0-2 | 04t2o000000yUW3AAM |yes | create map with 'Object' key instead of 'String' |
 | Mapping | 2.0.0-1 | 04t2o000000yUWSAA2 |yes | replace map options |
 | Mapping | 2.1.0-2 | 04t2o000000yUWcAAM |no | move interfaces into main class |
 | Mapping | 3.0.0-1 | 04t2o000000yUWmAAM |yes | Create an interface to evaluate entries |
-
-### Installation order
- 1. Core
- 1. Mapping
 
 ### Installation via SFDX
 
