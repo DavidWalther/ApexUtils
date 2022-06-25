@@ -78,6 +78,10 @@ jobs:
           command: >
             node ./scripts/deployment/node/writeCurrentDate.js
           name: writing file for checksum
+      - run:
+          command: >
+              ls -la
+          name: printing filelist
 
 workflows:
   basic-test:
