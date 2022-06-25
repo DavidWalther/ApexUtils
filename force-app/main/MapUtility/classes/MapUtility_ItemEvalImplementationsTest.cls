@@ -22,8 +22,8 @@ private with sharing class MapUtility_ItemEvalImplementationsTest {
   static void mapOption_IgnoreNull() {
     MapUtility_MappingMain.IncludeItemKeyInMapInterface ignoreNullEvaluator = new MapUtility_ItemEvalImplementations.IgnoreKeyNull();
     
-    System.assertEquals(true, ignoreNullEvaluator.isValidKey(Math.random()), 'evaluation any value but NULL must evaluate to \'true\'');
-    System.assertEquals(false, ignoreNullEvaluator.isValidKey(NULL), 'NULL must evaluate to \'false\'');
+    System.assertEquals(true, ignoreNullEvaluator.isIncludeItemKey(Math.random()), 'evaluation any value but NULL must evaluate to \'true\'');
+    System.assertEquals(false, ignoreNullEvaluator.isIncludeItemKey(NULL), 'NULL must evaluate to \'false\'');
   }
 
   @IsTest
@@ -45,13 +45,13 @@ private with sharing class MapUtility_ItemEvalImplementationsTest {
      * values in the valid value set evaluate to 'true' else 'false'
      */
     for(Object validKey : validKeys) {
-      System.assertEquals(true, includeOnlyEvaluator.isValidKey(validKey), 'all valid keys must evaluate to \'true\'');
+      System.assertEquals(true, includeOnlyEvaluator.isIncludeItemKey(validKey), 'all valid keys must evaluate to \'true\'');
     }
 
-    System.assertEquals(false, includeOnlyEvaluator.isValidKey(3), '3 is not in set of valid keys and must evaluate to \'false\'');
-    System.assertEquals(false, includeOnlyEvaluator.isValidKey('value'), '\'value\' is not in set of valid keys and must evaluate to \'false\'');
+    System.assertEquals(false, includeOnlyEvaluator.isIncludeItemKey(3), '3 is not in set of valid keys and must evaluate to \'false\'');
+    System.assertEquals(false, includeOnlyEvaluator.isIncludeItemKey('value'), '\'value\' is not in set of valid keys and must evaluate to \'false\'');
     
-    System.assertEquals(true, includeOnlyEvaluator.isValidKey(new Lead(LastName= 'testLead')), 'A new sObject instance with the same field values must evaluate to \'true\'');
-    System.assertEquals(false, includeOnlyEvaluator.isValidKey(new Lead(LastName= 'testLead', FirstName='Max')), 'A new sObject instance with different field values must evaluate to \'false\'');
+    System.assertEquals(true, includeOnlyEvaluator.isIncludeItemKey(new Lead(LastName= 'testLead')), 'A new sObject instance with the same field values must evaluate to \'true\'');
+    System.assertEquals(false, includeOnlyEvaluator.isIncludeItemKey(new Lead(LastName= 'testLead', FirstName='Max')), 'A new sObject instance with different field values must evaluate to \'false\'');
   }
 }

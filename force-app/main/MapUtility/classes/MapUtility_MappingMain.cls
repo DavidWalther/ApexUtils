@@ -9,7 +9,7 @@ public with sharing class MapUtility_MappingMain {
     }
 
     public interface IncludeItemKeyInMapInterface {
-        Boolean isValidKey(Object keyToEvaluate);
+        Boolean isIncludeItemKey(Object keyToEvaluate);
     }
 
     public interface MapUtility_MappingLogicInterface {

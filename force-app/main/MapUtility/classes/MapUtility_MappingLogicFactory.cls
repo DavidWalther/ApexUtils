@@ -29,7 +29,7 @@ public with sharing class MapUtility_MappingLogicFactory {
                     continue;
                 }
                 Object key = valueReader.getValue(tempSObject);
-                Boolean isAddItem = this.isValidKey(keyEvaluators, key);
+                Boolean isAddItem = this.isIncludeItemKey(keyEvaluators, key);
 
                 if(isAddItem) {
                     this.addItem(result, key, tempSObject);
@@ -48,14 +48,14 @@ public with sharing class MapUtility_MappingLogicFactory {
             return isIncludeItem;
         }
 
-        private Boolean isValidKey(List<MapUtility_MappingMain.IncludeItemKeyInMapInterface> keyEvaluators, Object key) {
-            Boolean isValidKey = true;
+        private Boolean isIncludeItemKey(List<MapUtility_MappingMain.IncludeItemKeyInMapInterface> keyEvaluators, Object key) {
+            Boolean isIncludeItemKey = true;
             Iterator<MapUtility_MappingMain.IncludeItemKeyInMapInterface> evaluatorIterator = keyEvaluators.iterator();
-            while (evaluatorIterator.hasNext() && isValidKey) {
+            while (evaluatorIterator.hasNext() && isIncludeItemKey) {
                 MapUtility_MappingMain.IncludeItemKeyInMapInterface keyEvaluator = evaluatorIterator.next();
-                isValidKey &= keyEvaluator.isValidKey(key);
+                isIncludeItemKey &= keyEvaluator.isIncludeItemKey(key);
             }
-            return isValidKey;
+            return isIncludeItemKey;
         }
     }
 

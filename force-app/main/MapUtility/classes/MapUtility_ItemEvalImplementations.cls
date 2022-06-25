@@ -9,7 +9,7 @@ public with sharing class MapUtility_ItemEvalImplementations {
   //--------------------------------------------------------
 
   public class IgnoreKeyNull implements MapUtility_MappingMain.IncludeItemKeyInMapInterface {
-    public Boolean isValidKey(Object keyToEvaluate) {
+    public Boolean isIncludeItemKey(Object keyToEvaluate) {
       return keyToEvaluate != NULL;
     }
   }
@@ -20,7 +20,7 @@ public with sharing class MapUtility_ItemEvalImplementations {
       this.validKeys = validKeys;
     }
 
-    public Boolean isValidKey(Object keyToEvaluate) {
+    public Boolean isIncludeItemKey(Object keyToEvaluate) {
       return this.validKeys.contains(keyToEvaluate);
     }
   }
