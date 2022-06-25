@@ -90,8 +90,16 @@ jobs:
       - sfdx/install
       - run:
           command: >
+            node ./scripts/deployment/node/writeChecksumFile.js
+          name: writing file for checksum
+      - run:
+          command: >
             node ./scripts/deployment/node/writeRandomNumberToCache.js
           name: write to cache
+      - run:
+          command: >
+              ls -la
+          name: printing filelist
 
 
 workflows:
