@@ -92,10 +92,16 @@ jobs:
           command: >
             node ./scripts/deployment/node/writeChecksumFile.js
           name: writing file for checksum
+      - restore_cache:
+          key: -v1-{{ checksum "checksum_24h.cache" }}
       - run:
           command: >
             node ./scripts/deployment/node/writeRandomNumberToCache.js
           name: write to cache
+      - save_cache:
+          key: -v1-{{ checksum "checksum_24h.cache" }}
+          paths:
+            - "cache"
       - run:
           command: >
               ls -la
