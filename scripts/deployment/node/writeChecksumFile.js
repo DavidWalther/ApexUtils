@@ -2,8 +2,6 @@ const fs = require('fs');
 
 console.log('i am a node script');
 
-console.log('date for caching checksum:' + currentDateString);
-
 const checksumObj = {
   currentDateString: getCurrentDateString(),
   version: 'v1'

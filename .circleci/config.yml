@@ -76,7 +76,7 @@ jobs:
           name: print node version
       - run:
           command: >
-            node ./scripts/deployment/node/writeCurrentDate.js
+            node ./scripts/deployment/node/writeChecksumFile.js
           name: writing file for checksum
       - run:
           command: >
