@@ -65,10 +65,26 @@ jobs:
             sfdx force:org:display -u sc-pkg-test --verbose
           name: print VERBOSE org details
           
+  node-access-filesystem:
+    executor: sfdx/default
+    steps:
+      - checkout
+      - sfdx/install
+      - run:
+          command: >
+            node --version
+          name: print node version
+      - run:
+          command: >
+            node ./scripts/deployment/node/writeCurrentDate.js
+          name: print node version
+
 workflows:
   basic-test:
     jobs:
-      - install_authenticate
+      - node-access-filesystem
+#      - install_authenticate
 #      - create_scratch_org
-      - try-caching
-      - print-filesystem
+# - try-caching
+#      - print-filesystem
+# node-access-filesystem
