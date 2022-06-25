@@ -22,14 +22,14 @@ public with sharing class MapUtility_MappingLogicFactory {
         protected abstract Object createResultMap();
         protected abstract void addItem(Object resultMap, Object key, Object newItem);
         
-        public Object execute(List<Object> objects, IValueReader valueReader, List<MapUtility_MappingMain.MapUtility_ValidKeyInterface> keyEvaluators, List<MapUtility_MappingMain.IncludeItemInMapInterface> itemFilters) {
+        public Object execute(List<Object> objects, IValueReader valueReader, List<MapUtility_MappingMain.IncludeItemKeyInMapInterface> keyEvaluators, List<MapUtility_MappingMain.IncludeItemInMapInterface> itemFilters) {
             Object result = this.createResultMap();
             for(Object tempSObject : objects) {
                 if(!this.isIncludeItem(itemFilters, tempSObject)) {
                     continue;
                 }
                 Object key = valueReader.getValue(tempSObject);
-                Boolean isAddItem = this.isValidKey(keyEvaluators, key);
+                Boolean isAddItem = this.isIncludeItemKey(keyEvaluators, key);
 
                 if(isAddItem) {
                     this.addItem(result, key, tempSObject);
@@ -48,14 +48,14 @@ public with sharing class MapUtility_MappingLogicFactory {
             return isIncludeItem;
         }
 
-        private Boolean isValidKey(List<MapUtility_MappingMain.MapUtility_ValidKeyInterface> keyEvaluators, Object key) {
-            Boolean isValidKey = true;
-            Iterator<MapUtility_MappingMain.MapUtility_ValidKeyInterface> evaluatorIterator = keyEvaluators.iterator();
-            while (evaluatorIterator.hasNext() && isValidKey) {
-                MapUtility_MappingMain.MapUtility_ValidKeyInterface keyEvaluator = evaluatorIterator.next();
-                isValidKey &= keyEvaluator.isValidKey(key);
+        private Boolean isIncludeItemKey(List<MapUtility_MappingMain.IncludeItemKeyInMapInterface> keyEvaluators, Object key) {
+            Boolean isIncludeItemKey = true;
+            Iterator<MapUtility_MappingMain.IncludeItemKeyInMapInterface> evaluatorIterator = keyEvaluators.iterator();
+            while (evaluatorIterator.hasNext() && isIncludeItemKey) {
+                MapUtility_MappingMain.IncludeItemKeyInMapInterface keyEvaluator = evaluatorIterator.next();
+                isIncludeItemKey &= keyEvaluator.isIncludeItemKey(key);
             }
-            return isValidKey;
+            return isIncludeItemKey;
         }
     }
 

@@ -621,7 +621,7 @@ public with sharing class MapUtility_MappingMainTest {
             leadList,
             new LeadCompanyReader(),
             MAP_RETAIN_MODE.RETAIN_ALL,
-            new List<MapUtility_MappingMain.MapUtility_ValidKeyInterface>(),
+            new List<MapUtility_MappingMain.IncludeItemKeyInMapInterface>(),
             new List<MapUtility_MappingMain.IncludeItemInMapInterface>()
         );
 
@@ -787,7 +787,7 @@ public with sharing class MapUtility_MappingMainTest {
          */
         List<OpportunityLineItem> lineItemsToCreateMapFrom = createOppurtunityLineItemsWithData();
         
-        List<MapUtility_MappingMain.MapUtility_ValidKeyInterface> keyFilters = new List<MapUtility_MappingMain.MapUtility_ValidKeyInterface>{
+        List<MapUtility_MappingMain.IncludeItemKeyInMapInterface> keyFilters = new List<MapUtility_MappingMain.IncludeItemKeyInMapInterface>{
             new MapUtility_ItemEvalImplementations.IgnoreKeyNull(),
             new MapUtility_ItemEvalImplementations.IncludeOnly(new Set<Object>{FAMILY_ONE, FAMILY_TWO})
         };
@@ -860,7 +860,7 @@ public with sharing class MapUtility_MappingMainTest {
          */
         List<OpportunityLineItem> lineItemsToCreateMapFrom = createOppurtunityLineItemsWithData();
         
-        List<MapUtility_MappingMain.MapUtility_ValidKeyInterface> keyFilters = new List<MapUtility_MappingMain.MapUtility_ValidKeyInterface>{
+        List<MapUtility_MappingMain.IncludeItemKeyInMapInterface> keyFilters = new List<MapUtility_MappingMain.IncludeItemKeyInMapInterface>{
             new MapUtility_ItemEvalImplementations.IncludeOnly(new Set<Object>{FAMILY_ONE, FAMILY_TWO})
         };
         

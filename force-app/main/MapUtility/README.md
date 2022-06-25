@@ -188,7 +188,7 @@ For further examples see class `MapUtility_MappingMainTest`.
 | --- | --- |
 | [fflib](https://test.salesforce.com/packaging/installPackage.apexp?p0=04t2o000000yUWwAAM) | [fflib](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t2o000000yUWwAAM) |
 | [Core](https://test.salesforce.com/packaging/installPackage.apexp?p0=04t2o000000yUX6AAM) | [Core](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t2o000000yUX6AAM) |
-| [Mapping](https://test.salesforce.com/packaging/installPackage.apexp?p0=04t2o000000yUWmAAM) | [Mapping](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t2o000000yUWmAAM) |
+| [Mapping](https://test.salesforce.com/packaging/installPackage.apexp?p0=04t2o000000yUXGAA2) | [Mapping](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t2o000000yUWmAAM) |
 
 ### **Package versions**
 | Packagen | Version | Id| Promoted | Highlight |
@@ -202,6 +202,7 @@ For further examples see class `MapUtility_MappingMainTest`.
 | Mapping | 2.0.0-1 | 04t2o000000yUWSAA2 |yes | replace map options |
 | Mapping | 2.1.0-2 | 04t2o000000yUWcAAM |no | move interfaces into main class |
 | Mapping | 3.0.0-1 | 04t2o000000yUWmAAM |yes | Create an interface to evaluate entries |
+| Mapping | 3.1.0-2 | 04t2o000000yUXGAA2 |no | Create an interface to evaluate entries |
 
 ### Installation via SFDX
 
