@@ -6,7 +6,7 @@ const currentDateString = getCurrentDateString();
 console.log('date for caching checksum:' + currentDateString);
 
 
-fs.writeFile("checksum.txt", currentDateString, 'utf8', function (err) {
+fs.writeFile("checksum_24h.cache", currentDateString, 'utf8', function (err) {
   if (err) {
       console.log("An error occured while writing JSON Object to File.");
       return console.log(err);
