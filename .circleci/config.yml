@@ -41,6 +41,9 @@ jobs:
   print-filesystem:
     executor: sfdx/default
     steps:
+      - sfdx/install
+      - sfdx/auth:
+          defaultusername: david@mcga.de
       - run:
           command: >
               ls -la
@@ -62,10 +65,30 @@ jobs:
             sfdx force:org:display -u sc-pkg-test --verbose
           name: print VERBOSE org details
           
+  node-access-filesystem:
+    executor: sfdx/default
+    steps:
+      - checkout
+      - sfdx/install
+      - run:
+          command: >
+            node --version
+          name: print node version
+      - run:
+          command: >
+            node ./scripts/deployment/node/writeChecksumFile.js
+          name: writing file for checksum
+      - run:
+          command: >
+              ls -la
+          name: printing filelist
+
 workflows:
   basic-test:
     jobs:
-      - install_authenticate
+      - node-access-filesystem
+#      - install_authenticate
 #      - create_scratch_org
-      - try-caching
-      - print-filesystem
+# - try-caching
+#      - print-filesystem
+# node-access-filesystem
