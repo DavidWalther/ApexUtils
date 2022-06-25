@@ -83,10 +83,22 @@ jobs:
               ls -la
           name: printing filelist
 
+  node-create-cache-with-number:
+    executor: sfdx/default
+    steps:
+      - checkout
+      - sfdx/install
+      - run:
+          command: >
+            node ./scripts/deployment/node/writeRandomNumberToCache.js
+          name: write to cache
+
+
 workflows:
   basic-test:
     jobs:
-      - node-access-filesystem
+      - node-create-cache-with-number
+#      - node-access-filesystem
 #      - install_authenticate
 #      - create_scratch_org
 # - try-caching
