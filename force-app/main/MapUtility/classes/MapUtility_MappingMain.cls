@@ -8,12 +8,12 @@ public with sharing class MapUtility_MappingMain {
         Boolean isIncludeItem(Object itemToCheckForInclusion);
     }
 
-    public interface MapUtility_ValidKeyInterface {
+    public interface IncludeItemKeyInMapInterface {
         Boolean isValidKey(Object keyToEvaluate);
     }
 
     public interface MapUtility_MappingLogicInterface {
-        Object execute(List<Object> objects, IValueReader valueReader, List<MapUtility_ValidKeyInterface> keyEvaluators, List<MapUtility_MappingMain.IncludeItemInMapInterface> itemFilters);
+        Object execute(List<Object> objects, IValueReader valueReader, List<IncludeItemKeyInMapInterface> keyEvaluators, List<MapUtility_MappingMain.IncludeItemInMapInterface> itemFilters);
     }
 
     /**
@@ -44,12 +44,12 @@ public with sharing class MapUtility_MappingMain {
         //----------------------------
         // Business logic
         //----------------------------
-        List<MapUtility_ValidKeyInterface> keyEvaluators = this.createKeyEvaluatorsFromMapOptions(mapOptions, keySet);
+        List<IncludeItemKeyInMapInterface> keyEvaluators = this.createKeyEvaluatorsFromMapOptions(mapOptions, keySet);
         List<MapUtility_MappingMain.IncludeItemInMapInterface> itemFilters = new List<MapUtility_MappingMain.IncludeItemInMapInterface>();
         return this.generateMapFromObjectList(objects, valueReader, retainingMode, keyEvaluators, itemFilters);
     }
 
-    public Map<Object, Object> generateMapFromObjectList(List<Object> objects, IValueReader valueReader, MAP_RETAIN_MODE retainingMode, List<MapUtility_ValidKeyInterface> keyEvaluators, List<MapUtility_MappingMain.IncludeItemInMapInterface> itemFilters) {
+    public Map<Object, Object> generateMapFromObjectList(List<Object> objects, IValueReader valueReader, MAP_RETAIN_MODE retainingMode, List<IncludeItemKeyInMapInterface> keyEvaluators, List<MapUtility_MappingMain.IncludeItemInMapInterface> itemFilters) {
     
         //----------------------------
         // Guardians
@@ -58,7 +58,7 @@ public with sharing class MapUtility_MappingMain {
         if(objects == NULL) throw new MapUtility_Exception('The list of objects to map must not be NULL.');
         if(valueReader == NULL) throw new MapUtility_Exception('An instance of IValueReader must be provided.');
         if(retainingMode == NULL) throw new MapUtility_Exception('The retaining mode must be provided.');
-        if(keyEvaluators == NULL) throw new MapUtility_Exception('A list of \'MapUtility_ValidKeyInterface\' must be provided.');
+        if(keyEvaluators == NULL) throw new MapUtility_Exception('A list of \'IncludeItemKeyInMapInterface\' must be provided.');
 
         //----------------------------
         // Business logic
@@ -72,8 +72,8 @@ public with sharing class MapUtility_MappingMain {
         return typeConverter.convertMappingResult(tempMap);
     }
 
-    private List<MapUtility_ValidKeyInterface> createKeyEvaluatorsFromMapOptions(Set<MAP_OPTIONS> mapOptions, Set<Object> keySet) {
-        List<MapUtility_ValidKeyInterface> keyEvaluators = new List<MapUtility_ValidKeyInterface>();
+    private List<IncludeItemKeyInMapInterface> createKeyEvaluatorsFromMapOptions(Set<MAP_OPTIONS> mapOptions, Set<Object> keySet) {
+        List<IncludeItemKeyInMapInterface> keyEvaluators = new List<IncludeItemKeyInMapInterface>();
 
         if(mapOptions.contains(MAP_OPTIONS.KEY_IGNORE_NULL)) {
             keyEvaluators.add(new MapUtility_ItemEvalImplementations.IgnoreKeyNull());

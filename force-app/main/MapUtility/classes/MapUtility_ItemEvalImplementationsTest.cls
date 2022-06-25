@@ -15,12 +15,12 @@ private with sharing class MapUtility_ItemEvalImplementationsTest {
   //--------------------------------------------------------
   
   //--------------------------------------------------------
-  // MapUtility_MappingMain.MapUtility_ValidKeyInterface
+  // MapUtility_MappingMain.IncludeItemKeyInMapInterface
   //--------------------------------------------------------
 
   @IsTest
   static void mapOption_IgnoreNull() {
-    MapUtility_MappingMain.MapUtility_ValidKeyInterface ignoreNullEvaluator = new MapUtility_ItemEvalImplementations.IgnoreKeyNull();
+    MapUtility_MappingMain.IncludeItemKeyInMapInterface ignoreNullEvaluator = new MapUtility_ItemEvalImplementations.IgnoreKeyNull();
     
     System.assertEquals(true, ignoreNullEvaluator.isValidKey(Math.random()), 'evaluation any value but NULL must evaluate to \'true\'');
     System.assertEquals(false, ignoreNullEvaluator.isValidKey(NULL), 'NULL must evaluate to \'false\'');
@@ -38,7 +38,7 @@ private with sharing class MapUtility_ItemEvalImplementationsTest {
      * When
      * the evaluator is created with the set of valid keys
      */
-    MapUtility_MappingMain.MapUtility_ValidKeyInterface includeOnlyEvaluator = new MapUtility_ItemEvalImplementations.IncludeOnly(validKeys);
+    MapUtility_MappingMain.IncludeItemKeyInMapInterface includeOnlyEvaluator = new MapUtility_ItemEvalImplementations.IncludeOnly(validKeys);
 
     /**
      * Then
