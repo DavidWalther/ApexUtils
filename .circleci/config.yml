@@ -41,6 +41,9 @@ jobs:
   print-filesystem:
     executor: sfdx/default
     steps:
+      - sfdx/install
+      - sfdx/auth:
+          defaultusername: david@mcga.de
       - run:
           command: >
               ls -la
