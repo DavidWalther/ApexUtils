@@ -108,10 +108,33 @@ jobs:
           name: printing filelist
 
 
+  authenticate-or-create-scratch-org:
+    executor: sfdx/default
+    steps:
+      - checkout
+      - sfdx/install
+      - sfdx/auth:
+          defaultusername: david@mcga.de
+      - restore_cache:
+          key: -v1-node_modules
+      - run:
+          command: >
+            npm install sfdx-node
+          name: install sfdx-node
+      - save_cache:
+          key: -v1-node_modules
+          paths:
+            - "node_modules"
+      - run:
+          command: >
+            node scripts/deployment/sfdxNode/sfdxNodePrintOrgs.js
+          name: run display
+
 workflows:
   basic-test:
     jobs:
-      - node-create-cache-with-number
+      - authenticate-or-create-scratch-org
+#      - node-create-cache-with-number
 #      - node-access-filesystem
 #      - install_authenticate
 #      - create_scratch_org
