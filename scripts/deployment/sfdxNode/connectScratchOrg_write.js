@@ -28,24 +28,7 @@ const fullPath = directory + '/' + filename;
 
 const fileEncoding = 'utf8';
 
-const dataObject = {
-  key1: 'abcd',
-  key2: 'efg'
-}
-console.log(dataObject);
-
-console.log('call write');
-writeCredentialsJson(dataObject)
-  .then(() => {
-    console.log('then');
-  })
-  .catch((error) => {
-    console.log('catch');
-    console.log(error);
-  })
-  .finally(() => {
-    console.log('finally');
-  });
+createScratchOrg();
 
 function writeCredentialsJson(jsonObj) {
   return new Promise((resolve) => {
@@ -69,6 +52,7 @@ function createScratchOrg() {
       definitionfile: './config/project-scratch-def.json'
     }).then(result => {
       console.log(result);
+      writeCredentialsJson(result);
     }).catch(error => {
       console.log(result);
     });
