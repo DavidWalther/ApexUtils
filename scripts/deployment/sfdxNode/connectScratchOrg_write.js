@@ -33,7 +33,7 @@ if (fs.existsSync(fullPath)) {
   return;
 }
 
-createScratchOrg();
+//createScratchOrg();
 
 function writeCredentialsJson(jsonObj) {
   return new Promise((resolve) => {
@@ -59,6 +59,6 @@ function createScratchOrg() {
       console.log(result);
       writeCredentialsJson(result);
     }).catch(error => {
-      console.log(result);
+      console.log(error);
     });
 }
