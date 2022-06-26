@@ -154,7 +154,7 @@ jobs:
 
 # create / restore credential file
       - restore_cache:
-          key: -v6-credentials-{{ checksum "checksum_24h.cache" }}
+          key: -v7-credentials-{{ checksum "checksum_24h.cache" }}
       - run:
           command: >
               ls -la
@@ -168,7 +168,7 @@ jobs:
               ls -la
           name: print cache
       - save_cache:
-          key: -v6-credentials-{{ checksum "checksum_24h.cache" }}
+          key: -v7-credentials-{{ checksum "checksum_24h.cache" }}
           paths:
             - "cache"
       - run:

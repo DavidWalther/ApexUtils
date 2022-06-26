@@ -59,9 +59,12 @@ if (fs.existsSync(directory)) {
   fs.mkdirSync(directory);
 }
 
-fs.writeFile(fullPath, JSON.stringify(jsonObj), fileEncoding, function (err) {
-  if (err) throw err;
-});
+
+function save(fullPath, jsonObj) {
+  fs.writeFile(fullPath, JSON.stringify(jsonObj), fileEncoding, function (err) {
+    if (err) throw err;
+  });
+}
 
 
 // createScratchOrg(scratchOrgAlias);
@@ -75,7 +78,7 @@ function createScratchOrg(alias) {
       verbose: true
     }).then(result => {
       console.log(result);
-      writeCredentialsJson(result);
+      save(fullPath, result);
     }).catch(error => {
       console.log(error);
     });
