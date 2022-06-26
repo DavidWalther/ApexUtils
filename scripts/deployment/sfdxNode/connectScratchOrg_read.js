@@ -28,38 +28,14 @@ const fullPath = directory + '/' + filename;
 
 const fileEncoding = 'utf8';
 
-readCredentialsJson()
-  .then(data => {
-    console.log(data);
+
+const credentials = load(fullPath);
+console.log(credentials);
+
+
+function load(path) {
+  fs.readFile(path, fileEncoding, (err,data) => {
+    if (err) throw err;
+    return JSON.parse(data);
   });
-
-
-function readCredentialsJson() {
-  return new Promise((resolve, reject) => {
-    if (!fs.existsSync(fullPath)){
-      reject('File does not exist!');
-    }
-
-    fs.readFile(fullPath, fileEncoding , (err,data) => {
-      if (err) {
-        reject(err);
-      }
-      if (data) {
-        resolve(JSON.parse(data));
-      }
-    });  
-  });
-}
-
-function createScratchOrg() {
-  sfdx.force.org.create({
-      setalias: scratchOrgAlias,
-      setdefaultusername: true,
-      durationdays: 1,
-      definitionfile: './config/project-scratch-def.json'
-    }).then(result => {
-      console.log(result);
-    }).catch(error => {
-      console.log(result);
-    });
 }

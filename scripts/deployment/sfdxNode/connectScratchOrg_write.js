@@ -8,7 +8,7 @@
  * - number of new gen2 package version (per 24h?) - (?) 
  */
 
-//const sfdx = require('sfdx-node/parallel');
+const sfdx = require('sfdx-node/parallel');
 const fs = require('fs');
 
 // process.argv[0] - command name
@@ -57,17 +57,19 @@ if (fs.existsSync(directory)) {
 } else {
   console.log(directory + ' does NOT exist > create');
   fs.mkdirSync(directory);
+  createScratchOrg(scratchOrgAlias);
 }
 
 
 function save(fullPath, jsonObj) {
   fs.writeFile(fullPath, JSON.stringify(jsonObj), fileEncoding, function (err) {
-    if (err) throw err;
+    if (err) {
+      console.log('Save-Error: ' + err);
+      throw err
+    };
+    console.log('Save-Success');
   });
 }
-
-
-// createScratchOrg(scratchOrgAlias);
 
 function createScratchOrg(alias) {
   sfdx.force.org.create({
@@ -75,11 +77,11 @@ function createScratchOrg(alias) {
       setdefaultusername: true,
       durationdays: 1,
       definitionfile: './config/project-scratch-def.json',
-      verbose: true
+      verbose:true
     }).then(result => {
-      console.log(result);
+      console.log('Success: ' + result);
       save(fullPath, result);
     }).catch(error => {
-      console.log(error);
+      console.log('Error: ' + error);
     });
 }
