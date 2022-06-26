@@ -8,7 +8,7 @@
  * - number of new gen2 package version (per 24h?) - (?) 
  */
 
-const sfdx = require('sfdx-node/parallel');
+//const sfdx = require('sfdx-node/parallel');
 const fs = require('fs');
 
 // process.argv[0] - command name
@@ -28,29 +28,47 @@ const fullPath = directory + '/' + filename;
 
 const fileEncoding = 'utf8';
 
-if (fs.existsSync(fullPath)) {
-  console.log(filename + ' does exist > return')
-  return;
-}
 
-//createScratchOrg();
 
-function writeCredentialsJson(jsonObj) {
-  return new Promise((resolve) => {
-    if (!fs.existsSync(fullPath)) {
-      fs.mkdirSync(directory);
-      fs.writeFile(fullPath, JSON.stringify(jsonObj), fileEncoding, function (err) {
-        if (!err) {
-          resolve();
-        }
-      });
-    };
+/* 
+console.log('try promie - start');
+fs.existsSync(fullPath)
+  .then(() => {
+    console.log('file found');
   })
+  .catch(() => {
+    console.log('file NOT found');
+  })
+  .finally(() => {
+    console.log('file finish');
+  });
+console.log('try promie - start');
+ */
+
+const jsonObj = {
+  key1: 'abc',
+  key2: 'def'
 }
 
-function createScratchOrg() {
+
+console.log('check directory');
+if (fs.existsSync(directory)) {
+  console.log(directory + ' does exist > return');
+} else {
+  console.log(directory + ' does NOT exist > create');
+  fs.mkdirSync(directory);
+}
+
+fs.writeFile(fullPath, JSON.stringify(jsonObj), fileEncoding, function (err) {
+  if (err) throw err;
+});
+
+
+// createScratchOrg(scratchOrgAlias);
+
+function createScratchOrg(alias) {
   sfdx.force.org.create({
-      setalias: scratchOrgAlias,
+      setalias: alias,
       setdefaultusername: true,
       durationdays: 1,
       definitionfile: './config/project-scratch-def.json',
