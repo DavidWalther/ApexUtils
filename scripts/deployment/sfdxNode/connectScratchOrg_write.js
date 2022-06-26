@@ -28,12 +28,16 @@ const fullPath = directory + '/' + filename;
 
 const fileEncoding = 'utf8';
 
+if (fs.existsSync(fullPath)) {
+  console.log(filename + ' does exist > return')
+  return;
+}
+
 createScratchOrg();
 
 function writeCredentialsJson(jsonObj) {
   return new Promise((resolve) => {
     if (!fs.existsSync(fullPath)) {
-      console.log(filename + ' does not exist')
       fs.mkdirSync(directory);
       fs.writeFile(fullPath, JSON.stringify(jsonObj), fileEncoding, function (err) {
         if (!err) {
@@ -49,7 +53,8 @@ function createScratchOrg() {
       setalias: scratchOrgAlias,
       setdefaultusername: true,
       durationdays: 1,
-      definitionfile: './config/project-scratch-def.json'
+      definitionfile: './config/project-scratch-def.json',
+      verbose: true
     }).then(result => {
       console.log(result);
       writeCredentialsJson(result);

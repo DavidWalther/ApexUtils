@@ -154,13 +154,13 @@ jobs:
 
 # create / restore credential file
       - restore_cache:
-          key: -v2-credentials-{{ checksum "checksum_24h.cache" }}
+          key: -v3-credentials-{{ checksum "checksum_24h.cache" }}
       - run:
           command: >
             node scripts/deployment/sfdxNode/connectScratchOrg_write.js sc-pkg-dev-org
           name: write JSON
       - save_cache:
-          key: -v2-credentials-{{ checksum "checksum_24h.cache" }}
+          key: -v3-credentials-{{ checksum "checksum_24h.cache" }}
           paths:
             - "cache"
 
