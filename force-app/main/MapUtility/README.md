@@ -42,14 +42,14 @@ The four highlighted elements are the parts that are special for each map:
         List<Object> objects,
         IValueReader valueReader,
         MAP_RETAIN_MODE retainingMode,
-        List<MapUtility_MappingMain.MapUtility_ValidKeyInterface> keyEvaluators
+        List<MapUtility_MappingMain.IncludeItemKeyInMapInterface> keyEvaluators
       )
 
 **Parameters**
 * `objects`: List of objects to create the map of. This can be SObjects or Objects
 * `valueReader`: the ValueReader **instance** to use for getting mapping keys for each entry in `objects`
 * `retainingMode`: an enum value to specify which items to keep
-* `keyEvaluators`: a List of `MapUtility_MappingMain.MapUtility_ValidKeyInterface` to define more key-specific behavior
+* `keyEvaluators`: a List of `MapUtility_MappingMain.IncludeItemKeyInMapInterface` to define more key-specific behavior
 
 **_Depricated:_**
 
@@ -89,16 +89,15 @@ But regardless of the way a 'mapping key' is read it is always the result of an 
 
 This simple interface provides the neccessary abstraction for a generic way to read a 'mapping key' from an object.
 
-#### **3. `interface: MapUtility_MappingMain.MapUtility_ValidKeyInterface`**
+#### **3. `interface: MapUtility_MappingMain.IncludeItemKeyInMapInterface`**
 
 This interface is used to identify whether to include a calculated key in the mapping or not.
 
-    public Interface MapUtility_MappingMain.MapUtility_ValidKeyInterface {
-      Boolean isValidKey(Object keyToEvaluate);
+    public Interface MapUtility_MappingMain.IncludeItemKeyInMapInterface {
+      Boolean isIncludeItemKey(Object keyToEvaluate);
     }
 
-#### **(`enum: MAP_OPTIONS`)**
-**_Depricated_** use ```MapUtility_MappingMain.MapUtility_ValidKeyInterface``` instead
+#### **(`enum: MAP_OPTIONS`)** **_Depricated_** use ```MapUtility_MappingMain.IncludeItemKeyInMapInterface``` instead
 
 Sometimes a special behavior is required on specific 'mapping keys'. This can be defined by using specific values of the enum `MAP_OPTIONS`. These Options can be combined if required.
 
@@ -126,7 +125,7 @@ There is currently no option to _exclude_ specific keys. Yet there is a Workarou
     final String COMPANY_NAME = 'My Company';
     Lead testLead = new Lead(Company = COMPANY_NAME);
     System.assertEquals(COMPANY_NAME, new LeadCompanyReader().getValue(testLead));
-
+---
 ### 2. Reading the company field depending on object type 
 
   This implementation of the IValueReader interface uses `instanceOf` to read a different field of the entry based on it's sObject type
@@ -182,7 +181,7 @@ For further examples see class `MapUtility_MappingMainTest`.
 ## **Packages**
 
 ### Installation order
-  1. fflib (only required if there is no `fflib_IDGenerator` in your org)
+  1. fflib
   1. Core
   1. Mapping
 
