@@ -136,6 +136,8 @@ jobs:
       - sfdx/install
       - sfdx/auth:
           defaultusername: david@mcga.de
+
+# install / restore node modules - Start          
       - restore_cache:
           key: -v1-node_modules
       - run:
@@ -146,6 +148,9 @@ jobs:
           key: -v1-node_modules
           paths:
             - "node_modules"
+# install / restore node modules - End
+
+# create file with current date to automatically drop scratchorg credentials
       - run:
           command: >
             node ./scripts/deployment/node/writeChecksumFile.js
@@ -153,24 +158,27 @@ jobs:
 
 
 # create / restore credential file
+  # chaching - start
       - restore_cache:
-          key: -v9-credentials-{{ checksum "checksum_24h.cache" }}
+          key: -v1-credentials-{{ checksum "checksum_24h.cache" }}
       - run:
           command: >
               ls -la
           name: print cache
       - run:
           command: >
-            node scripts/deployment/sfdxNode/connectScratchOrg_write.js sc-pkg-dev-org
+            node scripts/deployment/node/connectScratchOrg_write.js
           name: write JSON
       - run:
           command: >
               ls -la
           name: print cache
       - save_cache:
-          key: -v9-credentials-{{ checksum "checksum_24h.cache" }}
+          key: -v1-credentials-{{ checksum "checksum_24h.cache" }}
           paths:
             - "cache"
+  # chaching - end
+
       - run:
           command: >
               ls -la
@@ -180,11 +188,13 @@ jobs:
               ls -la cache
           name: print cache
 
-# authorize with credential file
+  # reconnect to scratch org
       - run:
           command: >
-            node scripts/deployment/sfdxNode/connectScratchOrg_read.js sc-pkg-dev-org
+            node scripts/deployment/sfdxNode/connectScratchOrg_write.js
           name: read JSON
+
+# authorize with credential file
 
 workflows:
   basic-test:
