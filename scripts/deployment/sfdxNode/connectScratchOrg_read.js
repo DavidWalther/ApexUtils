@@ -21,6 +21,7 @@ const fileEncoding = 'utf8';
 const credentials = load(fullPath);
 console.log(credentials);
 
+process.env.SFDX_ACCESS_TOKEN = credentials.accessToken;
 
 function load(path) {
   fs.readFile(path, fileEncoding, (err,data) => {

@@ -188,7 +188,7 @@ jobs:
 workflows:
   basic-test:
     jobs:
-      - authenticate-or-create-scratch-org
+#      - authenticate-or-create-scratch-org
       - connect-to-scratchOrg
 #      - node-create-cache-with-number
 #      - node-access-filesystem
