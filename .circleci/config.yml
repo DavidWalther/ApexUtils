@@ -161,32 +161,17 @@ jobs:
   # chaching - start
       - restore_cache:
           key: -v1-credentials-{{ checksum "checksum_24h.cache" }}
-      - run:
-          command: >
-              ls -la
-          name: print cache
+
       - run:
           command: >
             node scripts/deployment/node/connectScratchOrg_write.js
           name: write JSON
-      - run:
-          command: >
-              ls -la
-          name: print cache
+
       - save_cache:
           key: -v1-credentials-{{ checksum "checksum_24h.cache" }}
           paths:
             - "cache"
   # chaching - end
-
-      - run:
-          command: >
-              ls -la
-          name: print cache
-      - run:
-          command: >
-              ls -la cache
-          name: print cache
 
   # reconnect to scratch org
       - run:
