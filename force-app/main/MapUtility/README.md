@@ -12,6 +12,7 @@ Creating a map from a list of objects is always done by the same steps:
     * only the last item
 2. Loop over the list
     * for each item
+      * **check whether the item should be inserted**
       * **read a 'mapping key'**
       * **evaluate the read value**
       * depending on which items to keep
