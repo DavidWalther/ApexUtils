@@ -176,7 +176,7 @@ jobs:
   # reconnect to scratch org
       - run:
           command: >
-            node scripts/deployment/sfdxNode/connectScratchOrg_write.js
+            node scripts/deployment/sfdxNode/connectScratchOrg_read.js
           name: read JSON
 
 # authorize with credential file
