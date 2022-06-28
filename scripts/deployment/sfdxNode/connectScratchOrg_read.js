@@ -26,6 +26,7 @@ process.env.SFDX_ACCESS_TOKEN = credentials.accessToken;
 function load(path) {
   fs.readFile(path, fileEncoding, (err,data) => {
     if (err) throw err;
+    console.log(data);
     return JSON.parse(data);
   });
 }

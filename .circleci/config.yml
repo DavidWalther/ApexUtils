@@ -172,16 +172,15 @@ jobs:
           paths:
             - "cache"
   # chaching - end
-
+      - run:
+          command: >
+            cat cache/org.credentials
+          name: print credential file
   # reconnect to scratch org
       - run:
           command: >
             node scripts/deployment/sfdxNode/connectScratchOrg_read.js
           name: read JSON
-      - run:
-          command: >
-            cat cache/org.credentials
-          name: print credential file
 
 # authorize with credential file
 
