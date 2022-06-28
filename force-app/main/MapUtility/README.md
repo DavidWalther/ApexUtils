@@ -111,6 +111,15 @@ There is currently no option to _exclude_ specific keys. Yet there is a Workarou
 * set `MAP_OPTIONS.KEY_IGNORE_NULL`  
 * define a custom `IValueReader` with `getValue` returning `NULL` on undesired keys
 
+#### **4. `interface: MapUtility_MappingMain.IncludeItemInMapInterface`**
+
+This interface is used to evaluate whether an item should even be considered to be added to the map.
+
+   
+    public interface IncludeItemInMapInterface {
+        Boolean isIncludeItem(Object itemToCheckForInclusion);
+    }
+
 ## Examples: Use of IValueReader interface
 
 ### 1. Reading the Company field of a lead object
@@ -175,6 +184,7 @@ a Contacts `Account.Name`-field
     System.assertEquals(COMPANY_NAME_CONTACT, new CompanyReader().getValue(testContact),
       'getValue(Contact) must return its\'s Account\'s Name field.');
 
+---
 For further examples see class `MapUtility_MappingMainTest`.
 
 
