@@ -11,17 +11,6 @@
 const sfdx = require('sfdx-node/parallel');
 const fs = require('fs');
 
-// process.argv[0] - command name
-// process.argv[1] - script name
-const scratchOrgAlias = process.argv[2] // first parameter
-
-if(!scratchOrgAlias) {
-  console.log('no org alias');
-  return;
-}
-
-console.log(scratchOrgAlias);
-
 const directory = './cache';
 const filename = 'org.credentials';
 const fullPath = directory + '/' + filename;
