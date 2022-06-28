@@ -18,15 +18,17 @@ const fullPath = directory + '/' + filename;
 const fileEncoding = 'utf8';
 
 
-const credentials = load(fullPath);
-console.log(credentials);
+load(fullPath).then( credentials =>{
+  console.log(credentials);
+  process.env.SFDX_ACCESS_TOKEN = credentials.accessToken;
+});
 
-process.env.SFDX_ACCESS_TOKEN = credentials.accessToken;
 
-function load(path) {
-  fs.readFile('cache/org.credentials', fileEncoding, (err,data) => {
-    if (err) throw err;
-    console.log(data);
-    return JSON.parse(data);
+function load(fullPath) {
+  return new Promise(function(resolve, reject) {
+    fs.readFile('cache/org.credentials', fileEncoding, (err,data) => {
+      if (err) {reject(err)};
+      resolve(JSON.parse(data));
+    });
   });
 }
