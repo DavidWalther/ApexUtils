@@ -20,16 +20,19 @@ Creating a map from a list of objects is always done by the same steps:
         * only insert into map if 'mapping key' ist not present yet (keeps first item)
         * add item to the collection for this 'mapping key' OR create a new collection for this 'mapping key' and add item
 
-The three highlighted elements are the parts that are special for each map:
+The four highlighted elements are the parts that are special for each map:
   * Decide 'how' to keep entries
     
     This is achieved via the enum `MAP_RETAIN_MODE`
+  * Decide whether to keep item
+  
+    This is achieved via the interface `MapUtility_MappingMain.IncludeItemInMapInterface`  
   * Reading 'a value' form each entry 
 
     This is achieved via the interface `IValueReader`
   * 'Skip/add' each entry after evaluation
 
-  *  This is achieved via the interface `MapUtility_MappingMain.MapUtility_ValidKeyInterface`
+    This is achieved via the interface `MapUtility_MappingMain.IncludeItemKeyInMapInterface`
 
 ## **Use of the Map Util**
 
