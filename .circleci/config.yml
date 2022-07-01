@@ -158,7 +158,7 @@ jobs:
   # create / restore credential file
     # chaching - start
       - restore_cache:
-          key: -v5-credentials-{{ checksum "checksum_24h.cache" }}
+          key: -v1-credentials-{{ checksum "checksum_24h.cache" }}
 
       - sfdx/auth:
           defaultusername: david@mcga.de
@@ -174,7 +174,7 @@ jobs:
           name: move credentials into cache
 
       - save_cache:
-          key: -v5-credentials-{{ checksum "checksum_24h.cache" }}
+          key: -v1-credentials-{{ checksum "checksum_24h.cache" }}
           paths:
             - "cache"
 
@@ -206,8 +206,8 @@ jobs:
 
       - run:
           command: >
-            sfdx alias:set tempScratchOrg=test-ky48c6rvthzh@example.com
-          name: set hardcoded alias
+            node scripts/deployment/node/authorizeScratchOrgWithJwt.js
+          name: authorize via JWT
 
       - run:
           command: >
