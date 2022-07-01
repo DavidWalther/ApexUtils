@@ -22,66 +22,62 @@ if(!scratchOrgAlias) {
 
 console.log(scratchOrgAlias);
 
+const fileEncoding = 'utf8';
 const directory = './cache';
 const filename = 'org.credentials';
 const fullPath = directory + '/' + filename;
 
-const fileEncoding = 'utf8';
 
+try {
+  console.log('check directory');
+  if (fs.existsSync(directory)) {
+    console.log(directory + ' does exist > return');
+  } else {
+    console.log(directory + ' does NOT exist > create');
+    fs.mkdirSync(directory);
+    createScratchOrg(scratchOrgAlias);
+  }
 
-
-/* 
-console.log('try promie - start');
-fs.existsSync(fullPath)
-  .then(() => {
-    console.log('file found');
-  })
-  .catch(() => {
-    console.log('file NOT found');
-  })
-  .finally(() => {
-    console.log('file finish');
-  });
-console.log('try promie - start');
- */
-
-const jsonObj = {
-  key1: 'abc',
-  key2: 'def'
-}
-
-
-console.log('check directory');
-if (fs.existsSync(directory)) {
-  console.log(directory + ' does exist > return');
-} else {
-  console.log(directory + ' does NOT exist > create');
-  fs.mkdirSync(directory);
-  createScratchOrg(scratchOrgAlias);
-}
-
-
-function save(fullPath, jsonObj) {
-  fs.writeFile(fullPath, JSON.stringify(jsonObj), fileEncoding, function (err) {
-    if (err) {
-      console.log('Save-Error: ' + err);
-      throw err
-    };
-    console.log('Save-Success');
-  });
+} catch ( error){
+  console.log('failure on creation of scratch org');
 }
 
 function createScratchOrg(alias) {
-  sfdx.force.org.create({
-      setalias: alias,
-      setdefaultusername: true,
-      durationdays: 1,
-      definitionfile: './config/project-scratch-def.json',
-      verbose:true
-    }).then(result => {
-      console.log('Success: ' + result);
-      save(fullPath, result);
-    }).catch(error => {
-      console.log('Error: ' + error);
-    });
+  return new Promise(function(resolve) {
+    console.log('creating scratch org');
+    sfdx.force.org.create({
+        setalias: alias,
+        durationdays: 1,
+        definitionfile: './config/project-scratch-def.json',
+        defaultusername: true
+      }).then(()=> {
+        console.log('scratch org created');
+        resolve();
+      }).catch(error =>{
+        console.log('Error on creating scratch org: ' + error);
+      });
+  });
 }
+/*
+function checkScrathOrg(alias) {
+  console.log('retrieving scratch org credentials');
+  sfdx.force.org.display({
+    targetusername: alias
+  })
+  .then(result=>{
+    console.log('retrieved scratch org credentials');
+    save(fullPath, result);
+  })
+}
+
+function save(fullPath, jsonObj) {
+  console.log('saving credentials');
+  fs.writeFile(fullPath, JSON.stringify(jsonObj), fileEncoding, function (err) {
+    if (err) {
+      console.log('Error on saving credentials: ' + err);
+      throw err
+    };
+    console.log('credentials saved');
+  });
+}
+*/

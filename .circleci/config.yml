@@ -134,8 +134,6 @@ jobs:
     steps:
       - checkout
       - sfdx/install
-      - sfdx/auth:
-          defaultusername: david@mcga.de
 
 # install / restore node modules - Start          
       - restore_cache:
@@ -157,38 +155,106 @@ jobs:
           name: writing file for checksum
 
 
-# create / restore credential file
-  # chaching - start
+  # create / restore credential file
+    # chaching - start
       - restore_cache:
-          key: -v1-credentials-{{ checksum "checksum_24h.cache" }}
+          key: -v5-credentials-{{ checksum "checksum_24h.cache" }}
+
+      - sfdx/auth:
+          defaultusername: david@mcga.de
 
       - run:
           command: >
             node scripts/deployment/node/connectScratchOrg_write.js
           name: write JSON
 
+      - run:
+          command: >
+            cp ~/.sfdx/* cache
+          name: move credentials into cache
+
       - save_cache:
-          key: -v1-credentials-{{ checksum "checksum_24h.cache" }}
+          key: -v5-credentials-{{ checksum "checksum_24h.cache" }}
           paths:
             - "cache"
-  # chaching - end
+
       - run:
           command: >
-            cat cache/org.credentials
-          name: print credential file
-  # reconnect to scratch org
+            cp cache/* .sfdx
+          name: move credentials out of cache
+
       - run:
           command: >
-            node scripts/deployment/sfdxNode/connectScratchOrg_read.js
-          name: read JSON
+            ls -l .sfdx
+          name: show sfdx 
+
+      - run:
+          command: >
+            cat ~/.sfdx/alias.json
+          name: cat aliases 
+
+      - run:
+          command: >
+            node scripts/deployment/node/findFile.js
+          name: print scratch orgs
+
+      
+      - run:
+          command: >
+            node scripts/deployment/node/addScratchOrgToAliases.js
+          name: add scratch org to aliases
+
+      - run:
+          command: >
+            sfdx alias:set tempScratchOrg=test-ky48c6rvthzh@example.com
+          name: set hardcoded alias
+
+      - run:
+          command: >
+            sfdx config:set defaultusername=tempScratchOrg
+          name: set hardcoded alias
+
+      - run:
+          command: >
+            sfdx auth:list
+          name: Show authenticated orgs
+
+      - run:
+          command: >
+            sfdx force:org:list --all
+          name: Show orgs
+
+      - run:
+          command: >
+            sfdx config:list
+          name: Show configs
+
+
+
+      #- run:
+      #    command: >
+      #      scripts/deployment/pushCodeAndRunTests.sh tempScratchOrg
+      #    name: dply
+
+
+#      - run:
+#          command: >
+#            sfdx force:source:push --wait 60
+#          name: Deploy and Test
+
+#      - run:
+#          command: >
+#            sfdx force:apex:test:run --testlevel=RunLocalTests --resultformat=human --detailedcoverage --codecoverage --wait 60
+#          name: Deploy and Test
 
 # authorize with credential file
 
 workflows:
   basic-test:
     jobs:
-#      - authenticate-or-create-scratch-org
       - connect-to-scratchOrg
+#      - authenticate-or-create-scratch-org
+
 #      - node-create-cache-with-number
 #      - node-access-filesystem
 #      - install_authenticate

@@ -17,16 +17,21 @@ const fullPath = directory + '/' + filename;
 
 const fileEncoding = 'utf8';
 
-
 load(fullPath).then( credentials =>{
-  console.log(credentials);
   process.env.SFDX_ACCESS_TOKEN = credentials.accessToken;
-});
 
+  sfdx.auth.accesstoken.store({
+    noprompt: true,
+    setAlias: 'temp-Scratch-Org',
+    instanceurl: credentials.instanceUrl
+  }).then(() => {
+    console.log('auth success');
+  });
+});
 
 function load(fullPath) {
   return new Promise(function(resolve, reject) {
-    fs.readFile('cache/org.credentials', fileEncoding, (err,data) => {
+    fs.readFile(fullPath, fileEncoding, (err,data) => {
       if (err) {reject(err)};
       resolve(JSON.parse(data));
     });

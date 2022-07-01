@@ -26,7 +26,7 @@ try {
     console.log(directory + ' does NOT exist > create');
     fs.mkdirSync(directory);
     createScratchOrg(scratchOrgAlias).then(()=>{
-      checkScrathOrg(scratchOrgAlias);
+      //checkScrathOrg(scratchOrgAlias);
     });
   }
 
