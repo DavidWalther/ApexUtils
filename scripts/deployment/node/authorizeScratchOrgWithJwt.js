@@ -35,6 +35,10 @@ Promise.all(filePromisses).then(files => {
   console.log('key starts: ' + files[0].startsWith(serverKeyStart));
   console.log('key end: ' + files[0].endsWith(serverKeyEnd));
 
+  files[0].split(/\r?\n/).forEach(line =>  {
+    console.log(`Line from file: ${line}`);
+  });
+
 
 
 
@@ -48,7 +52,6 @@ Promise.all(filePromisses).then(files => {
   console.log(JSON.stringify(credentials));
 
   const setalias = 'tempScratchOrg2'
-
 
 
   sfdx.auth.jwt.grant({
