@@ -32,13 +32,16 @@ Promise.all(filePromisses).then(files => {
   const serverKeyStart = '-----BEGIN RSA PRIVATE KEY-----';
   const serverKeyEnd = '-----END RSA PRIVATE KEY-----';
   
-  console.log('key starts: ' + files[0].startsWith(serverKeyStart));
-  console.log('key end: ' + files[0].endsWith(serverKeyEnd));
 
+  console.log('server key');
   files[0].split(/\r?\n/).forEach(line =>  {
     console.log(`Line from file: ${line}`);
   });
 
+  console.log('JWT');
+  Buffer.from(files[0]).toString('base64').split(/\r?\n/).forEach(line =>  {
+    console.log(`Line from file: ${line}`);
+  });
 
 
 
