@@ -29,18 +29,26 @@ files.filter( filename => {
 
 
 Promise.all(filePromisses).then(files => {
-  const jwt = Buffer.from(files[0], 'base64');
-  const clientId = files[1].clientId;
-  const username = files[1].username;
-  const instanceUrl = files[1].instanceUrl
+  
+  const credentials = {
+    jwt: Buffer.from(files[0], 'base64'),
+    clientId: files[1].clientId,
+    username: files[1].username,
+    instanceUrl: files[1].instanceUrl
+  }
+
+
+
   const setalias = 'tempScratchOrg2'
+
+
 
   sfdx.auth.jwt.grant({
     setalias:setalias,
-    jwtkeyfile: jwt,
-    clientid: clientId,
-    instanceurl: instanceUrl,
-    username: username,
+    jwtkeyfile: credentials.jwt,
+    clientid: credentials.clientId,
+    instanceurl: credentials.instanceUrl,
+    username: credentials.username,
     setdefaultusername: true
   }).then(result => {
     console.log('Auth sucess. ' + result)
