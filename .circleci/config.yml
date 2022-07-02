@@ -206,7 +206,7 @@ jobs:
 
       - run:
           command: >
-            node scripts/deployment/node/authorizeScratchOrgWithJwt.js
+            node scripts/deployment/node/authorizeScratchOrgWithJwt.js tempScratchOrg
           name: authorize via JWT
 
       - run:
