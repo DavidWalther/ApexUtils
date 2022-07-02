@@ -37,7 +37,7 @@ Promise.all(filePromisses).then(files => {
     instanceUrl: files[1].instanceUrl
   }
 
-
+  console.log(JSON.stringify(credentials));
 
   const setalias = 'tempScratchOrg2'
 
