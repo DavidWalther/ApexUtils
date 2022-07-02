@@ -180,16 +180,6 @@ jobs:
 
       - run:
           command: >
-            ls -l .sfdx
-          name: show sfdx 
-
-      - run:
-          command: >
-            node scripts/deployment/node/findFile.js cache
-          name: print scratch orgs in cache
-
-      - run:
-          command: >
             node scripts/deployment/node/authorizeScratchOrgWithJwt.js tempScratchOrg
           name: authorize via JWT
 

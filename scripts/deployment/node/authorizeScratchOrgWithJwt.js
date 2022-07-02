@@ -34,12 +34,13 @@ const filePromises = fs.readdirSync(cachePath)
 Promise.all(filePromises)
   .then(values => {
 
+    const scratchorg = values[0];
 
     sfdx.auth.jwt.grant({
       clientid: consumerKey,
-      username: scratchOrgUsername,
+      username: scratchorg.username,
       jwtkeyfile: serverKeyPath,
-      instanceurl: scratchOrgInstanceurl,
+      instanceurl: scratchorg.instanceUrl,
       setalias: alias,
       setdefaultusername:true
     }).then(result => {
@@ -50,7 +51,7 @@ Promise.all(filePromises)
     });
 
 
-    console.log(values);
+    //console.log(values);
   })
 
 
