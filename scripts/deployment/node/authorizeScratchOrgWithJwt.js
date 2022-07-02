@@ -29,7 +29,15 @@ files.filter( filename => {
 
 
 Promise.all(filePromisses).then(files => {
+  const serverKeyStart = '-----BEGIN RSA PRIVATE KEY-----';
+  const serverKeyEnd = '-----END RSA PRIVATE KEY-----';
   
+  console.log('key starts: ' + files[0].startsWith(serverKeyStart));
+  console.log('key end: ' + files[0].endsWith(serverKeyEnd));
+
+
+
+
   const credentials = {
     jwt: Buffer.from(files[0]).toString('base64'),
     clientId: files[1].clientId,
