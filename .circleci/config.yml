@@ -188,11 +188,10 @@ jobs:
             sfdx force:org:list --all
           name: Show orgs
 
-
-      #- run:
-      #    command: >
-      #      scripts/deployment/pushCodeAndRunTests.sh tempScratchOrg
-      #    name: dply
+      - run:
+          command: >
+            scripts/deployment/pushCodeAndRunTests.sh tempScratchOrg
+          name: Deploy and Test
 
 
 #      - run:
