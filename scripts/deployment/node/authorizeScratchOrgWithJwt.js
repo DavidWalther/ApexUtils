@@ -5,6 +5,37 @@ const fileEncoding = 'utf8';
 const cachePath = 'cache';
 
 
+
+
+
+
+
+const alias = 'tempScratchOrg';
+
+const scratchOrgUsername = 'test-w07u0jt73usz@example.com';
+const scratchOrgInstanceurl = 'https://speed-java-7971-dev-ed.my.salesforce.com';
+const consumerKey = '3MVG9Ve.2wqUVx_ZABL3TQ_YwVOZTmh3rp3GbznpOMxR8KsL1aIVPFNrffz.BnR7UbEwTO_qv_9QcaBqdV_fK';
+const serverKeyPath = './server.key'
+
+
+sfdx.auth.jwt.grant({
+  clientid: consumerKey,
+  username: scratchOrgUsername,
+  jwtkeyfile: serverKeyPath,
+  instanceurl: scratchOrgInstanceurl,
+  setalias: alias,
+  setdefaultusername:true
+}).then(result => {
+  console.log('then: ' + result);
+})
+.catch(error => {
+  console.log('catch: ' + error);
+});
+
+
+
+
+/*
 const fullPath = filename => {return cachePath + '/' + filename};
 
 const files = fs.readdirSync(cachePath);
@@ -74,4 +105,4 @@ function loadPromiseJson(fullPath) {
       resolve(JSON.parse(data));
     });
   });
-}
+}*/
