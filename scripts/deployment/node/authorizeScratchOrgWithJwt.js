@@ -7,6 +7,9 @@ const cachePath = 'cache';
 
 
 
+
+
+
 const alias = process.argv[2] ? process.argv[2] :'tempScratchOrg';
 
 const scratchOrgUsername = 'test-w07u0jt73usz@example.com';
@@ -15,19 +18,55 @@ const consumerKey =  process.env.SFDX_CONSUMER_KEY;
 const serverKeyPath = './server.key'
 
 
-sfdx.auth.jwt.grant({
-  clientid: consumerKey,
-  username: scratchOrgUsername,
-  jwtkeyfile: serverKeyPath,
-  instanceurl: scratchOrgInstanceurl,
-  setalias: alias,
-  setdefaultusername:true
-}).then(result => {
-  console.log('then: ' + result);
-})
-.catch(error => {
-  console.log('catch: ' + error);
-});
+
+
+const scratchOrgNameFiler = filename => {return filename.startsWith('test-') && filename.endsWith('.json')}
+const fullPath = filename => {return cachePath + '/' + filename};
+
+
+
+//get all filenames in directory
+const filePromises = fs.readdirSync(cachePath)
+  .filter(scratchOrgNameFiler)
+  .map(fullPath)
+  .map(loadPromise);
+
+Promise.all(filePromises)
+  .then(values => {
+
+
+    sfdx.auth.jwt.grant({
+      clientid: consumerKey,
+      username: scratchOrgUsername,
+      jwtkeyfile: serverKeyPath,
+      instanceurl: scratchOrgInstanceurl,
+      setalias: alias,
+      setdefaultusername:true
+    }).then(result => {
+      console.log('then: ' + result);
+    })
+    .catch(error => {
+      console.log('catch: ' + error);
+    });
+
+
+    console.log(values);
+  })
+
+
+
+
+function loadPromise(fullPath) {
+  return new Promise(function(resolve, reject) {
+    fs.readFile(fullPath, fileEncoding, (err,data) => {
+      if (err) {reject(err)};
+      resolve(JSON.parse(data));
+    });
+  });
+}
+
+
+
 
 
 
