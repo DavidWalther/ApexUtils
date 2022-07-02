@@ -7,9 +7,6 @@ const cachePath = 'cache';
 
 
 
-
-
-
 const alias = process.argv[2] ? process.argv[2] :'tempScratchOrg';
 
 const scratchOrgUsername = 'test-w07u0jt73usz@example.com';

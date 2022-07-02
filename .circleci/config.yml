@@ -180,29 +180,13 @@ jobs:
 
       - run:
           command: >
-            cp cache/* .sfdx
-          name: move credentials out of cache
-
-      - run:
-          command: >
             ls -l .sfdx
           name: show sfdx 
 
       - run:
           command: >
-            cat ~/.sfdx/alias.json
-          name: cat aliases 
-
-      - run:
-          command: >
-            node scripts/deployment/node/findFile.js
-          name: print scratch orgs
-
-      
-      - run:
-          command: >
-            node scripts/deployment/node/addScratchOrgToAliases.js
-          name: add scratch org to aliases
+            node scripts/deployment/node/findFile.js cache
+          name: print scratch orgs in cache
 
       - run:
           command: >
@@ -211,19 +195,8 @@ jobs:
 
       - run:
           command: >
-            sfdx auth:list
-          name: Show authenticated orgs
-
-      - run:
-          command: >
             sfdx force:org:list --all
           name: Show orgs
-
-      - run:
-          command: >
-            sfdx config:list
-          name: Show configs
-
 
 
       #- run:
