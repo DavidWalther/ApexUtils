@@ -29,24 +29,10 @@ files.filter( filename => {
 
 
 Promise.all(filePromisses).then(files => {
-  const serverKeyStart = '-----BEGIN RSA PRIVATE KEY-----';
-  const serverKeyEnd = '-----END RSA PRIVATE KEY-----';
-  
-
-  console.log('server key');
-  files[0].split(/\r?\n/).forEach(line =>  {
-    console.log(`Line from file: ${line}`);
-  });
-
-  console.log('JWT');
-  Buffer.from(files[0]).toString('base64').split(/\r?\n/).forEach(line =>  {
-    console.log(`Line from file: ${line}`);
-  });
-
 
 
   const credentials = {
-    jwt: Buffer.from(files[0]).toString('base64'),
+    //jwt: Buffer.from(files[0]).toString('base64'),
     clientId: files[1].clientId,
     username: files[1].username,
     instanceUrl: files[1].instanceUrl
@@ -59,7 +45,7 @@ Promise.all(filePromisses).then(files => {
 
   sfdx.auth.jwt.grant({
     setalias:setalias,
-    jwtkeyfile: credentials.jwt,
+    jwtkeyfile: fullPath('server.key'),
     clientid: credentials.clientId,
     instanceurl: credentials.instanceUrl,
     username: credentials.username,
