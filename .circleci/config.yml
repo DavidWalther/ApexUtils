@@ -211,11 +211,6 @@ jobs:
 
       - run:
           command: >
-            sfdx config:set defaultusername=tempScratchOrg
-          name: set hardcoded alias
-
-      - run:
-          command: >
             sfdx auth:list
           name: Show authenticated orgs
 
