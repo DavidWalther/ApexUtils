@@ -31,7 +31,7 @@ files.filter( filename => {
 Promise.all(filePromisses).then(files => {
   
   const credentials = {
-    jwt: Buffer.from(files[0], 'base64'),
+    jwt: Buffer.from(files[0]).toString('base64'),
     clientId: files[1].clientId,
     username: files[1].username,
     instanceUrl: files[1].instanceUrl
