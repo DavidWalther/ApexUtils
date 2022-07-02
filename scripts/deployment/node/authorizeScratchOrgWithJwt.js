@@ -14,7 +14,7 @@ const alias = process.argv[2] ? process.argv[2] :'tempScratchOrg';
 
 const scratchOrgUsername = 'test-w07u0jt73usz@example.com';
 const scratchOrgInstanceurl = 'https://speed-java-7971-dev-ed.my.salesforce.com';
-const consumerKey = '3MVG9Ve.2wqUVx_ZABL3TQ_YwVOZTmh3rp3GbznpOMxR8KsL1aIVPFNrffz.BnR7UbEwTO_qv_9QcaBqdV_fK';
+const consumerKey =  process.env.SFDX_CONSUMER_KEY;
 const serverKeyPath = './server.key'
 
 
