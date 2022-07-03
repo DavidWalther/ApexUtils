@@ -43,13 +43,15 @@ The four highlighted elements are the parts that are special for each map:
         IValueReader valueReader,
         MAP_RETAIN_MODE retainingMode,
         List<MapUtility_MappingMain.IncludeItemKeyInMapInterface> keyEvaluators
+        List<MapUtility_MappingMain.IncludeItemInMapInterface> itemFilters
       )
 
 **Parameters**
 * `objects`: List of objects to create the map of. This can be SObjects or Objects
 * `valueReader`: the ValueReader **instance** to use for getting mapping keys for each entry in `objects`
 * `retainingMode`: an enum value to specify which items to keep
-* `keyEvaluators`: a List of `MapUtility_MappingMain.IncludeItemKeyInMapInterface` to define more key-specific behavior
+* `keyEvaluators`: a List of `MapUtility_MappingMain.IncludeItemKeyInMapInterface` to define criteria for the evaluation of every item key
+* `itemFilters`: A list `MapUtility_MappingMain.IncludeItemInMapInterface` to define criteria for the evaluation of every item
 
 **_Depricated:_**
 
