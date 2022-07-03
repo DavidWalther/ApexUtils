@@ -158,23 +158,28 @@ jobs:
   # create / restore credential file
     # chaching - start
       - restore_cache:
-          key: -v1-credentials-{{ checksum "checksum_24h.cache" }}
+          key: -v4-credentials-{{ checksum "checksum_24h.cache" }}
 
       - sfdx/auth:
           defaultusername: david@mcga.de
 
       - run:
           command: >
-            node scripts/deployment/node/connectScratchOrg_write.js
-          name: write JSON
+            node scripts/deployment/node/scratchOrg_create.js tempScratchOrg
+          name: create scratch org
 
       - run:
           command: >
-            cp ~/.sfdx/* cache
-          name: move credentials into cache
+            node scripts/deployment/node/scratchOrg_writeCache.js tempScratchOrg
+          name: retrieve and save scratch org credentials
+
+#      - run:
+#          command: >
+#            cp ~/.sfdx/* cache
+#          name: move credentials into cache
 
       - save_cache:
-          key: -v1-credentials-{{ checksum "checksum_24h.cache" }}
+          key: -v4-credentials-{{ checksum "checksum_24h.cache" }}
           paths:
             - "cache"
 

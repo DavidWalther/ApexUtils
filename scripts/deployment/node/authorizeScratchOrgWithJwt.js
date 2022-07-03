@@ -3,6 +3,7 @@ const sfdx = require('sfdx-node/parallel');
 
 const fileEncoding = 'utf8';
 const cachePath = 'cache';
+const credentialFileName = 'org.credentials'
 
 const alias = process.argv[2] ? process.argv[2] :'tempScratchOrg';
 
@@ -10,22 +11,8 @@ const consumerKey =  process.env.SFDX_CONSUMER_KEY;
 const serverKeyPath = './server.key'
 
 
-const scratchOrgNameFiler = filename => {return filename.startsWith('test-') && filename.endsWith('.json')}
-const fullPath = filename => {return cachePath + '/' + filename};
-
-
-
-//get all filenames in directory
-const filePromises = fs.readdirSync(cachePath)
-  .filter(scratchOrgNameFiler)
-  .map(fullPath)
-  .map(loadPromise);
-
-Promise.all(filePromises)
-  .then(values => {
-
-    const scratchorg = values[0];
-
+loadPromise(cachePath + '/' + credentialFileName)
+  .then(scratchorg => {
     sfdx.auth.jwt.grant({
       clientid: consumerKey,
       username: scratchorg.username,
