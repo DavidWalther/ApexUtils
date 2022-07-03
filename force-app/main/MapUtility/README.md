@@ -12,6 +12,7 @@ Creating a map from a list of objects is always done by the same steps:
     * only the last item
 2. Loop over the list
     * for each item
+      * **check whether the item should be inserted**
       * **read a 'mapping key'**
       * **evaluate the read value**
       * depending on which items to keep
@@ -19,16 +20,19 @@ Creating a map from a list of objects is always done by the same steps:
         * only insert into map if 'mapping key' ist not present yet (keeps first item)
         * add item to the collection for this 'mapping key' OR create a new collection for this 'mapping key' and add item
 
-The three highlighted elements are the parts that are special for each map:
+The four highlighted elements are the parts that are special for each map:
   * Decide 'how' to keep entries
     
     This is achieved via the enum `MAP_RETAIN_MODE`
+  * Decide whether to keep item
+  
+    This is achieved via the interface `MapUtility_MappingMain.IncludeItemInMapInterface`  
   * Reading 'a value' form each entry 
 
     This is achieved via the interface `IValueReader`
   * 'Skip/add' each entry after evaluation
 
-  *  This is achieved via the interface `MapUtility_MappingMain.MapUtility_ValidKeyInterface`
+    This is achieved via the interface `MapUtility_MappingMain.IncludeItemKeyInMapInterface`
 
 ## **Use of the Map Util**
 
@@ -38,14 +42,16 @@ The three highlighted elements are the parts that are special for each map:
         List<Object> objects,
         IValueReader valueReader,
         MAP_RETAIN_MODE retainingMode,
-        List<MapUtility_MappingMain.MapUtility_ValidKeyInterface> keyEvaluators
+        List<MapUtility_MappingMain.IncludeItemKeyInMapInterface> keyEvaluators
+        List<MapUtility_MappingMain.IncludeItemInMapInterface> itemFilters
       )
 
 **Parameters**
 * `objects`: List of objects to create the map of. This can be SObjects or Objects
 * `valueReader`: the ValueReader **instance** to use for getting mapping keys for each entry in `objects`
 * `retainingMode`: an enum value to specify which items to keep
-* `keyEvaluators`: a List of `MapUtility_MappingMain.MapUtility_ValidKeyInterface` to define more key-specific behavior
+* `keyEvaluators`: a List of `MapUtility_MappingMain.IncludeItemKeyInMapInterface` to define criteria for the evaluation of every item key
+* `itemFilters`: A list `MapUtility_MappingMain.IncludeItemInMapInterface` to define criteria for the evaluation of every item
 
 **_Depricated:_**
 
@@ -85,16 +91,15 @@ But regardless of the way a 'mapping key' is read it is always the result of an 
 
 This simple interface provides the neccessary abstraction for a generic way to read a 'mapping key' from an object.
 
-#### **3. `interface: MapUtility_MappingMain.MapUtility_ValidKeyInterface`**
+#### **3. `interface: MapUtility_MappingMain.IncludeItemKeyInMapInterface`**
 
 This interface is used to identify whether to include a calculated key in the mapping or not.
 
-    public Interface MapUtility_MappingMain.MapUtility_ValidKeyInterface {
-      Boolean isValidKey(Object keyToEvaluate);
+    public Interface MapUtility_MappingMain.IncludeItemKeyInMapInterface {
+      Boolean isIncludeItemKey(Object keyToEvaluate);
     }
 
-#### **(`enum: MAP_OPTIONS`)**
-**_Depricated_** use ```MapUtility_MappingMain.MapUtility_ValidKeyInterface``` instead
+#### **(`enum: MAP_OPTIONS`)** **_Depricated_** use ```MapUtility_MappingMain.IncludeItemKeyInMapInterface``` instead
 
 Sometimes a special behavior is required on specific 'mapping keys'. This can be defined by using specific values of the enum `MAP_OPTIONS`. These Options can be combined if required.
 
@@ -107,6 +112,15 @@ Sometimes a special behavior is required on specific 'mapping keys'. This can be
 There is currently no option to _exclude_ specific keys. Yet there is a Workaround:
 * set `MAP_OPTIONS.KEY_IGNORE_NULL`  
 * define a custom `IValueReader` with `getValue` returning `NULL` on undesired keys
+
+#### **4. `interface: MapUtility_MappingMain.IncludeItemInMapInterface`**
+
+This interface is used to evaluate whether an item should even be considered to be added to the map.
+
+   
+    public interface IncludeItemInMapInterface {
+        Boolean isIncludeItem(Object itemToCheckForInclusion);
+    }
 
 ## Examples: Use of IValueReader interface
 
@@ -122,7 +136,7 @@ There is currently no option to _exclude_ specific keys. Yet there is a Workarou
     final String COMPANY_NAME = 'My Company';
     Lead testLead = new Lead(Company = COMPANY_NAME);
     System.assertEquals(COMPANY_NAME, new LeadCompanyReader().getValue(testLead));
-
+---
 ### 2. Reading the company field depending on object type 
 
   This implementation of the IValueReader interface uses `instanceOf` to read a different field of the entry based on it's sObject type
@@ -172,13 +186,13 @@ a Contacts `Account.Name`-field
     System.assertEquals(COMPANY_NAME_CONTACT, new CompanyReader().getValue(testContact),
       'getValue(Contact) must return its\'s Account\'s Name field.');
 
+---
 For further examples see class `MapUtility_MappingMainTest`.
 
 
 ## **Packages**
 
 ### Installation order
-  1. fflib (only required if there is no `fflib_IDGenerator` in your org)
   1. Core
   1. Mapping
 
