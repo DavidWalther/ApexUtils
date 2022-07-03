@@ -195,9 +195,13 @@ jobs:
 
       - run:
           command: >
-            scripts/deployment/pushCodeAndRunTests.sh tempScratchOrg
-          name: Deploy and Test
+            sfdx force:source:push --targetusername tempScratchOrg --forceoverwrite --wait 60
+          name: SFDX Push Changes
 
+      - run:
+          command: >
+            sfdx force:apex:test:run --targetusername tempScratchOrg --testlevel=RunLocalTests --resultformat=human --codecoverage --wait 60
+          name: Apex Tests
 
 #      - run:
 #          command: >
