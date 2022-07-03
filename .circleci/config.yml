@@ -200,7 +200,7 @@ jobs:
 
       - run:
           command: >
-            sfdx force:apex:test:run --targetusername tempScratchOrg --testlevel=RunLocalTests --resultformat=human --codecoverage --wait 60
+            sfdx force:apex:test:run --targetusername tempScratchOrg --suitenames=MapUtilities --resultformat=human --codecoverage --wait 60
           name: Apex Tests
 
 #      - run:
