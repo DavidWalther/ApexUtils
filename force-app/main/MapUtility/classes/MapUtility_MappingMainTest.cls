@@ -1,6 +1,19 @@
 @IsTest
 public with sharing class MapUtility_MappingMainTest {
 
+    private static Integer fakeIdCount = 0;
+    private static final String ID_PATTERN = '000000000000';
+
+    public static Id generateFakeId(Schema.SObjectType sobjectType)
+    {
+        String keyPrefix = sobjectType.getDescribe().getKeyPrefix();
+        fakeIdCount++;
+
+        String fakeIdPrefix = ID_PATTERN.substring(0, 12 - fakeIdCount.format().length());
+
+        return Id.valueOf(keyPrefix + fakeIdPrefix + fakeIdCount);
+    }
+
     //----------------------------
     // Mapping of SObjects
     //----------------------------
@@ -26,15 +39,15 @@ public with sharing class MapUtility_MappingMainTest {
         final String TESTCOMPANY_3_NAME = 'TestCompany3';
 
         Lead lead1 = new Lead(
-        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
+        Id = generateFakeId(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
         Lead lead2 = new Lead(
-        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
+        Id = generateFakeId(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
         Lead lead3 = new Lead(
-        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_2_NAME);
+        Id = generateFakeId(Lead.getSObjectType()), Company = TESTCOMPANY_2_NAME);
         Lead lead4 = new Lead(
-        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_2_NAME);
+        Id = generateFakeId(Lead.getSObjectType()), Company = TESTCOMPANY_2_NAME);
         Lead lead5 = new Lead(
-        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_3_NAME);
+        Id = generateFakeId(Lead.getSObjectType()), Company = TESTCOMPANY_3_NAME);
 
         List<Lead> leadList = new List<Lead>{lead1, lead2, lead3, lead4, lead5};
 
@@ -86,17 +99,17 @@ public with sharing class MapUtility_MappingMainTest {
         final String TESTCOMPANY_3_NAME = 'TestCompany3';
 
         Lead lead1 = new Lead(
-        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
+        Id = generateFakeId(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
         Lead lead2 = new Lead(
-        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
+        Id = generateFakeId(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
         Lead lead3 = new Lead(
-        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_2_NAME);
+        Id = generateFakeId(Lead.getSObjectType()), Company = TESTCOMPANY_2_NAME);
         Lead lead4 = new Lead(
-        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_2_NAME);
+        Id = generateFakeId(Lead.getSObjectType()), Company = TESTCOMPANY_2_NAME);
         Lead lead5 = new Lead(
-        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_3_NAME);
+        Id = generateFakeId(Lead.getSObjectType()), Company = TESTCOMPANY_3_NAME);
         Lead lead6 = new Lead(
-        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
+        Id = generateFakeId(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
 
         List<Lead> leadList = new List<Lead>{lead1, lead2, lead3, lead4, lead5, lead6};
 
@@ -146,17 +159,17 @@ public with sharing class MapUtility_MappingMainTest {
         final String TESTCOMPANY_3_NAME = 'TestCompany3';
 
         Lead lead1 = new Lead(
-        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
+        Id = generateFakeId(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
         Lead lead2 = new Lead(
-        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
+        Id = generateFakeId(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
         Lead lead3 = new Lead(
-        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_2_NAME);
+        Id = generateFakeId(Lead.getSObjectType()), Company = TESTCOMPANY_2_NAME);
         Lead lead4 = new Lead(
-        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_2_NAME);
+        Id = generateFakeId(Lead.getSObjectType()), Company = TESTCOMPANY_2_NAME);
         Lead lead5 = new Lead(
-        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_3_NAME);
+        Id = generateFakeId(Lead.getSObjectType()), Company = TESTCOMPANY_3_NAME);
         Lead lead6 = new Lead(
-        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
+        Id = generateFakeId(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
 
         List<Lead> leadList = new List<Lead>{lead1, lead2, lead3, lead4, lead5, lead6};
 
@@ -368,9 +381,9 @@ public with sharing class MapUtility_MappingMainTest {
         final String TESTCOMPANY_1_NAME = 'TestCompany1';
 
         Lead lead1 = new Lead(
-        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
+        Id = generateFakeId(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
         Lead lead2 = new Lead(
-        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
+        Id = generateFakeId(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
 
         List<Lead> leadList = new List<Lead>{lead1, lead2};
 
@@ -415,7 +428,7 @@ public with sharing class MapUtility_MappingMainTest {
          */
         final String TESTCOMPANY_1_NAME = 'TestCompany1';
         Lead lead1 = new Lead(
-        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
+        Id = generateFakeId(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
 
         List<Lead> leadList = new List<Lead>{lead1};
 
@@ -456,7 +469,7 @@ public with sharing class MapUtility_MappingMainTest {
          */
         final String TESTCOMPANY_1_NAME = 'TestCompany1';
         Lead lead1 = new Lead(
-        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
+        Id = generateFakeId(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
 
         List<Lead> leadList = new List<Lead>{lead1};
 
@@ -504,9 +517,9 @@ public with sharing class MapUtility_MappingMainTest {
         * - one lead without a value for Company
         */
 
-        Lead lead1 = new Lead(Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
-        Lead lead2 = new Lead(Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_2_NAME);
-        Lead lead3 = new Lead(Id = fflib_IDGenerator.generate(Lead.getSObjectType()));
+        Lead lead1 = new Lead(Id = generateFakeId(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
+        Lead lead2 = new Lead(Id = generateFakeId(Lead.getSObjectType()), Company = TESTCOMPANY_2_NAME);
+        Lead lead3 = new Lead(Id = generateFakeId(Lead.getSObjectType()));
 
         List<Lead> leadList = new List<Lead>{lead1, lead2, lead3};
 
@@ -545,11 +558,11 @@ public with sharing class MapUtility_MappingMainTest {
         * - two of them having the same value
         */
 
-        Lead lead1 = new Lead(Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
-        Lead lead2 = new Lead(Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_2_NAME);
-        Lead lead3 = new Lead(Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_3_NAME);
-        Lead lead4 = new Lead(Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_4_NAME);
-        Lead lead5 = new Lead(Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_4_NAME);
+        Lead lead1 = new Lead(Id = generateFakeId(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
+        Lead lead2 = new Lead(Id = generateFakeId(Lead.getSObjectType()), Company = TESTCOMPANY_2_NAME);
+        Lead lead3 = new Lead(Id = generateFakeId(Lead.getSObjectType()), Company = TESTCOMPANY_3_NAME);
+        Lead lead4 = new Lead(Id = generateFakeId(Lead.getSObjectType()), Company = TESTCOMPANY_4_NAME);
+        Lead lead5 = new Lead(Id = generateFakeId(Lead.getSObjectType()), Company = TESTCOMPANY_4_NAME);
 
         List<Lead> leadList = new List<Lead>{lead1, lead2, lead3, lead4, lead5};
 
@@ -599,15 +612,15 @@ public with sharing class MapUtility_MappingMainTest {
         final String TESTCOMPANY_3_NAME = 'TestCompany3';
 
         Lead lead1 = new Lead(
-        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
+        Id = generateFakeId(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
         Lead lead2 = new Lead(
-        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
+        Id = generateFakeId(Lead.getSObjectType()), Company = TESTCOMPANY_1_NAME);
         Lead lead3 = new Lead(
-        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_2_NAME);
+        Id = generateFakeId(Lead.getSObjectType()), Company = TESTCOMPANY_2_NAME);
         Lead lead4 = new Lead(
-        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_2_NAME);
+        Id = generateFakeId(Lead.getSObjectType()), Company = TESTCOMPANY_2_NAME);
         Lead lead5 = new Lead(
-        Id = fflib_IDGenerator.generate(Lead.getSObjectType()), Company = TESTCOMPANY_3_NAME);
+        Id = generateFakeId(Lead.getSObjectType()), Company = TESTCOMPANY_3_NAME);
 
         List<Lead> leadList = new List<Lead>{lead1, lead2, lead3, lead4, lead5};
 
@@ -666,12 +679,12 @@ public with sharing class MapUtility_MappingMainTest {
     private static final String PRODUCT_NAME_FOUR = 'Product 4';
     
     private static final List<Id> OLI_IDS = new List<Id>{
-        fflib_IDGenerator.generate(OpportunityLineItem.getSObjectType()), // 'familiy one' => mapped
-        fflib_IDGenerator.generate(OpportunityLineItem.getSObjectType()), // 'familiy two' => mapped
-        fflib_IDGenerator.generate(OpportunityLineItem.getSObjectType()), // 'familiy two' => mapped
-        fflib_IDGenerator.generate(OpportunityLineItem.getSObjectType()), // 'familiy three' => excluded
-        fflib_IDGenerator.generate(OpportunityLineItem.getSObjectType()), // opportunity will be closed => excluded
-        fflib_IDGenerator.generate(OpportunityLineItem.getSObjectType())  // opportunity will be closed => excluded
+        generateFakeId(OpportunityLineItem.getSObjectType()), // 'familiy one' => mapped
+        generateFakeId(OpportunityLineItem.getSObjectType()), // 'familiy two' => mapped
+        generateFakeId(OpportunityLineItem.getSObjectType()), // 'familiy two' => mapped
+        generateFakeId(OpportunityLineItem.getSObjectType()), // 'familiy three' => excluded
+        generateFakeId(OpportunityLineItem.getSObjectType()), // opportunity will be closed => excluded
+        generateFakeId(OpportunityLineItem.getSObjectType())  // opportunity will be closed => excluded
     };
 
     /**
@@ -703,7 +716,7 @@ public with sharing class MapUtility_MappingMainTest {
         // FAMILY_ONE
         PricebookEntry pbeOne = new PricebookEntry(
             Product2 = new Product2(
-                Id = fflib_IDGenerator.generate(Product2.getSObjectType()),
+                Id = generateFakeId(Product2.getSObjectType()),
                 Name = PRODUCT_NAME_ONE,
                 Family = FAMILY_ONE
         ));
@@ -711,14 +724,14 @@ public with sharing class MapUtility_MappingMainTest {
         // FAMILY_TWO
         PricebookEntry pbeTwo = new PricebookEntry(
             Product2 = new Product2(
-                Id = fflib_IDGenerator.generate(Product2.getSObjectType()),
+                Id = generateFakeId(Product2.getSObjectType()),
                 Name = PRODUCT_NAME_TWO,
                 Family = FAMILY_TWO
         ));
 
         PricebookEntry pbeThree = new PricebookEntry(
             Product2 = new Product2(
-                Id = fflib_IDGenerator.generate(Product2.getSObjectType()),
+                Id = generateFakeId(Product2.getSObjectType()),
                 Name = PRODUCT_NAME_THREE,
                 Family = FAMILY_TWO
         ));
@@ -726,18 +739,18 @@ public with sharing class MapUtility_MappingMainTest {
         // FAMILY_THREE
         PricebookEntry pbeFour = new PricebookEntry(
             Product2 = new Product2(
-                Id = fflib_IDGenerator.generate(Product2.getSObjectType()),
+                Id = generateFakeId(Product2.getSObjectType()),
                 Name = PRODUCT_NAME_FOUR,
                 Family = FAMILY_THREE
         ));
 
         Opportunity opportunityOpen = new Opportunity(
-            Id = fflib_IDGenerator.generate(Opportunity.getSObjectType()),
+            Id = generateFakeId(Opportunity.getSObjectType()),
             CloseDate = Date.today().addDays(10)
         );
 
         Opportunity opportunityClosed = new Opportunity(
-            Id = fflib_IDGenerator.generate(Opportunity.getSObjectType()),
+            Id = generateFakeId(Opportunity.getSObjectType()),
             CloseDate = Date.today().addDays(-1)
         );
 

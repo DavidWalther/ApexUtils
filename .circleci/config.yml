@@ -1,0 +1,230 @@
+version: 2.1
+
+orbs:
+  sfdx: circleci/salesforce-sfdx@2.2.0
+
+jobs:
+  install_authenticate:
+    executor: sfdx/default
+    steps:
+      - checkout
+      - sfdx/install
+      - sfdx/auth:
+          defaultusername: david@mcga.de
+      - run:
+          command: >
+            echo You now have access to the sfdx cli and may execute commands
+            against it.
+
+            sfdx auth:list
+          name: Run your SFDX commands here
+
+  try-caching:
+    executor: sfdx/default
+    steps:
+      - checkout
+      - sfdx/install
+      - sfdx/auth:
+          defaultusername: david@mcga.de
+      - run: touch authOrgs.json
+      - restore_cache:
+          key: -v1-{{ checksum "authOrgs.json" }}
+      - run: echo authOrgs.json
+      - run:
+          command: sfdx auth:list --json > authOrgs.json
+          name: getting and saving auth list
+      - save_cache:
+          key: -v1-{{ checksum "authOrgs.json" }}
+          paths:
+            - "authOrgs"
+
+  print-filesystem:
+    executor: sfdx/default
+    steps:
+      - sfdx/install
+      - sfdx/auth:
+          defaultusername: david@mcga.de
+      - run:
+          command: >
+              ls -la
+          name: printing filelist
+
+  create_scratch_org:
+    executor: sfdx/default
+    steps:
+      - checkout
+      - sfdx/install
+      - sfdx/auth:
+          defaultusername: david@mcga.de
+      - run:
+          command: >
+            ./scripts/deployment/createNewScratchOrg.sh sc-pkg-test 
+          name: creating scratch org
+      - run:
+          command: >
+            sfdx force:org:display -u sc-pkg-test --verbose
+          name: print VERBOSE org details
+          
+  node-access-filesystem:
+    executor: sfdx/default
+    steps:
+      - checkout
+      - sfdx/install
+      - run:
+          command: >
+            node --version
+          name: print node version
+      - run:
+          command: >
+            node ./scripts/deployment/node/writeChecksumFile.js
+          name: writing file for checksum
+      - run:
+          command: >
+              ls -la
+          name: printing filelist
+
+  node-create-cache-with-number:
+    executor: sfdx/default
+    steps:
+      - checkout
+      - sfdx/install
+      - run:
+          command: >
+            node ./scripts/deployment/node/writeChecksumFile.js
+          name: writing file for checksum
+      - restore_cache:
+          key: -v1-{{ checksum "checksum_24h.cache" }}
+      - run:
+          command: >
+            node ./scripts/deployment/node/writeRandomNumberToCache.js
+          name: write to cache
+      - save_cache:
+          key: -v1-{{ checksum "checksum_24h.cache" }}
+          paths:
+            - "cache"
+      - run:
+          command: >
+              ls -la
+          name: print cache
+
+  authenticate-or-create-scratch-org:
+    executor: sfdx/default
+    steps:
+      - checkout
+      - sfdx/install
+      - sfdx/auth:
+          defaultusername: david@mcga.de
+      - restore_cache:
+          key: -v1-node_modules
+      - run:
+          command: >
+            npm install sfdx-node
+          name: install sfdx-node
+      - save_cache:
+          key: -v1-node_modules
+          paths:
+            - "node_modules"
+      - run:
+          command: >
+            node scripts/deployment/sfdxNode/sfdxNodePrintOrgs.js
+          name: run display
+
+  connect-to-scratchOrg:
+    executor: sfdx/default
+    steps:
+      - checkout
+      - sfdx/install
+
+# install / restore node modules - Start          
+      - restore_cache:
+          key: -v1-node_modules
+      - run:
+          command: >
+            npm install sfdx-node
+          name: install sfdx-node
+      - save_cache:
+          key: -v1-node_modules
+          paths:
+            - "node_modules"
+# install / restore node modules - End
+
+# create file with current date to automatically drop scratchorg credentials
+      - run:
+          command: >
+            node ./scripts/deployment/node/writeChecksumFile.js
+          name: writing file for checksum
+
+
+  # create / restore credential file
+    # chaching - start
+      - restore_cache:
+          key: -v4-credentials-{{ checksum "checksum_24h.cache" }}
+
+      - sfdx/auth:
+          defaultusername: david@mcga.de
+
+      - run:
+          command: >
+            node scripts/deployment/node/scratchOrg_create.js tempScratchOrg
+          name: create scratch org
+
+      - run:
+          command: >
+            node scripts/deployment/node/scratchOrg_writeCache.js tempScratchOrg
+          name: retrieve and save scratch org credentials
+
+#      - run:
+#          command: >
+#            cp ~/.sfdx/* cache
+#          name: move credentials into cache
+
+      - save_cache:
+          key: -v4-credentials-{{ checksum "checksum_24h.cache" }}
+          paths:
+            - "cache"
+
+      - run:
+          command: >
+            node scripts/deployment/node/authorizeScratchOrgWithJwt.js tempScratchOrg
+          name: authorize via JWT
+
+      - run:
+          command: >
+            sfdx force:org:list --all
+          name: Show orgs
+
+      - run:
+          command: >
+            sfdx force:source:push --targetusername tempScratchOrg --forceoverwrite --wait 60
+          name: SFDX Push Changes
+
+      - run:
+          command: >
+            sfdx force:apex:test:run --targetusername tempScratchOrg --suitenames=MapUtilities --resultformat=human --codecoverage --wait 60
+          name: Apex Tests
+
+#      - run:
+#          command: >
+#            sfdx force:source:push --wait 60
+#          name: Deploy and Test
+
+#      - run:
+#          command: >
+#            sfdx force:apex:test:run --testlevel=RunLocalTests --resultformat=human --detailedcoverage --codecoverage --wait 60
+#          name: Deploy and Test
+
+# authorize with credential file
+
+workflows:
+  basic-test:
+    jobs:
+      - connect-to-scratchOrg
+#      - authenticate-or-create-scratch-org
+
+#      - node-create-cache-with-number
+#      - node-access-filesystem
+#      - install_authenticate
+#      - create_scratch_org
+# - try-caching
+#      - print-filesystem
+# node-access-filesystem
