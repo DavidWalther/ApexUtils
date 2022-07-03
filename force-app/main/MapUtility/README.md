@@ -186,14 +186,12 @@ For further examples see class `MapUtility_MappingMainTest`.
 
 | Sandbox | Production | 
 | --- | --- |
-| [fflib](https://test.salesforce.com/packaging/installPackage.apexp?p0=04t2o000000yUWwAAM) | [fflib](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t2o000000yUWwAAM) |
 | [Core](https://test.salesforce.com/packaging/installPackage.apexp?p0=04t2o000000yUX6AAM) | [Core](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t2o000000yUX6AAM) |
 | [Mapping](https://test.salesforce.com/packaging/installPackage.apexp?p0=04t2o000000yUXGAA2) | [Mapping](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t2o000000yUWmAAM) |
 
 ### **Package versions**
 | Packagen | Version | Id| Promoted | Highlight |
 | --- | --- | --- | --- | --- |
-| fflib | 1.0.0-1 | 04t2o000000yUWwAAM |yes | package to separate fflib items from core package |
 | Core | 1.0.0-2 | 04t2o000000yUVjAAM |yes | Original logic |
 | Core | 1.1.0-1 | 04t2o000000yUVyAAM |yes | make value reader return 'Object' instead of 'String' |
 | Core | 1.3.0-1 | 04t2o000000yUX6AAM |no | remove fflib items   |
@@ -203,6 +201,7 @@ For further examples see class `MapUtility_MappingMainTest`.
 | Mapping | 2.1.0-2 | 04t2o000000yUWcAAM |no | move interfaces into main class |
 | Mapping | 3.0.0-1 | 04t2o000000yUWmAAM |yes | Create an interface to evaluate entries |
 | Mapping | 3.1.0-2 | 04t2o000000yUXGAA2 |no | Create an interface to evaluate entries |
+| Mapping | 3.2.0-1 | 04t2o000000yUXLAA2 |yes | Create an interface to evaluate entries |
 
 ### Installation via SFDX
 
