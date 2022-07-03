@@ -191,7 +191,6 @@ For further examples see class `MapUtility_MappingMainTest`.
 ## **Packages**
 
 ### Installation order
-  1. fflib
   1. Core
   1. Mapping
 
