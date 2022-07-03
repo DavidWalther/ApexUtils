@@ -3,7 +3,7 @@
 #
 
 package.xml
-README.md
+**/README.md
 
 # LWC configuration files
 **/jsconfig.json
@@ -11,3 +11,6 @@ README.md
 
 # LWC Jest
 **/__tests__/**
+
+# Connected Apps
+**/connectedApps/**
