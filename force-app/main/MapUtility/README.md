@@ -208,7 +208,7 @@ For further examples see class `MapUtility_MappingMainTest`.
 | --- | --- | --- | --- | --- |
 | Core | 1.0.0-2 | 04t2o000000yUVjAAM |yes | Original logic |
 | Core | 1.1.0-1 | 04t2o000000yUVyAAM |yes | make value reader return 'Object' instead of 'String' |
-| Core | 1.3.0-1 | 04t2o000000yUX6AAM |no | remove fflib items   |
+| Core | 1.3.0-1 | 04t2o000000yUX6AAM |yes | remove fflib items   |
 | Mapping | 1.0.0-2 | 04t2o000000yUVeAAM |yes| Original logic |
 | Mapping | 1.1.0-2 | 04t2o000000yUW3AAM |yes | create map with 'Object' key instead of 'String' |
 | Mapping | 2.0.0-1 | 04t2o000000yUWSAA2 |yes | replace map options |
