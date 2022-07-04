@@ -158,7 +158,7 @@ jobs:
   # create / restore credential file
     # chaching - start
       - restore_cache:
-          key: -v4-credentials-{{ checksum "checksum_24h.cache" }}
+          key: -v1-credentials-{{ checksum "checksum_24h.cache" }}
 
       - sfdx/auth:
           defaultusername: david@mcga.de
@@ -184,7 +184,7 @@ jobs:
 #          name: move credentials into cache
 
       - save_cache:
-          key: -v4-credentials-{{ checksum "checksum_24h.cache" }}
+          key: -v1-credentials-{{ checksum "checksum_24h.cache" }}
           paths:
             - "cache"
 
