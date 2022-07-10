@@ -53,6 +53,52 @@ The four highlighted elements are the parts that are special for each map:
 * `keyEvaluators`: a List of `MapUtility_MappingMain.IncludeItemKeyInMapInterface` to define criteria for the evaluation of every item key
 * `itemFilters`: A list `MapUtility_MappingMain.IncludeItemInMapInterface` to define criteria for the evaluation of every item
 
+### Examples
+
+#### Map by field values retaining all entries (`MAP_RETAIN_MODE.RETAIN_ALL`)
+
+    List<Lead> leadToCreateMapFrom;
+    ...
+    Map<Object, List<Object>> mappedEntries = new MapUtility_MappingMain().generateMapFromObjectList(
+      sObjectsToCreateMapFrom, 
+      new FieldValueReader(Lead.Company),
+      MAP_RETAIN_MODE.RETAIN_ALL,
+      new List<MapUtility_MappingMain.IncludeItemKeyInMapInterface>(),
+      new List<MapUtility_MappingMain.IncludeItemInMapInterface>()
+    );
+
+#### Map by field values retaining last entry (`MAP_RETAIN_MODE.RETAIN_LAST`)
+
+    List<Lead> leadToCreateMapFrom;
+    ...
+    Map<Object, SObject> mappedEntries = new MapUtility_MappingMain().generateMapFromObjectList(
+      sObjectsToCreateMapFrom, 
+      new FieldValueReader(Lead.Company),
+      MAP_RETAIN_MODE.RETAIN_LAST,
+      new List<MapUtility_MappingMain.IncludeItemKeyInMapInterface>(),
+      new List<MapUtility_MappingMain.IncludeItemInMapInterface>());
+
+#### Map by field values retaining all entries and keep only some mapping keys ( `MAP_RETAIN_MODE.RETAIN_LAST`, `MapUtility_MappingMain.IncludeItemKeyInMapInterface` )
+
+    List<Lead> leadToCreateMapFrom;
+    Set<Object> companiesToKeep = new Set<Object>{'ACME Inc.', 'Universal Containers'};
+    ...
+    Map<Object, List<Object>> mappedEntries = new MapUtility_MappingMain().generateMapFromObjectList(
+      sObjectsToCreateMapFrom, 
+      new FieldValueReader(Lead.Company),
+      MAP_RETAIN_MODE.RETAIN_LAST,
+      new List<MapUtility_MappingMain.IncludeItemKeyInMapInterface>{
+        new MapUtility_ItemEvalImplementations.IncludeOnly(companiesToKeep);
+        
+      },
+      new List<MapUtility_MappingMain.IncludeItemInMapInterface>());
+
+
+
+
+
+
+
 #### **1. `enum: MAP_RETAIN_MODE`**
 
 There are three mutual exclusive ways to store data inside a map. Each of these ways is represented by a member of the enum `MAP_RETAIN_MODE`:
