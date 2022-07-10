@@ -18,8 +18,8 @@
             "path": "force-app/main/MapUtility",
             "default": false,
             "package": "ApexUtilities-Mapping",
-            "versionNumber": "3.2.0.NEXT",
-            "versionName": "remove dependency of fflib",
+            "versionNumber": "4.0.0.NEXT",
+            "versionName": "Remove enum MAP_OPTION",
             "dependencies": [
                 {
                     "package": "ApexUtilities-Core",
@@ -53,6 +53,7 @@
         "ApexUtilities-Mapping@2.1.0-2": "04t2o000000yUWcAAM",
         "ApexUtilities-Mapping@3.0.0-1": "04t2o000000yUWmAAM",
         "ApexUtilities-Mapping@3.1.0-2": "04t2o000000yUXGAA2",
-        "ApexUtilities-Mapping@3.2.0-1": "04t2o000000yUXLAA2"
+        "ApexUtilities-Mapping@3.2.0-1": "04t2o000000yUXLAA2",
+        "ApexUtilities-Mapping@4.0.0-1": "04t2o000000yUXQAA2"
     }
 }
