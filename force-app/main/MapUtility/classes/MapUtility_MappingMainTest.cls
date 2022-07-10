@@ -61,8 +61,8 @@ public with sharing class MapUtility_MappingMainTest {
             leadList,
             new LeadCompanyReader(),
             MAP_RETAIN_MODE.RETAIN_ALL,
-            new Set<MAP_OPTIONS>(),
-            new Set<Object>()
+            new List<MapUtility_MappingMain.IncludeItemKeyInMapInterface>(),
+            new List<MapUtility_MappingMain.IncludeItemInMapInterface>()
         );
 
         Test.stopTest();
@@ -123,8 +123,8 @@ public with sharing class MapUtility_MappingMainTest {
             leadList,
             new LeadCompanyReader(),
             MAP_RETAIN_MODE.RETAIN_FIRST,
-            new Set<MAP_OPTIONS>(),
-            new Set<Object>()
+            new List<MapUtility_MappingMain.IncludeItemKeyInMapInterface>(),
+            new List<MapUtility_MappingMain.IncludeItemInMapInterface>()
         );
         Test.stopTest();
 
@@ -183,8 +183,8 @@ public with sharing class MapUtility_MappingMainTest {
             leadList,
             new LeadCompanyReader(),
             MAP_RETAIN_MODE.RETAIN_LAST,
-            new Set<MAP_OPTIONS>(),
-            new Set<Object>()
+            new List<MapUtility_MappingMain.IncludeItemKeyInMapInterface>(),
+            new List<MapUtility_MappingMain.IncludeItemInMapInterface>()
         );
         Test.stopTest();
 
@@ -264,8 +264,8 @@ public with sharing class MapUtility_MappingMainTest {
             integerpairs,
             new ModValueReader(),
             MAP_RETAIN_MODE.RETAIN_ALL,
-            new Set<MAP_OPTIONS>(),
-            new Set<Object>()
+            new List<MapUtility_MappingMain.IncludeItemKeyInMapInterface>(),
+            new List<MapUtility_MappingMain.IncludeItemInMapInterface>()
         );
         Test.stopTest();
 
@@ -309,8 +309,8 @@ public with sharing class MapUtility_MappingMainTest {
             integerpairs,
             new ModValueReader(),
             MAP_RETAIN_MODE.RETAIN_FIRST,
-            new Set<MAP_OPTIONS>(),
-            new Set<Object>()
+            new List<MapUtility_MappingMain.IncludeItemKeyInMapInterface>(),
+            new List<MapUtility_MappingMain.IncludeItemInMapInterface>()
         );
         Test.stopTest();
 
@@ -349,8 +349,8 @@ public with sharing class MapUtility_MappingMainTest {
             integerpairs,
             new ModValueReader(),
             MAP_RETAIN_MODE.RETAIN_LAST,
-            new Set<MAP_OPTIONS>(),
-            new Set<Object>()
+            new List<MapUtility_MappingMain.IncludeItemKeyInMapInterface>(),
+            new List<MapUtility_MappingMain.IncludeItemInMapInterface>()
         );
         Test.stopTest();
 
@@ -399,8 +399,8 @@ public with sharing class MapUtility_MappingMainTest {
                 leadList,
                 new LeadCompanyReader(),
                 MAP_RETAIN_MODE.RETAIN_ALL,
-                new Set<MAP_OPTIONS>(),
-                new Set<Object>()
+                new List<MapUtility_MappingMain.IncludeItemKeyInMapInterface>(),
+                new List<MapUtility_MappingMain.IncludeItemInMapInterface>()
             );
 
         } catch(System.Exception exc) {
@@ -443,8 +443,8 @@ public with sharing class MapUtility_MappingMainTest {
                 leadList,
                 new LeadCompanyReader(),
                 MAP_RETAIN_MODE.RETAIN_LAST,
-                new Set<MAP_OPTIONS>(),
-                new Set<Object>()
+                new List<MapUtility_MappingMain.IncludeItemKeyInMapInterface>(),
+                new List<MapUtility_MappingMain.IncludeItemInMapInterface>()
             );
 
         } catch(System.Exception exc) {
@@ -485,8 +485,10 @@ public with sharing class MapUtility_MappingMainTest {
                 leadList,
                 new LeadCompanyReader(),
                 MAP_RETAIN_MODE.RETAIN_LAST,
-                new Set<MAP_OPTIONS>{MAP_OPTIONS.KEY_IGNORE_NULL},
-                new Set<Object>()
+                new List<MapUtility_MappingMain.IncludeItemKeyInMapInterface>{
+                    new MapUtility_ItemEvalImplementations.IgnoreKeyNull()
+                },
+                new List<MapUtility_MappingMain.IncludeItemInMapInterface>()
             );
             leadToCheck = (Lead)notTypecastedLeadMap.values().get(0);
         } catch (System.Exception exc) {
@@ -532,8 +534,10 @@ public with sharing class MapUtility_MappingMainTest {
             leadList,
             new LeadCompanyReader(),
             MAP_RETAIN_MODE.RETAIN_LAST,
-            new Set<MAP_OPTIONS>{MAP_OPTIONS.KEY_IGNORE_NULL},
-            new Set<Object>()
+            new List<MapUtility_MappingMain.IncludeItemKeyInMapInterface>{
+                new MapUtility_ItemEvalImplementations.IgnoreKeyNull()
+            },
+            new List<MapUtility_MappingMain.IncludeItemInMapInterface>()
         );
         Test.stopTest();
 
@@ -576,8 +580,10 @@ public with sharing class MapUtility_MappingMainTest {
             leadList,
             new LeadCompanyReader(),
             MAP_RETAIN_MODE.RETAIN_ALL,
-            new Set<MAP_OPTIONS>{MAP_OPTIONS.KEY_INCLUDE_ONLY},
-            keysForMapping
+            new List<MapUtility_MappingMain.IncludeItemKeyInMapInterface>{
+                new MapUtility_ItemEvalImplementations.IncludeOnly(keysForMapping)
+            },
+            new List<MapUtility_MappingMain.IncludeItemInMapInterface>()
         );
         Test.stopTest();
 
