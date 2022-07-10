@@ -171,7 +171,7 @@ For further examples see class `MapUtility_MappingMainTest`.
 | Sandbox | Production | 
 | --- | --- |
 | [Core](https://test.salesforce.com/packaging/installPackage.apexp?p0=04t2o000000yUX6AAM) | [Core](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t2o000000yUX6AAM) |
-| [Mapping](https://test.salesforce.com/packaging/installPackage.apexp?p0=04t2o000000yUXLAA2) | [Mapping](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t2o000000yUXLAA2) |
+| [Mapping](https://test.salesforce.com/packaging/installPackage.apexp?p0=04t2o000000yUWwAAM) | [Mapping](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t2o000000yUWwAAM) |
 
 ### **Package versions**
 | Packagen | Version | Id| Promoted | Highlight |
