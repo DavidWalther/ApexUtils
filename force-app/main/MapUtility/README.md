@@ -53,24 +53,75 @@ The four highlighted elements are the parts that are special for each map:
 * `keyEvaluators`: a List of `MapUtility_MappingMain.IncludeItemKeyInMapInterface` to define criteria for the evaluation of every item key
 * `itemFilters`: A list `MapUtility_MappingMain.IncludeItemInMapInterface` to define criteria for the evaluation of every item
 
-**_Depricated:_**
+### Examples
 
-      Map<String, Object> result = MapUtility_MappingMain.generateMapFromObjectList(
-        List<Object> objects,
-        IValueReader valueReader,
-        MAP_RETAIN_MODE retainingMode,
-        Set<MAP_OPTIONS> mapOptions,
-        Set<String> keySet
-      )
+#### Map by field values retaining all entries (`MAP_RETAIN_MODE.RETAIN_ALL`)
 
-**Parameters**
-* `objects`: List of objects to create the map of. This can be SObjects or Objects
-* `valueReader`: the ValueReader **instance** to use for getting mapping keys for each entry in `objects`
-* `retainingMode`: an enum value to specify which items to keep
-* `mapOptions`: a Set of `MAP_OPTIONS` to define more key-specific behavior
-* `keySet`: a Set of value to use for on `MAP_OPTIONS.KEY_INCLUDE_ONLY`
+    List<Lead> leadToCreateMapFrom;
+    ...
+    Map<Object, List<Object>> mappedEntries = new MapUtility_MappingMain().generateMapFromObjectList(
+      sObjectsToCreateMapFrom, 
+      new FieldValueReader(Lead.Company),
+      MAP_RETAIN_MODE.RETAIN_ALL,
+      new List<MapUtility_MappingMain.IncludeItemKeyInMapInterface>(),
+      new List<MapUtility_MappingMain.IncludeItemInMapInterface>()
+    );
 
-#### **1. `enum: MAP_RETAIN_MODE`**
+#### Map by field values retaining last entry (`MAP_RETAIN_MODE.RETAIN_LAST`)
+
+    List<Lead> leadToCreateMapFrom;
+    ...
+    Map<Object, SObject> mappedEntries = new MapUtility_MappingMain().generateMapFromObjectList(
+      sObjectsToCreateMapFrom, 
+      new FieldValueReader(Lead.Company),
+      MAP_RETAIN_MODE.RETAIN_LAST,
+      new List<MapUtility_MappingMain.IncludeItemKeyInMapInterface>(),
+      new List<MapUtility_MappingMain.IncludeItemInMapInterface>());
+
+#### Map by field values retaining all entries AND keep only some mapping keys ( `MAP_RETAIN_MODE.RETAIN_LAST`, `MapUtility_MappingMain.IncludeItemKeyInMapInterface` )
+
+    List<Lead> leadToCreateMapFrom;
+    Set<Object> companiesToKeep = new Set<Object>{'ACME Inc.', 'Universal Containers'};
+    ...
+    Map<Object, List<Object>> mappedEntries = new MapUtility_MappingMain().generateMapFromObjectList(
+      sObjectsToCreateMapFrom, 
+      new FieldValueReader(Lead.Company),
+      MAP_RETAIN_MODE.RETAIN_LAST,
+      new List<MapUtility_MappingMain.IncludeItemKeyInMapInterface>{
+        new MapUtility_ItemEvalImplementations.IncludeOnly(companiesToKeep);
+        
+      },
+      new List<MapUtility_MappingMain.IncludeItemInMapInterface>());
+
+#### Map by field values retaining all entries **AND** keep only some mapping keys **AND** exclude leads of inactive users (owners)  ( `MAP_RETAIN_MODE.RETAIN_LAST`, `MapUtility_MappingMain.IncludeItemKeyInMapInterface` )
+
+    public class ExcluceIfOwnerIsInactive implements MapUtility_MappingMain.IncludeItemInMapInterface {
+
+        Boolean isIncludeItem(Object itemToCheckForInclusion) {
+          Lead leadToCheck = (Lead)itemToCheckForInclusion;
+          return leadToCheck?.Owner?.isActive == true;
+        }
+    }
+    ...
+    List<Lead> leadToCreateMapFrom;
+    Set<Object> companiesToKeep = new Set<Object>{'ACME Inc.', 'Universal Containers'};
+    ...
+    Map<Object, List<Object>> mappedEntries = new MapUtility_MappingMain().generateMapFromObjectList(
+      sObjectsToCreateMapFrom, 
+      new FieldValueReader(Lead.Company),
+      MAP_RETAIN_MODE.RETAIN_LAST,
+      new List<MapUtility_MappingMain.IncludeItemKeyInMapInterface>{
+        new MapUtility_ItemEvalImplementations.IncludeOnly(companiesToKeep);
+        
+      },
+      new List<MapUtility_MappingMain.IncludeItemInMapInterface>{
+        new ExcluceIfOwnerIsInactive();
+    });
+
+
+---
+
+#### **`enum: MAP_RETAIN_MODE`**
 
 There are three mutual exclusive ways to store data inside a map. Each of these ways is represented by a member of the enum `MAP_RETAIN_MODE`:
 
@@ -80,7 +131,7 @@ There are three mutual exclusive ways to store data inside a map. Each of these 
 * `RETAIN_LAST`: specifies to keep the last item for a specific 'mapping key'
 * `RETAIN_ALL`: specifies to keep the all items for a specific 'mapping key' in a collection for each one
 
-#### **2. `interface: IValueReader`**
+#### **`interface: IValueReader`**
 
 The complexity of reading the 'mapping key' of an object can variy from object to object. It can be as simple as reading the value of a certain sObjectField or it can be the the result of a function call based on multiple values.
 But regardless of the way a 'mapping key' is read it is always the result of an action specific to an individual item. This abstraction is taken into account by the `IValueReader` interface:
@@ -91,7 +142,7 @@ But regardless of the way a 'mapping key' is read it is always the result of an 
 
 This simple interface provides the neccessary abstraction for a generic way to read a 'mapping key' from an object.
 
-#### **3. `interface: MapUtility_MappingMain.IncludeItemKeyInMapInterface`**
+#### **`interface: MapUtility_MappingMain.IncludeItemKeyInMapInterface`**
 
 This interface is used to identify whether to include a calculated key in the mapping or not.
 
@@ -99,21 +150,8 @@ This interface is used to identify whether to include a calculated key in the ma
       Boolean isIncludeItemKey(Object keyToEvaluate);
     }
 
-#### **(`enum: MAP_OPTIONS`)** **_Depricated_** use ```MapUtility_MappingMain.IncludeItemKeyInMapInterface``` instead
 
-Sometimes a special behavior is required on specific 'mapping keys'. This can be defined by using specific values of the enum `MAP_OPTIONS`. These Options can be combined if required.
-
-    public enum MAP_OPTIONS {KEY_IGNORE_NULL, KEY_INCLUDE_ONLY}
-
-* `KEY_IGNORE_NULL`: option to ignore an item if `IValueReader.getValue` returns `NULL`
-* `KEY_INCLUDE_ONLY`: option to only add an item to map if the result of `IValueReader.getValue` is in a predefined set
-
-**_Note:_**
-There is currently no option to _exclude_ specific keys. Yet there is a Workaround:
-* set `MAP_OPTIONS.KEY_IGNORE_NULL`  
-* define a custom `IValueReader` with `getValue` returning `NULL` on undesired keys
-
-#### **4. `interface: MapUtility_MappingMain.IncludeItemInMapInterface`**
+#### **`interface: MapUtility_MappingMain.IncludeItemInMapInterface`**
 
 This interface is used to evaluate whether an item should even be considered to be added to the map.
 
@@ -201,7 +239,7 @@ For further examples see class `MapUtility_MappingMainTest`.
 | Sandbox | Production | 
 | --- | --- |
 | [Core](https://test.salesforce.com/packaging/installPackage.apexp?p0=04t2o000000yUX6AAM) | [Core](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t2o000000yUX6AAM) |
-| [Mapping](https://test.salesforce.com/packaging/installPackage.apexp?p0=04t2o000000yUXLAA2) | [Mapping](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t2o000000yUXLAA2) |
+| [Mapping](https://test.salesforce.com/packaging/installPackage.apexp?p0=04t2o000000yUWwAAM) | [Mapping](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t2o000000yUWwAAM) |
 
 ### **Package versions**
 | Packagen | Version | Id| Promoted | Highlight |
@@ -216,6 +254,7 @@ For further examples see class `MapUtility_MappingMainTest`.
 | Mapping | 3.0.0-1 | 04t2o000000yUWmAAM |yes | Create an interface to evaluate entries |
 | Mapping | 3.1.0-2 | 04t2o000000yUXGAA2 |no | Create an interface to evaluate entries |
 | Mapping | 3.2.0-1 | 04t2o000000yUXLAA2 |yes | Create an interface to evaluate entries |
+| Mapping | 4.0.0-1 | 04t2o000000yUWwAAM |no | Remove enum MAP_OPTION |
 
 ### Installation via SFDX
 
