@@ -31,24 +31,6 @@ public with sharing class MapUtility_MappingMain {
     // Logic
     //----------------------------
 
-    // Depricated
-    public Map<Object, Object> generateMapFromObjectList(List<Object> objects, IValueReader valueReader, MAP_RETAIN_MODE retainingMode, Set<MAP_OPTIONS> mapOptions, Set<Object> keySet) {
-    
-        //----------------------------
-        // Guardians
-        //----------------------------
-
-        if(mapOptions == NULL) throw new MapUtility_Exception('A set of mapOptions must be provided');
-        if(keySet == NULL) throw new MapUtility_Exception('A set of keys to in-/exclude must be provided');
-
-        //----------------------------
-        // Business logic
-        //----------------------------
-        List<IncludeItemKeyInMapInterface> keyEvaluators = this.createKeyEvaluatorsFromMapOptions(mapOptions, keySet);
-        List<MapUtility_MappingMain.IncludeItemInMapInterface> itemFilters = new List<MapUtility_MappingMain.IncludeItemInMapInterface>();
-        return this.generateMapFromObjectList(objects, valueReader, retainingMode, keyEvaluators, itemFilters);
-    }
-
     public Map<Object, Object> generateMapFromObjectList(List<Object> objects, IValueReader valueReader, MAP_RETAIN_MODE retainingMode, List<IncludeItemKeyInMapInterface> keyEvaluators, List<MapUtility_MappingMain.IncludeItemInMapInterface> itemFilters) {
     
         //----------------------------
@@ -70,18 +52,5 @@ public with sharing class MapUtility_MappingMain {
 
         MapUtility_MappingMain.MapUtility_TypeConverterInterface typeConverter = new MapUtility_TypeConverterFactory().getProduct(retainingMode, objects);
         return typeConverter.convertMappingResult(tempMap);
-    }
-
-    private List<IncludeItemKeyInMapInterface> createKeyEvaluatorsFromMapOptions(Set<MAP_OPTIONS> mapOptions, Set<Object> keySet) {
-        List<IncludeItemKeyInMapInterface> keyEvaluators = new List<IncludeItemKeyInMapInterface>();
-
-        if(mapOptions.contains(MAP_OPTIONS.KEY_IGNORE_NULL)) {
-            keyEvaluators.add(new MapUtility_ItemEvalImplementations.IgnoreKeyNull());
-        }
-        if(mapOptions.contains(MAP_OPTIONS.KEY_INCLUDE_ONLY)) {
-            keyEvaluators.add(new MapUtility_ItemEvalImplementations.IncludeOnly(keySet));
-        }
-
-        return keyEvaluators;
     }
 }
