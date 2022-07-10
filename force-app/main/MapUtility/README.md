@@ -53,23 +53,6 @@ The four highlighted elements are the parts that are special for each map:
 * `keyEvaluators`: a List of `MapUtility_MappingMain.IncludeItemKeyInMapInterface` to define criteria for the evaluation of every item key
 * `itemFilters`: A list `MapUtility_MappingMain.IncludeItemInMapInterface` to define criteria for the evaluation of every item
 
-**_Depricated:_**
-
-      Map<String, Object> result = MapUtility_MappingMain.generateMapFromObjectList(
-        List<Object> objects,
-        IValueReader valueReader,
-        MAP_RETAIN_MODE retainingMode,
-        Set<MAP_OPTIONS> mapOptions,
-        Set<String> keySet
-      )
-
-**Parameters**
-* `objects`: List of objects to create the map of. This can be SObjects or Objects
-* `valueReader`: the ValueReader **instance** to use for getting mapping keys for each entry in `objects`
-* `retainingMode`: an enum value to specify which items to keep
-* `mapOptions`: a Set of `MAP_OPTIONS` to define more key-specific behavior
-* `keySet`: a Set of value to use for on `MAP_OPTIONS.KEY_INCLUDE_ONLY`
-
 #### **1. `enum: MAP_RETAIN_MODE`**
 
 There are three mutual exclusive ways to store data inside a map. Each of these ways is represented by a member of the enum `MAP_RETAIN_MODE`:
@@ -99,19 +82,6 @@ This interface is used to identify whether to include a calculated key in the ma
       Boolean isIncludeItemKey(Object keyToEvaluate);
     }
 
-#### **(`enum: MAP_OPTIONS`)** **_Depricated_** use ```MapUtility_MappingMain.IncludeItemKeyInMapInterface``` instead
-
-Sometimes a special behavior is required on specific 'mapping keys'. This can be defined by using specific values of the enum `MAP_OPTIONS`. These Options can be combined if required.
-
-    public enum MAP_OPTIONS {KEY_IGNORE_NULL, KEY_INCLUDE_ONLY}
-
-* `KEY_IGNORE_NULL`: option to ignore an item if `IValueReader.getValue` returns `NULL`
-* `KEY_INCLUDE_ONLY`: option to only add an item to map if the result of `IValueReader.getValue` is in a predefined set
-
-**_Note:_**
-There is currently no option to _exclude_ specific keys. Yet there is a Workaround:
-* set `MAP_OPTIONS.KEY_IGNORE_NULL`  
-* define a custom `IValueReader` with `getValue` returning `NULL` on undesired keys
 
 #### **4. `interface: MapUtility_MappingMain.IncludeItemInMapInterface`**
 
