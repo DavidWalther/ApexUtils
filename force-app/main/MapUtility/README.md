@@ -257,7 +257,7 @@ For further examples see class `MapUtility_MappingMainTest`.
 | Mapping | 3.0.0-1 | 04t2o000000yUWmAAM |yes | Create an interface to evaluate entries |
 | Mapping | 3.1.0-2 | 04t2o000000yUXGAA2 |no | Create an interface to evaluate entries |
 | Mapping | 3.2.0-1 | 04t2o000000yUXLAA2 |yes | Create an interface to evaluate entries |
-| Mapping | 4.0.0-1 | 04t2o000000yUWwAAM |no | Remove enum MAP_OPTION |
+| Mapping | 4.0.0-1 | 04t2o000000yUWwAAM |yes | Remove enum MAP_OPTION |
 
 ### Installation via SFDX
 
