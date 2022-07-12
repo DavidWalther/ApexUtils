@@ -29,6 +29,11 @@ jobs:
             node ./scripts/deployment/node/writeChecksumFile.js
           name: writing file for checksum
 
+      - run:
+          command: |
+            mkdir tmp
+            mkdir tmp/artifacts
+          name: create folder for artifacts 
 
   # create / restore credential file
     # chaching - start
@@ -40,8 +45,12 @@ jobs:
 
       - run:
           command: >
-            sfdx force:limits:api:display -u david@mcga.de
+            sfdx force:limits:api:display -u david@mcga.de > tmp/artifacts/limitsBefore.txt
           name: print org limits
+
+      - store_artifacts:
+          path: tmp/artifacts/limitsBefore.txt
+          destination: Limits Before
 
       - run:
           command: >
@@ -79,6 +88,14 @@ jobs:
             sfdx force:apex:test:run --targetusername tempScratchOrg --suitenames=MapUtilities --resultformat=human --codecoverage --wait 60
           name: Apex Tests
 
+      - run:
+          command: >
+            sfdx force:limits:api:display -u david@mcga.de > tmp/artifacts/limitsAfter.txt
+          name: print org limits
+
+      - store_artifacts:
+          path: tmp/artifacts/limitsAfter.txt
+          destination: Limits After
 workflows:
   basic-test:
     jobs:
