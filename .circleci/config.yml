@@ -85,7 +85,7 @@ jobs:
 
       - run:
           command: >
-            sfdx force:apex:test:run --targetusername tempScratchOrg --suitenames=MapUtilities --resultformat=human --codecoverage --wait 60 > tmp/artifacts/testResults.txt          name: Apex Tests
+            sfdx force:apex:test:run --targetusername tempScratchOrg --suitenames=MapUtilities --resultformat=human --codecoverage --wait 60 > tmp/artifacts/testResults.txt
 
       - store_artifacts:
           path: tmp/artifacts/testResults.txt
