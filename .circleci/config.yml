@@ -46,11 +46,7 @@ jobs:
       - run:
           command: >
             sfdx force:limits:api:display -u david@mcga.de > tmp/artifacts/limitsBefore.txt
-          name: print org limits
-
-      - store_artifacts:
-          path: tmp/artifacts/limitsBefore.txt
-          destination: Org Limits - Before
+          name: print org limits 
 
       - run:
           command: >
@@ -87,18 +83,14 @@ jobs:
           command: >
             sfdx force:apex:test:run --targetusername tempScratchOrg --suitenames=MapUtilities --resultformat=human --codecoverage --wait 60 > tmp/artifacts/testResults.txt
 
-      - store_artifacts:
-          path: tmp/artifacts/testResults.txt
-          destination: Testresults
-
       - run:
           command: >
             sfdx force:limits:api:display -u david@mcga.de > tmp/artifacts/limitsAfter.txt
           name: print org limits
 
       - store_artifacts:
-          path: tmp/artifacts/limitsAfter.txt
-          destination: Org Limits - After
+          path: tmp/artifacts/
+
 workflows:
   basic-test:
     jobs:
