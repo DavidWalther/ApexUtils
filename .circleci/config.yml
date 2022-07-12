@@ -50,7 +50,7 @@ jobs:
 
       - store_artifacts:
           path: tmp/artifacts/limitsBefore.txt
-          destination: Limits Before
+          destination: Org Limits - Before
 
       - run:
           command: >
@@ -85,8 +85,11 @@ jobs:
 
       - run:
           command: >
-            sfdx force:apex:test:run --targetusername tempScratchOrg --suitenames=MapUtilities --resultformat=human --codecoverage --wait 60
-          name: Apex Tests
+            sfdx force:apex:test:run --targetusername tempScratchOrg --suitenames=MapUtilities --resultformat=human --codecoverage --wait 60 > tmp/artifacts/testResults.txt          name: Apex Tests
+
+      - store_artifacts:
+          path: tmp/artifacts/testResults.txt
+          destination: Testresults
 
       - run:
           command: >
@@ -95,7 +98,7 @@ jobs:
 
       - store_artifacts:
           path: tmp/artifacts/limitsAfter.txt
-          destination: Limits After
+          destination: Org Limits - After
 workflows:
   basic-test:
     jobs:
