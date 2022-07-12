@@ -178,15 +178,11 @@ jobs:
             node scripts/deployment/node/scratchOrg_writeCache.js tempScratchOrg
           name: retrieve and save scratch org credentials
 
-#      - run:
-#          command: >
-#            cp ~/.sfdx/* cache
-#          name: move credentials into cache
-
       - save_cache:
           key: -v1-credentials-{{ checksum "checksum_24h.cache" }}
           paths:
             - "cache"
+# chaching scratch org credentials - end
 
       - run:
           command: >
@@ -208,28 +204,7 @@ jobs:
             sfdx force:apex:test:run --targetusername tempScratchOrg --suitenames=MapUtilities --resultformat=human --codecoverage --wait 60
           name: Apex Tests
 
-#      - run:
-#          command: >
-#            sfdx force:source:push --wait 60
-#          name: Deploy and Test
-
-#      - run:
-#          command: >
-#            sfdx force:apex:test:run --testlevel=RunLocalTests --resultformat=human --detailedcoverage --codecoverage --wait 60
-#          name: Deploy and Test
-
-# authorize with credential file
-
 workflows:
   basic-test:
     jobs:
       - connect-to-scratchOrg
-#      - authenticate-or-create-scratch-org
-
-#      - node-create-cache-with-number
-#      - node-access-filesystem
-#      - install_authenticate
-#      - create_scratch_org
-# - try-caching
-#      - print-filesystem
-# node-access-filesystem
