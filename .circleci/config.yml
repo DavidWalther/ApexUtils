@@ -27,7 +27,11 @@ jobs:
           paths:
             - "node_modules"
 # install / restore node modules - End
- 
+      - run:
+          command: |
+            pwd
+            ls -la
+          name: print Filesystem 
              
 
   connect-to-scratchOrg:
