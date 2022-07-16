@@ -15,18 +15,11 @@ jobs:
       - checkout
       - sfdx/install
 
-# install / restore node modules - Start          
-      - restore_cache:
-          key: -v1-node_modules
       - run:
           command: >
             npm install sfdx-node
           name: install sfdx-node
-      - save_cache:
-          key: -v1-node_modules
-          paths:
-            - "node_modules"
-# install / restore node modules - End
+
       - run:
           command: |
             pwd
