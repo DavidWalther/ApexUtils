@@ -51,8 +51,13 @@ jobs:
             pwd
             ls -la
           name: print Filesystem
-        
-
+      - sfdx/auth:
+          defaultusername: david@mcga.de        
+      - run:
+          command: |
+            pwd
+            ls -la
+          name: print Filesystem
 
   connect-to-scratchOrg:
     executor: sfdx/default
