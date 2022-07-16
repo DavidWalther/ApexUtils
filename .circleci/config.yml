@@ -43,7 +43,7 @@ jobs:
   downstream-job:
     executor: sfdx/default
     steps:
-       - attach_workspace:
+      - attach_workspace:
           # Must be absolute path or relative path from working_directory
           at: ./
       - run:
