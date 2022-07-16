@@ -43,15 +43,15 @@ jobs:
   downstream-job:
     executor: sfdx/default
     steps:
-      - run:
-        - attach_workspace:
+       - attach_workspace:
           # Must be absolute path or relative path from working_directory
-          at: /tmp/workspace            
+          at: ./
+      - run:
           command: |
             pwd
             ls -la
           name: print Filesystem
-      
+        
 
 
   connect-to-scratchOrg:
