@@ -25,8 +25,6 @@ jobs:
             pwd
             ls -la
           name: print Filesystem 
-      - sfdx/auth:
-          defaultusername: david@mcga.de
 
       - persist_to_workspace:
           # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
