@@ -4,6 +4,16 @@ orbs:
   sfdx: circleci/salesforce-sfdx@2.2.0
 
 jobs:
+  upstream-job
+    executor: sfdx/default
+    steps:
+      - run:
+          command: |
+            pwd
+            ls -la
+          name: print Filesystem
+             
+
   connect-to-scratchOrg:
     executor: sfdx/default
     steps:
@@ -95,4 +105,5 @@ jobs:
 workflows:
   basic-test:
     jobs:
-      - connect-to-scratchOrg
+#      - connect-to-scratchOrg
+      - upstream-job
