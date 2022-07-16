@@ -7,31 +7,30 @@ jobs:
   upstream-job:
     executor: sfdx/default
     steps:
-      - run:
-          command: |
-            pwd
-            ls -la
-          name: print Filesystem
       - checkout
       - sfdx/install
 
-# install / restore node modules - Start          
+      # install / restore node modules - Start          		
       - restore_cache:
           key: -v1-node_modules
+
       - run:
           command: >
             npm install sfdx-node
           name: install sfdx-node
+
+      # install / restore node modules - End		
       - save_cache:
           key: -v1-node_modules
           paths:
             - "node_modules"
-# install / restore node modules - End
+
       - run:
           command: |
             pwd
             ls -la
           name: print Filesystem 
+
       - persist_to_workspace:
           # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
           # taken to be the root directory of the workspace.
@@ -51,8 +50,13 @@ jobs:
             pwd
             ls -la
           name: print Filesystem
-        
-
+      - sfdx/install
+      - sfdx/auth:
+          defaultusername: david@mcga.de
+      - run:
+          command: >
+            sfdx force:limits:api:display -u david@mcga.de
+          name: print org limits 
 
   connect-to-scratchOrg:
     executor: sfdx/default
