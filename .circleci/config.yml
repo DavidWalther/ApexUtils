@@ -45,13 +45,11 @@ jobs:
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
           at: ./
-      - run:
-          command: |
-            pwd
-            ls -la
-          name: print Filesystem
+
+      - sfdx/install
       - sfdx/auth:
           defaultusername: david@mcga.de
+
       - run:
           command: >
             sfdx force:limits:api:display -u david@mcga.de
