@@ -151,3 +151,6 @@ workflows:
       - downstream-job:
           requires:
             - upstream-job
+      - downstream-job:
+          requires:
+            - upstream-job
