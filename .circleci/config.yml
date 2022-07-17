@@ -70,13 +70,6 @@ jobs:
           name: print Filesystem
 
       - sfdx/install
-      - sfdx/auth:
-          defaultusername: david@mcga.de
-
-      - run:
-          command: >
-            sfdx force:org:list --all
-          name: Show orgs
 
 
   # create / restore credential file
