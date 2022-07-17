@@ -53,7 +53,7 @@ The four highlighted elements are the parts that are special for each map:
 * `keyEvaluators`: a List of `MapUtility_MappingMain.IncludeItemKeyInMapInterface` to define criteria for the evaluation of every item key
 * `itemFilters`: A list `MapUtility_MappingMain.IncludeItemInMapInterface` to define criteria for the evaluation of every item
 
-# Examples mapping sObjects
+# Examples: Mapping sObjects
 
 ## 1. Map by field values retaining all entries 
 
@@ -120,12 +120,11 @@ The four highlighted elements are the parts that are special for each map:
 **Using**
  * `MAP_RETAIN_MODE.RETAIN_ALL`
  * `MapUtility_MappingMain.IncludeItemKeyInMapInterface`
- * `MapUtility_MappingMain.IncludeItemInMapInterface`</sub>
+ * `MapUtility_MappingMain.IncludeItemInMapInterface`
 
 **Records to map**
 
     List<Lead> leadToCreateMapFrom;
-    Set<Object> companiesToKeep = new Set<Object>{'ACME Inc.', 'Universal Containers'};
 
 **`MapUtility_MappingMain.IncludeItemInMapInterface`**
 
@@ -137,6 +136,8 @@ The four highlighted elements are the parts that are special for each map:
     }
 
 **Create map**
+    
+    Set<Object> companiesToKeep = new Set<Object>{'ACME Inc.', 'Universal Containers'};
 
     Map<Object, List<Object>> mappedEntries = new MapUtility_MappingMain().generateMapFromObjectList(
       sObjectsToCreateMapFrom, 
@@ -149,6 +150,65 @@ The four highlighted elements are the parts that are special for each map:
       new List<MapUtility_MappingMain.IncludeItemInMapInterface>{
         new ExcluceIfOwnerIsInactive();
     });
+
+
+# Examples: Mapping class instances
+
+**Using**
+ * `MAP_RETAIN_MODE.RETAIN_ALL`
+ * `MapUtility_MappingMain.IncludeItemKeyInMapInterface`
+
+**Records to map**
+
+    public class CompanyWrapper {
+      Account company;
+      Decimal anualTurnover;
+
+      public CompanyWrapper(Account company, Decimal anualTurnover) {
+        this.company = company;
+        this.anualTurnover
+      }
+    }
+
+    List<CompanyWrapper>  listCompanyWrappers = new List<CompanyWrapper>();
+    ...
+
+**`IValueReader`**
+        
+        public class CompanyClassifier implements IValueReader {
+          public Object getValue(Object objectToGetValueFrom) {
+            if(objectToGetValueFrom instanceOf CompanyWrapper) {
+              CompanyWrapper wrapperInstance = (CompanyWrapper)objectToGetValueFrom;
+
+              if(wrapperInstance.anualTurnover > 10000000) {
+                return 'blue';
+              }
+              if(wrapperInstance.anualTurnover > 5000000) {
+                return 'green';
+              }
+              if(wrapperInstance.anualTurnover > 1000000) {
+                return 'yellow';
+              }
+              return 'red';
+            }
+          return NULL;
+        }
+
+**Create map**
+
+    Set<Object> turnoverClassesToKeep = 
+      new Set<Object>{'green', 'yellow'};
+
+    Map<Object, List<Object>> mappedEntries = new MapUtility_MappingMain().generateMapFromObjectList(
+      listCompanyWrappers, 
+      new CompanyClassifier(),
+      MAP_RETAIN_MODE.RETAIN_ALL,
+      new List<MapUtility_MappingMain.IncludeItemKeyInMapInterface>{
+        new MapUtility_ItemEvalImplementations.IncludeOnly(turnoverClassesToKeep),
+        new MapUtility_ItemEvalImplementations.IgnoreKeyNull()
+      },
+      new List<MapUtility_MappingMain.IncludeItemInMapInterface>()
+    );
 
 ---
 
