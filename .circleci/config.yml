@@ -4,36 +4,73 @@ orbs:
   sfdx: circleci/salesforce-sfdx@2.2.0
 
 jobs:
-  connect-to-scratchOrg:
+  set-up-enviroment:
     executor: sfdx/default
     steps:
       - checkout
       - sfdx/install
 
-# install / restore node modules - Start          
+      # install / restore node modules - Start          		
       - restore_cache:
           key: -v1-node_modules
+
       - run:
           command: >
             npm install sfdx-node
           name: install sfdx-node
+
+      # install / restore node modules - End		
       - save_cache:
           key: -v1-node_modules
           paths:
             - "node_modules"
-# install / restore node modules - End
-
-# create file with current date to automatically drop scratchorg credentials
-      - run:
-          command: >
-            node ./scripts/deployment/node/writeChecksumFile.js
-          name: writing file for checksum
-
       - run:
           command: |
             mkdir tmp
             mkdir tmp/artifacts
           name: create folder for artifacts 
+
+      - persist_to_workspace:
+          # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
+          # taken to be the root directory of the workspace.
+          root: ./
+          # Must be relative path from root
+          paths:
+            - ./
+
+  create-cache-checksum:
+    executor: sfdx/default
+    steps:
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: ./
+          
+      - run:
+          command: >
+            node ./scripts/deployment/node/writeChecksumFile.js
+          name: writing file for checksum
+
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - ./
+            
+            
+  create-scratch-org:
+    executor: sfdx/default
+    steps:
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: ./
+
+      - run:
+          command: |
+            pwd
+            ls -la
+          name: print Filesystem
+
+      - sfdx/install
+
 
   # create / restore credential file
     # chaching - start
@@ -62,7 +99,34 @@ jobs:
           key: -v1-credentials-{{ checksum "checksum_24h.cache" }}
           paths:
             - "cache"
-# chaching scratch org credentials - end
+       # chaching scratch org credentials - end 
+        
+      - store_artifacts:
+          path: tmp/artifacts/
+          
+          
+      - run:
+          command: >
+            rm server.key
+          name: Remove 'server.key' file
+      
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - ./
+
+
+  push-Code-to-Org:
+    executor: sfdx/default
+    steps:
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: ./
+          
+      - sfdx/install
+
+      - sfdx/auth:
+          defaultusername: david@mcga.de
 
       - run:
           command: >
@@ -73,12 +137,30 @@ jobs:
           command: >
             sfdx force:org:list --all
           name: Show orgs
+      - run:
+          command: >
+            sfdx force:source:push --targetusername tempScratchOrg --forceoverwrite --wait 60 > tmp/artifacts/DeploymentResults.txt
+          name: SFDX Push Changes
+
+      - store_artifacts:
+          path: tmp/artifacts/        
+
+  execute-apex-test:
+    executor: sfdx/default
+    steps:
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: ./
+          
+      - sfdx/install
+      - sfdx/auth:
+          defaultusername: david@mcga.de
 
       - run:
           command: >
-            sfdx force:source:push --targetusername tempScratchOrg --forceoverwrite --wait 60
-          name: SFDX Push Changes
-
+            node scripts/deployment/node/authorizeScratchOrgWithJwt.js tempScratchOrg
+          name: authorize via JWT
+          
       - run:
           command: >
             sfdx force:apex:test:run --targetusername tempScratchOrg --suitenames=MapUtilities --resultformat=human --codecoverage --wait 60 > tmp/artifacts/testResults.txt
@@ -90,9 +172,23 @@ jobs:
           name: print org limits
 
       - store_artifacts:
-          path: tmp/artifacts/
+          path: tmp/artifacts/          
+
 
 workflows:
   basic-test:
     jobs:
-      - connect-to-scratchOrg
+      - set-up-enviroment
+      - create-cache-checksum:
+          requires:
+            - set-up-enviroment
+      - create-scratch-org:
+          requires:
+            - set-up-enviroment
+            - create-cache-checksum      
+      - push-Code-to-Org:
+          requires:
+            - create-scratch-org
+      - execute-apex-test:
+          requires:
+            - push-Code-to-Org
