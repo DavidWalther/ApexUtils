@@ -124,7 +124,10 @@ jobs:
           at: ./
           
       - sfdx/install
-      
+
+      - sfdx/auth:
+          defaultusername: david@mcga.de
+
       - run:
           command: >
             node scripts/deployment/node/authorizeScratchOrgWithJwt.js tempScratchOrg
