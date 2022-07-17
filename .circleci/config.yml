@@ -130,10 +130,11 @@ jobs:
           name: Show orgs
       - run:
           command: >
-            sfdx force:source:push --targetusername tempScratchOrg --forceoverwrite --wait 60
+            sfdx force:source:push --targetusername tempScratchOrg --forceoverwrite --wait 60 > tmp/artifacts/DeploymentResults.txt
           name: SFDX Push Changes
 
-          
+      - store_artifacts:
+          path: tmp/artifacts/        
 
   connect-to-scratchOrg:
     executor: sfdx/default
