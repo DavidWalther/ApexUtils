@@ -172,6 +172,9 @@ workflows:
     jobs:
 #      - connect-to-scratchOrg
       - upstream-job
-      - downstream-job:
+      - create-cache-checksum:
           requires:
             - upstream-job
+      - downstream-job:
+          requires:
+            - create-cache-checksum
