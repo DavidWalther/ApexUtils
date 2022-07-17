@@ -114,38 +114,9 @@ jobs:
           root: ./
           paths:
             - ./
+    
 
-
-  push-Code-to-Org:
-    executor: sfdx/default
-    steps:
-      - attach_workspace:
-          # Must be absolute path or relative path from working_directory
-          at: ./
-          
-      - sfdx/install
-
-      - sfdx/auth:
-          defaultusername: david@mcga.de
-
-      - run:
-          command: >
-            node scripts/deployment/node/authorizeScratchOrgWithJwt.js tempScratchOrg
-          name: authorize via JWT
-
-      - run:
-          command: >
-            sfdx force:org:list --all
-          name: Show orgs
-      - run:
-          command: >
-            sfdx force:source:push --targetusername tempScratchOrg --forceoverwrite --wait 60 > tmp/artifacts/DeploymentResults.txt
-          name: SFDX Push Changes
-
-      - store_artifacts:
-          path: tmp/artifacts/        
-
-  execute-apex-test:
+  push-code-and-run-tests:
     executor: sfdx/default
     steps:
       - attach_workspace:
@@ -168,6 +139,11 @@ jobs:
 
       - run:
           command: >
+            sfdx force:source:push --targetusername tempScratchOrg --forceoverwrite --wait 60 > tmp/artifacts/DeploymentResults.txt
+          name: SFDX Push Changes
+
+      - run:
+          command: >
             sfdx force:limits:api:display -u david@mcga.de > tmp/artifacts/limitsAfter.txt
           name: print org limits
 
@@ -186,9 +162,6 @@ workflows:
           requires:
             - set-up-enviroment
             - create-cache-checksum      
-      - push-Code-to-Org:
+      - push-code-and-run-tests:
           requires:
             - create-scratch-org
-      - execute-apex-test:
-          requires:
-            - push-Code-to-Org
