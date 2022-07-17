@@ -144,6 +144,8 @@ jobs:
           at: ./
           
       - sfdx/install
+      - sfdx/auth:
+          defaultusername: david@mcga.de
 
       - run:
           command: >
@@ -163,98 +165,10 @@ jobs:
       - store_artifacts:
           path: tmp/artifacts/          
 
-  connect-to-scratchOrg:
-    executor: sfdx/default
-    steps:
-      - checkout
-      - sfdx/install
-
-# install / restore node modules - Start          
-      - restore_cache:
-          key: -v1-node_modules
-      - run:
-          command: >
-            npm install sfdx-node
-          name: install sfdx-node
-      - save_cache:
-          key: -v1-node_modules
-          paths:
-            - "node_modules"
-# install / restore node modules - End
-
-# create file with current date to automatically drop scratchorg credentials
-      - run:
-          command: >
-            node ./scripts/deployment/node/writeChecksumFile.js
-          name: writing file for checksum
-
-      - run:
-          command: |
-            mkdir tmp
-            mkdir tmp/artifacts
-          name: create folder for artifacts 
-
-  # create / restore credential file
-    # chaching - start
-      - restore_cache:
-          key: -v1-credentials-{{ checksum "checksum_24h.cache" }}
-
-      - sfdx/auth:
-          defaultusername: david@mcga.de
-
-      - run:
-          command: >
-            sfdx force:limits:api:display -u david@mcga.de > tmp/artifacts/limitsBefore.txt
-          name: print org limits 
-
-      - run:
-          command: >
-            node scripts/deployment/node/scratchOrg_create.js tempScratchOrg
-          name: create scratch org
-
-      - run:
-          command: >
-            node scripts/deployment/node/scratchOrg_writeCache.js tempScratchOrg
-          name: retrieve and save scratch org credentials
-
-      - save_cache:
-          key: -v1-credentials-{{ checksum "checksum_24h.cache" }}
-          paths:
-            - "cache"
-# chaching scratch org credentials - end
-
-      - run:
-          command: >
-            node scripts/deployment/node/authorizeScratchOrgWithJwt.js tempScratchOrg
-          name: authorize via JWT
-
-      - run:
-          command: >
-            sfdx force:org:list --all
-          name: Show orgs
-
-      - run:
-          command: >
-            sfdx force:source:push --targetusername tempScratchOrg --forceoverwrite --wait 60
-          name: SFDX Push Changes
-
-      - run:
-          command: >
-            sfdx force:apex:test:run --targetusername tempScratchOrg --suitenames=MapUtilities --resultformat=human --codecoverage --wait 60 > tmp/artifacts/testResults.txt
-          name: Run APEX Tests
-
-      - run:
-          command: >
-            sfdx force:limits:api:display -u david@mcga.de > tmp/artifacts/limitsAfter.txt
-          name: print org limits
-
-      - store_artifacts:
-          path: tmp/artifacts/
 
 workflows:
   basic-test:
     jobs:
-#      - connect-to-scratchOrg
       - set-up-enviroment
       - create-cache-checksum:
           requires:
