@@ -82,6 +82,12 @@ jobs:
 
       - run:
           command: >
+            rm server.key
+          name: Remove 'server.key' file
+      
+
+      - run:
+          command: >
             sfdx force:limits:api:display -u david@mcga.de > tmp/artifacts/limitsBefore.txt
           name: print org limits 
 
