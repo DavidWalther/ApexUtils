@@ -53,13 +53,19 @@ The four highlighted elements are the parts that are special for each map:
 * `keyEvaluators`: a List of `MapUtility_MappingMain.IncludeItemKeyInMapInterface` to define criteria for the evaluation of every item key
 * `itemFilters`: A list `MapUtility_MappingMain.IncludeItemInMapInterface` to define criteria for the evaluation of every item
 
-### Examples
+# Examples mapping sObjects
 
-#### Map by field values retaining all entries 
-<sub>`MAP_RETAIN_MODE.RETAIN_ALL`</sub>
+## 1. Map by field values retaining all entries 
+
+**Using**
+* `MAP_RETAIN_MODE.RETAIN_ALL`
+
+**Records to map**
 
     List<Lead> leadToCreateMapFrom;
-    ...
+
+**Create map**
+
     Map<Object, List<Object>> mappedEntries = new MapUtility_MappingMain().generateMapFromObjectList(
       sObjectsToCreateMapFrom, 
       new FieldValueReader(Lead.Company),
@@ -68,11 +74,17 @@ The four highlighted elements are the parts that are special for each map:
       new List<MapUtility_MappingMain.IncludeItemInMapInterface>()
     );
 
-#### Map by field values retaining last entry 
-<sub>`MAP_RETAIN_MODE.RETAIN_LAST`</sub>
+## 2. Map by field values retaining last entry 
+
+**Using**
+* `MAP_RETAIN_MODE.RETAIN_LAST`
+
+**Records to map**
 
     List<Lead> leadToCreateMapFrom;
-    ...
+
+**Create map**
+
     Map<Object, SObject> mappedEntries = new MapUtility_MappingMain().generateMapFromObjectList(
       sObjectsToCreateMapFrom, 
       new FieldValueReader(Lead.Company),
@@ -80,12 +92,19 @@ The four highlighted elements are the parts that are special for each map:
       new List<MapUtility_MappingMain.IncludeItemKeyInMapInterface>(),
       new List<MapUtility_MappingMain.IncludeItemInMapInterface>());
 
-#### Map by field values retaining all entries AND keep only some mapping keys
-<sub>`MAP_RETAIN_MODE.RETAIN_ALL`, `MapUtility_MappingMain.IncludeItemKeyInMapInterface`</sub>
+## 3. Map by field values retaining all entries AND keep only some mapping keys
+
+**Using**
+  * `MAP_RETAIN_MODE.RETAIN_ALL`
+  * `MapUtility_MappingMain.IncludeItemKeyInMapInterface`
+
+**Records to map**
 
     List<Lead> leadToCreateMapFrom;
     Set<Object> companiesToKeep = new Set<Object>{'ACME Inc.', 'Universal Containers'};
-    ...
+
+**Create map**
+
     Map<Object, List<Object>> mappedEntries = new MapUtility_MappingMain().generateMapFromObjectList(
       sObjectsToCreateMapFrom, 
       new FieldValueReader(Lead.Company),
@@ -96,20 +115,29 @@ The four highlighted elements are the parts that are special for each map:
       },
       new List<MapUtility_MappingMain.IncludeItemInMapInterface>());
 
-#### Map by field values retaining all entries **AND** keep only some mapping keys **AND** exclude leads of inactive users (owners)
-<sub>`MAP_RETAIN_MODE.RETAIN_ALL`, `MapUtility_MappingMain.IncludeItemKeyInMapInterface`, `MapUtility_MappingMain.IncludeItemInMapInterface`</sub>
+## 4. Map by field values retaining all entries **AND** keep only some mapping keys **AND** exclude leads of inactive users (owners)
+
+**Using**
+ * `MAP_RETAIN_MODE.RETAIN_ALL`
+ * `MapUtility_MappingMain.IncludeItemKeyInMapInterface`
+ * `MapUtility_MappingMain.IncludeItemInMapInterface`</sub>
+
+**Records to map**
+
+    List<Lead> leadToCreateMapFrom;
+    Set<Object> companiesToKeep = new Set<Object>{'ACME Inc.', 'Universal Containers'};
+
+**`MapUtility_MappingMain.IncludeItemInMapInterface`**
 
     public class ExcluceIfOwnerIsInactive implements MapUtility_MappingMain.IncludeItemInMapInterface {
-
         Boolean isIncludeItem(Object itemToCheckForInclusion) {
           Lead leadToCheck = (Lead)itemToCheckForInclusion;
           return leadToCheck?.Owner?.isActive == true;
         }
     }
-    ...
-    List<Lead> leadToCreateMapFrom;
-    Set<Object> companiesToKeep = new Set<Object>{'ACME Inc.', 'Universal Containers'};
-    ...
+
+**Create map**
+
     Map<Object, List<Object>> mappedEntries = new MapUtility_MappingMain().generateMapFromObjectList(
       sObjectsToCreateMapFrom, 
       new FieldValueReader(Lead.Company),
