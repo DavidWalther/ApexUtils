@@ -136,6 +136,33 @@ jobs:
       - store_artifacts:
           path: tmp/artifacts/        
 
+  execute-apex-test:
+    executor: sfdx/default
+    steps:
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: ./
+          
+      - sfdx/install
+
+      - run:
+          command: >
+            node scripts/deployment/node/authorizeScratchOrgWithJwt.js tempScratchOrg
+          name: authorize via JWT
+          
+      - run:
+          command: >
+            sfdx force:apex:test:run --targetusername tempScratchOrg --suitenames=MapUtilities --resultformat=human --codecoverage --wait 60 > tmp/artifacts/testResults.txt
+          name: Run APEX Tests
+
+      - run:
+          command: >
+            sfdx force:limits:api:display -u david@mcga.de > tmp/artifacts/limitsAfter.txt
+          name: print org limits
+
+      - store_artifacts:
+          path: tmp/artifacts/          
+
   connect-to-scratchOrg:
     executor: sfdx/default
     steps:
@@ -239,3 +266,6 @@ workflows:
       - push-Code-to-Org:
           requires:
             - create-scratch-org
+      - execute-apex-test:
+          requires:
+            - push-Code-to-Org
