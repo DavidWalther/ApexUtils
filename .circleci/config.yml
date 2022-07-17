@@ -57,6 +57,7 @@ jobs:
 
           
           
+            
   downstream-job:
     executor: sfdx/default
     steps:
@@ -79,10 +80,43 @@ jobs:
             sfdx force:org:list --all
           name: Show orgs
 
+  # create / restore credential file
+    # chaching - start
+      - restore_cache:
+          key: -v1-credentials-{{ checksum "checksum_24h.cache" }}
+
+      - sfdx/auth:
+          defaultusername: david@mcga.de
+
       - run:
           command: >
-            sfdx force:limits:api:display -u david@mcga.de
+            sfdx force:limits:api:display -u david@mcga.de > tmp/artifacts/limitsBefore.txt
           name: print org limits 
+
+      - run:
+          command: >
+            node scripts/deployment/node/scratchOrg_create.js tempScratchOrg
+          name: create scratch org
+
+      - run:
+          command: >
+            node scripts/deployment/node/scratchOrg_writeCache.js tempScratchOrg
+          name: retrieve and save scratch org credentials
+
+      - save_cache:
+          key: -v1-credentials-{{ checksum "checksum_24h.cache" }}
+          paths:
+            - "cache"
+       # chaching scratch org credentials - end 
+        
+      - store_artifacts:
+          path: tmp/artifacts/
+          
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - ./
+
 
   connect-to-scratchOrg:
     executor: sfdx/default
