@@ -110,6 +110,31 @@ jobs:
             - ./
 
 
+  push-Code-to-Org:
+    executor: sfdx/default
+    steps:
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: ./
+          
+      - sfdx/install
+      
+      - run:
+          command: >
+            node scripts/deployment/node/authorizeScratchOrgWithJwt.js tempScratchOrg
+          name: authorize via JWT
+
+      - run:
+          command: >
+            sfdx force:org:list --all
+          name: Show orgs
+      - run:
+          command: >
+            sfdx force:source:push --targetusername tempScratchOrg --forceoverwrite --wait 60
+          name: SFDX Push Changes
+
+          
+
   connect-to-scratchOrg:
     executor: sfdx/default
     steps:
@@ -209,4 +234,7 @@ workflows:
       - create-scratch-org:
           requires:
             - set-up-enviroment
+            - create-cache-checksum      
+      - push-Code-to-Org
+          requires:
             - create-cache-checksum
