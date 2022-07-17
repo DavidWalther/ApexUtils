@@ -1,6 +1,7 @@
 const fs = require('fs');
 
-console.log('i am a node script');
+const filepath = 'checksum_24h.cache';
+
 
 const checksumObj = {
   currentDateString: getCurrentDateString(),
@@ -8,7 +9,7 @@ const checksumObj = {
 }
 
 
-fs.writeFile("checksum_24h.cache", JSON.stringify(checksumObj), 'utf8', function (err) {
+fs.writeFile(filepath, JSON.stringify(checksumObj), 'utf8', function (err) {
   if (err) {
       console.log("An error occured while writing JSON Object to File.");
       return console.log(err);
