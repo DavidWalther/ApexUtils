@@ -2,16 +2,14 @@ const fs = require('fs');
 const sfdx = require('sfdx-node/parallel');
 
 const fileEncoding = 'utf8';
-const cachePath = 'cache';
-const credentialFileName = 'org.credentials'
+const filepath = 'cache/org.credentials';
 
 const alias = process.argv[2] ? process.argv[2] :'tempScratchOrg';
-
 const consumerKey =  process.env.SFDX_CONSUMER_KEY;
 const serverKeyPath = './server.key'
 
 
-loadPromise(cachePath + '/' + credentialFileName)
+loadPromise(filepath)
   .then(scratchorg => {
     sfdx.auth.jwt.grant({
       clientid: consumerKey,
