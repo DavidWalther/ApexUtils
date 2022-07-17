@@ -131,16 +131,16 @@ jobs:
           command: >
             node scripts/deployment/node/authorizeScratchOrgWithJwt.js tempScratchOrg
           name: authorize via JWT
-          
-      - run:
-          command: >
-            sfdx force:apex:test:run --targetusername tempScratchOrg --suitenames=MapUtilities --resultformat=human --codecoverage --wait 60 > tmp/artifacts/testResults.txt
-          name: Run APEX Tests
 
       - run:
           command: >
             sfdx force:source:push --targetusername tempScratchOrg --forceoverwrite --wait 60 > tmp/artifacts/DeploymentResults.txt
           name: SFDX Push Changes
+          
+      - run:
+          command: >
+            sfdx force:apex:test:run --targetusername tempScratchOrg --suitenames=MapUtilities --resultformat=human --codecoverage --wait 60 > tmp/artifacts/testResults.txt
+          name: Run APEX Tests
 
       - run:
           command: >
