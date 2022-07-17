@@ -4,7 +4,7 @@ orbs:
   sfdx: circleci/salesforce-sfdx@2.2.0
 
 jobs:
-  upstream-job:
+  set-up-enviroment:
     executor: sfdx/default
     steps:
       - checkout
@@ -24,6 +24,11 @@ jobs:
           key: -v1-node_modules
           paths:
             - "node_modules"
+      - run:
+          command: |
+            mkdir tmp
+            mkdir tmp/artifacts
+          name: create folder for artifacts 
 
       - persist_to_workspace:
           # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
@@ -171,10 +176,11 @@ workflows:
   basic-test:
     jobs:
 #      - connect-to-scratchOrg
-      - upstream-job
+      - set-up-enviroment
       - create-cache-checksum:
           requires:
-            - upstream-job
+            - set-up-enviroment
       - downstream-job:
           requires:
+            - set-up-enviroment
             - create-cache-checksum
