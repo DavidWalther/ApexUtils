@@ -54,11 +54,9 @@ jobs:
           root: ./
           paths:
             - ./
-
-          
-          
             
-  downstream-job:
+            
+  create-scratch-org:
     executor: sfdx/default
     steps:
       - attach_workspace:
@@ -79,6 +77,7 @@ jobs:
           command: >
             sfdx force:org:list --all
           name: Show orgs
+
 
   # create / restore credential file
     # chaching - start
@@ -214,7 +213,7 @@ workflows:
       - create-cache-checksum:
           requires:
             - set-up-enviroment
-      - downstream-job:
+      - create-scratch-org:
           requires:
             - set-up-enviroment
             - create-cache-checksum
