@@ -82,12 +82,6 @@ jobs:
 
       - run:
           command: >
-            rm server.key
-          name: Remove 'server.key' file
-      
-
-      - run:
-          command: >
             sfdx force:limits:api:display -u david@mcga.de > tmp/artifacts/limitsBefore.txt
           name: print org limits 
 
@@ -110,6 +104,12 @@ jobs:
       - store_artifacts:
           path: tmp/artifacts/
           
+          
+      - run:
+          command: >
+            rm server.key
+          name: Remove 'server.key' file
+      
       - persist_to_workspace:
           root: ./
           paths:
