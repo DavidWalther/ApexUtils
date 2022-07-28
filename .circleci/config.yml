@@ -161,7 +161,10 @@ workflows:
       - create-scratch-org:
           requires:
             - set-up-enviroment
-            - create-cache-checksum      
+            - create-cache-checksum
+          filters:
+            branches:
+              ignore: master
       - push-code-and-run-tests:
           requires:
             - create-scratch-org
