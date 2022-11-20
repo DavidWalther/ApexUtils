@@ -76,6 +76,13 @@ jobs:
 
       - sfdx/install
 
+      - run:
+          command: |
+            pwd
+            ls -la > tmp/artifacts/beforeCache-ls-root.txt
+            ls -la tmp/ > tmp/artifacts/beforeCache-ls-tmp.txt
+            ls -la cache/ > tmp/artifacts/beforeCache-ls-cache.txt
+          name: print Filesystem before cache
 
   # create / restore credential file
     # chaching - start
@@ -106,6 +113,14 @@ jobs:
             - tmp/cache/authFile.json
        # chaching scratch org credentials - end 
         
+      - run:
+          command: |
+            pwd
+            ls -la > tmp/artifacts/afterCache-ls-root.txt
+            ls -la tmp/ > tmp/artifacts/afterCache-ls-tmp.txt
+            ls -la cache/ > tmp/artifacts/afterCache-ls-cache.txt
+          name: print Filesystem after cache
+
       - run:
           command: >
             sfdx force:limits:api:display -u david@mcga.de > tmp/artifacts/limitsAfter.txt
