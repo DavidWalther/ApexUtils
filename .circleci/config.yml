@@ -28,7 +28,12 @@ jobs:
           command: |
             mkdir tmp
             mkdir tmp/artifacts
+            mkdir tmp/cache
           name: create folder for artifacts 
+      - run:
+          command: |
+            chmod +x scripts/deployment/*
+          name: make scripts executable 
 
       - persist_to_workspace:
           # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
@@ -83,22 +88,22 @@ jobs:
       - run:
           command: >
             sfdx force:limits:api:display -u david@mcga.de > tmp/artifacts/limitsBefore.txt
-          name: print org limits 
+          name: print org limits before creation
 
       - run:
           command: >
-            node scripts/deployment/node/scratchOrg_create.js tempScratchOrg
+            scripts/deployment/createNewScratchOrg.sh testScratchOrg
           name: create scratch org
 
       - run:
           command: >
-            node scripts/deployment/node/scratchOrg_writeCache.js tempScratchOrg
-          name: retrieve and save scratch org credentials
+            scripts/deployment/generateAuthFile.sh testScratchOrg > tmp/cache/authFile.json
+          name: generate AuthFile
 
       - save_cache:
           key: -v1-credentials-{{ checksum "checksum_24h.cache" }}
           paths:
-            - "cache"
+            - tmp/cache/authFile.json
        # chaching scratch org credentials - end 
         
       - run:
@@ -108,7 +113,6 @@ jobs:
 
       - store_artifacts:
           path: tmp/artifacts/
-          
           
       - run:
           command: >
@@ -134,8 +138,8 @@ jobs:
 
       - run:
           command: >
-            node scripts/deployment/node/authorizeScratchOrgWithJwt.js tempScratchOrg
-          name: authorize via JWT
+            scripts/deployment/authorizeWithAuthFile.sh tempScratchOrg tmp/cache/authFile.json
+          name: authorize via AuthFile
 
       - run:
           command: >
