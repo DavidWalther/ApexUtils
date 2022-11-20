@@ -84,11 +84,6 @@ jobs:
             ls -la tmp/cache/ > tmp/artifacts/beforeCache-ls-cache.txt
           name: print Filesystem before cache
 
-  # create / restore credential file
-    # chaching - start
-      - restore_cache:
-          key: -v1-credentials-{{ checksum "checksum_24h.cache" }}
-
       - sfdx/auth:
           defaultusername: david@mcga.de
 
@@ -96,6 +91,20 @@ jobs:
           command: >
             sfdx force:limits:api:display -u david@mcga.de > tmp/artifacts/limitsBefore.txt
           name: print org limits before creation
+
+  # create / restore credential file
+    # chaching - start
+      - restore_cache:
+          name: Restore cached org credentials
+          keys: 
+            - -v2-credentials-{{ checksum "checksum_24h.cache" }}
+      - run:
+          command: |
+            pwd
+            ls -la > tmp/artifacts/beforeScratch-ls-root.txt
+            ls -la tmp/ > tmp/artifacts/beforeScratch-ls-tmp.txt
+            ls -la tmp/cache/ > tmp/artifacts/beforeScratch-ls-cache.txt
+          name: print Filesystem before scratch org
 
       - run:
           command: >
@@ -108,9 +117,10 @@ jobs:
           name: generate AuthFile
 
       - save_cache:
-          key: -v1-credentials-{{ checksum "checksum_24h.cache" }}
+          name: Save cached org credentials
+          key: -v2-credentials-{{ checksum "checksum_24h.cache" }}
           paths:
-            - tmp/cache/authFile.json
+            - ./tmp/cache/authFile.json
        # chaching scratch org credentials - end 
         
       - run:
