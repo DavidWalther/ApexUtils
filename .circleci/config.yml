@@ -81,7 +81,7 @@ jobs:
             pwd
             ls -la > tmp/artifacts/beforeCache-ls-root.txt
             ls -la tmp/ > tmp/artifacts/beforeCache-ls-tmp.txt
-            ls -la cache/ > tmp/artifacts/beforeCache-ls-cache.txt
+            ls -la tmp/cache/ > tmp/artifacts/beforeCache-ls-cache.txt
           name: print Filesystem before cache
 
   # create / restore credential file
@@ -118,7 +118,7 @@ jobs:
             pwd
             ls -la > tmp/artifacts/afterCache-ls-root.txt
             ls -la tmp/ > tmp/artifacts/afterCache-ls-tmp.txt
-            ls -la cache/ > tmp/artifacts/afterCache-ls-cache.txt
+            ls -la tmp/cache/ > tmp/artifacts/afterCache-ls-cache.txt
           name: print Filesystem after cache
 
       - run:
