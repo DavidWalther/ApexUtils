@@ -101,6 +101,11 @@ jobs:
             - "cache"
        # chaching scratch org credentials - end 
         
+      - run:
+          command: >
+            sfdx force:limits:api:display -u david@mcga.de > tmp/artifacts/limitsAfter.txt
+          name: print org limits after creation
+
       - store_artifacts:
           path: tmp/artifacts/
           
