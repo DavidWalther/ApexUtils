@@ -137,6 +137,14 @@ jobs:
           defaultusername: david@mcga.de
 
       - run:
+          command: |
+            pwd
+            ls -la > tmp/artifacts/ls-root.txt
+            ls -la tmp/ > tmp/artifacts/ls-tmp.txt
+            ls -la cache/ > tmp/artifacts/ls-cache.txt
+          name: print Filesystem
+
+      - run:
           command: >
             scripts/deployment/authorizeWithAuthFile.sh tempScratchOrg tmp/cache/authFile.json
           name: authorize via AuthFile
