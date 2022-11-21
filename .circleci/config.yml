@@ -247,7 +247,7 @@ jobs:
 
       - run:
           command: |
-            base64 --decode $SFDX_JWT_KEY > server.key
+            echo "$SFDX_JWT_KEY" | base64 --decode > server.key
             sfdx auth:jwt:grant --clientid $SFDX_CONSUMER_KEY --instanceurl https://login.salesforce.com --jwtkeyfile ./server.key --setdefaultdevhubusername --username david@mcga.de
 
             rm server.key
