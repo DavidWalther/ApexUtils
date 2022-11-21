@@ -233,7 +233,7 @@ jobs:
 
   install-sfdx:
     docker:
-      - image: cimg/base:node
+      - image: cimg/node:19.1.0
     steps:
       - run:
           command: >
