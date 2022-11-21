@@ -238,8 +238,11 @@ jobs:
       - run:
           command: |
             npm install sfdx-cli
-            sfdx --version
           name: install sfdx
+      - run:
+          command: |
+            sfdx --version
+          name: print sfdx version
       # - run:
       #     command: |
 
