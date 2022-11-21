@@ -63,6 +63,9 @@ jobs:
             
   print-org-limits:
     executor: sfdx/default
+    parameters:
+      filename:
+        type: string
     steps:
       - sfdx/install
       - sfdx/auth:
