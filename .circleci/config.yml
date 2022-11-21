@@ -109,8 +109,8 @@ jobs:
 
       - run:
           command: >
-            | scripts/deployment/createNewScratchOrg.sh testScratchOrg tmp/cache/authFile.json
-            | base64 tmp/cache/authFile.json > tmp/cache/base64AuthFile
+            scripts/deployment/createNewScratchOrg.sh testScratchOrg tmp/cache/authFile.json
+            base64 tmp/cache/authFile.json > tmp/cache/base64AuthFile
           name: create scratch org
 
       - save_cache:
