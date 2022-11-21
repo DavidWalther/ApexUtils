@@ -172,7 +172,10 @@ jobs:
             ls -la tmp/ > tmp/artifacts/push-ls-tmp.txt
             ls -la tmp/cache/ > tmp/artifacts/push-ls-cache.txt
           name: print Filesystem
-
+          
+      - store_artifacts:
+          path: tmp/cache/authFile.json
+          
       - run:
           command: >
             scripts/deployment/authorizeWithAuthFile.sh tempScratchOrg tmp/cache/authFile.json
