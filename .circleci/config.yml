@@ -97,7 +97,7 @@ jobs:
       - restore_cache:
           name: Restore cached org credentials
           keys: 
-            - -v6-credentials-{{ checksum "checksum_24h.cache" }}
+            - -v7-credentials-{{ checksum "checksum_24h.cache" }}
 
       - run:
           command: |
@@ -108,14 +108,14 @@ jobs:
           name: print Filesystem before scratch org
 
       - run:
-          command: >
+          command: |
             scripts/deployment/createNewScratchOrg.sh testScratchOrg tmp/cache/authFile.json
             base64 tmp/cache/authFile.json > tmp/cache/base64AuthFile
           name: create scratch org
 
       - save_cache:
           name: Save cached org credentials
-          key: -v6-credentials-{{ checksum "checksum_24h.cache" }}
+          key: -v7-credentials-{{ checksum "checksum_24h.cache" }}
           paths:
             - ./tmp/cache/base64AuthFile
        # chaching scratch org credentials - end 
@@ -167,7 +167,7 @@ jobs:
       - restore_cache:
           name: Restore cached org credentials
           keys: 
-            - -v6-credentials-{{ checksum "checksum_24h.cache" }}
+            - -v7-credentials-{{ checksum "checksum_24h.cache" }}
           
       - run:
           command: |      
