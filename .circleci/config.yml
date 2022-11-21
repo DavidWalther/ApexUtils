@@ -110,13 +110,14 @@ jobs:
       - run:
           command: >
             scripts/deployment/createNewScratchOrg.sh testScratchOrg tmp/cache/authFile.json
+            base64 tmp/cache/authFile.json > tmp/cache/base64AuthFile
           name: create scratch org
 
       - save_cache:
           name: Save cached org credentials
           key: -v4-credentials-{{ checksum "checksum_24h.cache" }}
           paths:
-            - ./tmp/cache/authFile.json
+            - ./tmp/cache/base64AuthFile
        # chaching scratch org credentials - end 
         
       - run:
@@ -137,6 +138,9 @@ jobs:
       
       - store_artifacts:
           path: tmp/cache/authFile.json
+
+      - store_artifacts:
+          path: ./tmp/cache/base64AuthFile
           
       - run:
           command: >
@@ -164,7 +168,12 @@ jobs:
           name: Restore cached org credentials
           keys: 
             - -v4-credentials-{{ checksum "checksum_24h.cache" }}
-            
+          
+      - run:
+          command: |      
+            base64 --decode ./tmp/cache/base64AuthFile > ./tmp/cache/authFile.json
+          name: Decode authfile
+
       - run:
           command: |
             pwd
