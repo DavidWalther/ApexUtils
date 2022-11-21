@@ -98,6 +98,7 @@ jobs:
           name: Restore cached org credentials
           keys: 
             - -v1-credentials-{{ checksum "checksum_24h.cache" }}
+
       - run:
           command: |
             pwd
@@ -108,7 +109,7 @@ jobs:
 
       - run:
           command: >
-            scripts/deployment/createNewScratchOrg.sh testScratchOrg
+            scripts/deployment/createNewScratchOrg.sh testScratchOrg tmp/cache/authFile.json
           name: create scratch org
 
       - run:
@@ -166,7 +167,7 @@ jobs:
             pwd
             ls -la > tmp/artifacts/ls-root.txt
             ls -la tmp/ > tmp/artifacts/ls-tmp.txt
-            ls -la cache/ > tmp/artifacts/ls-cache.txt
+            ls -la tmp/cache/ > tmp/artifacts/ls-cache.txt
           name: print Filesystem
 
       - run:
