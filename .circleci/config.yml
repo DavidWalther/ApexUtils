@@ -244,8 +244,8 @@ jobs:
             npm install sfdx-cli
           name: install sfdx
       - run:
-          command: |
-            sfdx --version
+          command: >
+            sfdx update
           name: print sfdx version
       # - run:
       #     command: |
