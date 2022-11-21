@@ -3,6 +3,12 @@ version: 2.1
 orbs:
   sfdx: circleci/salesforce-sfdx@2.2.0
 
+parameters:
+  action:
+    type: enum
+    enum: [build, limits]
+    default: build
+
 jobs:
   set-up-enviroment:
     executor: sfdx/default
@@ -227,30 +233,40 @@ jobs:
 
 
 workflows:
-  test-limit-print:
+  org-limits:
+    when:
+      equal: [ limits, << pipeline.parameters.action >> ]
+    jobs:
+      - print-org-limits:
+          name: Org Limits
+          filename: orgLimits.txt
+
+
+  deploy-and-test:
+    when:
+      equal: [ build, << pipeline.parameters.action >> ]
     jobs:
       - print-org-limits:
           name: limitsBefore
           filename: orgLimits.txt
+      - set-up-enviroment:
+          requires:
+            - limitsBefore
+      - create-cache-checksum:
+          requires:
+            - set-up-enviroment
+      - create-scratch-org:
+          requires:
+            - set-up-enviroment
+            - create-cache-checksum
+          filters:
+            branches:
+              ignore: master
+      - push-code-and-run-tests:
+          requires:
+            - create-scratch-org
       - print-org-limits:
           name: limitsAfter
           filename: orgLimits.txt
           requires:
-            - limitsBefore
-
-  # basic-test:
-  #   jobs:
-  #     - set-up-enviroment
-  #     - create-cache-checksum:
-  #         requires:
-  #           - set-up-enviroment
-  #     - create-scratch-org:
-  #         requires:
-  #           - set-up-enviroment
-  #           - create-cache-checksum
-  #         filters:
-  #           branches:
-  #             ignore: master
-  #     - push-code-and-run-tests:
-  #         requires:
-  #           - create-scratch-org
+            - push-code-and-run-tests
