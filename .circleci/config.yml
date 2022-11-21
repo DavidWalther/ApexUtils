@@ -112,11 +112,6 @@ jobs:
             scripts/deployment/createNewScratchOrg.sh testScratchOrg tmp/cache/authFile.json
           name: create scratch org
 
-      - run:
-          command: >
-            scripts/deployment/generateAuthFile.sh testScratchOrg > tmp/cache/authFile.json
-          name: generate AuthFile
-
       - save_cache:
           name: Save cached org credentials
           key: -v1-credentials-{{ checksum "checksum_24h.cache" }}
