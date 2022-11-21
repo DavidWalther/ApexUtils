@@ -97,7 +97,7 @@ jobs:
       - restore_cache:
           name: Restore cached org credentials
           keys: 
-            - -v1-credentials-{{ checksum "checksum_24h.cache" }}
+            - -v3-credentials-{{ checksum "checksum_24h.cache" }}
 
       - run:
           command: |
@@ -114,7 +114,7 @@ jobs:
 
       - save_cache:
           name: Save cached org credentials
-          key: -v1-credentials-{{ checksum "checksum_24h.cache" }}
+          key: -v3-credentials-{{ checksum "checksum_24h.cache" }}
           paths:
             - ./tmp/cache/authFile.json
        # chaching scratch org credentials - end 
@@ -163,7 +163,7 @@ jobs:
       - restore_cache:
           name: Restore cached org credentials
           keys: 
-            - -v1-credentials-{{ checksum "checksum_24h.cache" }}
+            - -v3-credentials-{{ checksum "checksum_24h.cache" }}
             
       - run:
           command: |
