@@ -233,7 +233,8 @@ jobs:
 
   install-sfdx:
     docker:
-      - image: salesforce/salesforcedx
+      #- image: cimg/node:19.1.0
+      - image: salesforce/salesforcedx:7.178.0-slim
     steps:
       - run:
           command: |
