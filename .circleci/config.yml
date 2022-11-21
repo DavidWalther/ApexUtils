@@ -230,9 +230,13 @@ workflows:
   test-limit-print:
     jobs:
       - print-org-limits:
+          name: limitsBefore
           filename: orgLimits.txt
       - print-org-limits:
-          filename: orgLimits2.txt
+          name: limitsAfter
+          filename: orgLimits.txt
+          requires:
+            - limitsBefore
 
   # basic-test:
   #   jobs:
