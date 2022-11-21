@@ -240,23 +240,21 @@ jobs:
           command: |
             node --version
           name: print node version
-      # - run:
-      #     command: |
-      #       npm install sfdx-cli
-      #     name: install sfdx
-      # - run:
-      #     command: |
-      #       ls -l
-      #     name: print Filelist
       - run:
           command: |
             sfdx --version
           name: print sfdx version
-      # - run:
-      #     command: |
 
+      - run:
+          command: |
+            base64 --decode $SFDX_JWT_KEY > server.key
+            #sfdx auth:jwt:grant 
+
+          name: Authorize Devhub
+      # - run:
+      #     command: >
       #     name: Authorize Devhub
-#            david@mcga.de
+      #      david@mcga.de
 
 
     
