@@ -6,8 +6,8 @@ orbs:
 parameters:
   action:
     type: enum
-    enum: [build, limits]
-    default: build
+    enum: [build, limits, test-sfdx-install]
+    default: test-sfdx-install
 
 jobs:
   set-up-enviroment:
@@ -231,8 +231,24 @@ jobs:
       - store_artifacts:
           path: tmp/artifacts/          
 
+  install-sfdx:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - run:
+          command: >
+            node --version
+          name: check node
 
+
+    
 workflows:
+  install-sfdx::
+    when:
+      equal: [ test-sfdx-install, << pipeline.parameters.action >> ]
+    jobs:
+      - install-sfdx
+
   org-limits:
     when:
       equal: [ limits, << pipeline.parameters.action >> ]
