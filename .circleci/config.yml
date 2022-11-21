@@ -160,12 +160,17 @@ jobs:
       - sfdx/auth:
           defaultusername: david@mcga.de
 
+      - restore_cache:
+          name: Restore cached org credentials
+          keys: 
+            - -v1-credentials-{{ checksum "checksum_24h.cache" }}
+            
       - run:
           command: |
             pwd
-            ls -la > tmp/artifacts/ls-root.txt
-            ls -la tmp/ > tmp/artifacts/ls-tmp.txt
-            ls -la tmp/cache/ > tmp/artifacts/ls-cache.txt
+            ls -la > tmp/artifacts/push-ls-root.txt
+            ls -la tmp/ > tmp/artifacts/push-ls-tmp.txt
+            ls -la tmp/cache/ > tmp/artifacts/push-ls-cache.txt
           name: print Filesystem
 
       - run:
