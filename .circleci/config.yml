@@ -237,7 +237,7 @@ jobs:
     steps:
       - run:
           command: >
-            npm install sfdx-cli --global
+            npm install sfdx-cli
           name: install sfdx
 
 
