@@ -61,6 +61,20 @@ jobs:
             - ./
             
             
+  print-org-limits:
+    executor: sfdx/default
+    steps:
+      - sfdx/install
+      - sfdx/auth:
+          defaultusername: david@mcga.de
+      - run:
+          command: >
+            sfdx force:limits:api:display -u david@mcga.de > << parameters.filename >>
+          name: print org limits
+      - store_artifacts:
+          path: << parameters.filename >>
+
+
   create-scratch-org:
     executor: sfdx/default
     steps:
@@ -210,19 +224,24 @@ jobs:
 
 
 workflows:
-  basic-test:
+  test-limit-print:
     jobs:
-      - set-up-enviroment
-      - create-cache-checksum:
-          requires:
-            - set-up-enviroment
-      - create-scratch-org:
-          requires:
-            - set-up-enviroment
-            - create-cache-checksum
-          filters:
-            branches:
-              ignore: master
-      - push-code-and-run-tests:
-          requires:
-            - create-scratch-org
+      - print-org-limits:
+          filename: orgLimits.txt
+
+  # basic-test:
+  #   jobs:
+  #     - set-up-enviroment
+  #     - create-cache-checksum:
+  #         requires:
+  #           - set-up-enviroment
+  #     - create-scratch-org:
+  #         requires:
+  #           - set-up-enviroment
+  #           - create-cache-checksum
+  #         filters:
+  #           branches:
+  #             ignore: master
+  #     - push-code-and-run-tests:
+  #         requires:
+  #           - create-scratch-org
