@@ -9,4 +9,6 @@ if [ ! -f "$AUTHFILE" ]; then
   echo "Creating Org"
   echo "------------"
   sfdx force:org:create --setalias $ALIAS --definitionfile ./config/project-scratch-def.json --durationdays 1
+else
+  echo "$AUTHFILE does exist."
 fi

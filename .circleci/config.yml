@@ -138,7 +138,9 @@ jobs:
           name: print org limits after creation
 
       - store_artifacts:
-          path: tmp/artifacts/
+          paths:
+            - tmp/artifacts/
+            - tmp/cache/authFile.json
           
       - run:
           command: >
