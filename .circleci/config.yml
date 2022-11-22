@@ -231,7 +231,7 @@ jobs:
       - store_artifacts:
           path: tmp/artifacts/          
 
-  install-sfdx:
+  test-install-sfdx-auth:
     docker:
       #- image: cimg/node:19.1.0
       - image: salesforce/salesforcedx:7.178.0-slim
@@ -265,14 +265,29 @@ jobs:
       #     name: Authorize Devhub
       #      david@mcga.de
 
+  test-install-sfdx-print:
+    docker:
+      - image: salesforce/salesforcedx:7.178.0-slim
+    steps:
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: ./
+      - run:
+          command: >
+            sfdx config:list
+          name: print Config
+
 
     
 workflows:
-  install-sfdx::
+  install-sfdx:
     when:
       equal: [ test-sfdx-install, << pipeline.parameters.action >> ]
     jobs:
-      - install-sfdx
+      - test-install-sfdx-auth
+      - test-install-sfdx-print:
+          requires:
+            - test-install-sfdx-auth
 
   org-limits:
     when:
