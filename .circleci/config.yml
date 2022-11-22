@@ -252,6 +252,10 @@ jobs:
 
             rm server.key
           name: Authorize Devhub
+      - run:
+          command: |
+            sfdx force:org:display --targetusername  devHub --verbose --json
+          name: Print DevHub Auth Info
 
       - persist_to_workspace:
           # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
