@@ -276,6 +276,10 @@ jobs:
           command: >
             sfdx config:list
           name: print Config
+      - run:
+          command: >
+            sfdx force:org:list
+          name: print Org list
 
 
     
