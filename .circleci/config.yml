@@ -248,10 +248,18 @@ jobs:
       - run:
           command: |
             echo "$SFDX_JWT_KEY" | base64 --decode > server.key
-            sfdx auth:jwt:grant --clientid $SFDX_CONSUMER_KEY --instanceurl https://login.salesforce.com --jwtkeyfile ./server.key --setdefaultdevhubusername --username david@mcga.de
+            sfdx auth:jwt:grant --clientid $SFDX_CONSUMER_KEY --instanceurl https://login.salesforce.com --jwtkeyfile ./server.key --setdefaultdevhubusername --username david@mcga.de --setalias devHub
 
             rm server.key
           name: Authorize Devhub
+
+      - persist_to_workspace:
+          # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
+          # taken to be the root directory of the workspace.
+          root: ./
+          # Must be relative path from root
+          paths:
+            - ./
       # - run:
       #     command: >
       #     name: Authorize Devhub
