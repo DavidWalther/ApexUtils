@@ -6,6 +6,7 @@ const paramsObj = {
 console.table(paramsObj);
 
 process.env.JSON_PARAMETER_FIRST = paramsObj.filepath;
+console.log(process.env.JSON_PARAMETER_FIRST);
 
 function loadPromiseJson(fullPath) {
   return new Promise(function(resolve, reject) {
