@@ -117,6 +117,16 @@ jobs:
           defaultusername: david@mcga.de
 
       - run:
+          command: |      
+            node scripts/deployment/node/readVariableJson.js myTestParam
+          name: call node script
+
+      - run:
+          command: |      
+            echo $JSON_PARAMETER_FIRST
+          name: print Varibable
+
+      - run:
           command: >
             node scripts/deployment/node/authorizeScratchOrgWithJwt.js tempScratchOrg
           name: authorize via JWT
