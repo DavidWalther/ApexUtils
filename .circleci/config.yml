@@ -123,8 +123,11 @@ jobs:
 
       - run:
           command: |      
-            echo $JSON_PARAMETER_FIRST
+            echo "$JSON_PARAMETER_FIRST"
+            printenv
+            env
           name: print Varibable
+
 
       - run:
           command: >
