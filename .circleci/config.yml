@@ -3,12 +3,6 @@ version: 2.1
 orbs:
   sfdx: circleci/salesforce-sfdx@2.2.0
 
-parameters:
-  action:
-    type: enum
-    enum: [build, limits, test-sfdx-install]
-    default: test-sfdx-install
-
 jobs:
   set-up-enviroment:
     executor: sfdx/default
@@ -34,12 +28,7 @@ jobs:
           command: |
             mkdir tmp
             mkdir tmp/artifacts
-            mkdir tmp/cache
           name: create folder for artifacts 
-      - run:
-          command: |
-            chmod +x scripts/deployment/*
-          name: make scripts executable 
 
       - persist_to_workspace:
           # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
@@ -67,23 +56,6 @@ jobs:
             - ./
             
             
-  print-org-limits:
-    executor: sfdx/default
-    parameters:
-      filename:
-        type: string
-    steps:
-      - sfdx/install
-      - sfdx/auth:
-          defaultusername: david@mcga.de
-      - run:
-          command: >
-            sfdx force:limits:api:display -u david@mcga.de > << parameters.filename >>
-          name: print org limits
-      - store_artifacts:
-          path: << parameters.filename >>
-
-
   create-scratch-org:
     executor: sfdx/default
     steps:
@@ -99,13 +71,11 @@ jobs:
 
       - sfdx/install
 
-      - run:
-          command: |
-            pwd
-            ls -la > tmp/artifacts/beforeCache-ls-root.txt
-            ls -la tmp/ > tmp/artifacts/beforeCache-ls-tmp.txt
-            ls -la tmp/cache/ > tmp/artifacts/beforeCache-ls-cache.txt
-          name: print Filesystem before cache
+
+  # create / restore credential file
+    # chaching - start
+      - restore_cache:
+          key: -v1-credentials-{{ checksum "checksum_24h.cache" }}
 
       - sfdx/auth:
           defaultusername: david@mcga.de
@@ -113,57 +83,27 @@ jobs:
       - run:
           command: >
             sfdx force:limits:api:display -u david@mcga.de > tmp/artifacts/limitsBefore.txt
-          name: print org limits before creation
-
-  # create / restore credential file
-    # chaching - start
-      - restore_cache:
-          name: Restore cached org credentials
-          keys: 
-            - -v7-credentials-{{ checksum "checksum_24h.cache" }}
-
-      - run:
-          command: |
-            pwd
-            ls -la > tmp/artifacts/beforeScratch-ls-root.txt
-            ls -la tmp/ > tmp/artifacts/beforeScratch-ls-tmp.txt
-            ls -la tmp/cache/ > tmp/artifacts/beforeScratch-ls-cache.txt
-          name: print Filesystem before scratch org
-
-      - run:
-          command: |
-            scripts/deployment/createNewScratchOrg.sh testScratchOrg tmp/cache/authFile.json
-            base64 tmp/cache/authFile.json > tmp/cache/base64AuthFile
-          name: create scratch org
-
-      - save_cache:
-          name: Save cached org credentials
-          key: -v7-credentials-{{ checksum "checksum_24h.cache" }}
-          paths:
-            - ./tmp/cache/base64AuthFile
-       # chaching scratch org credentials - end 
-        
-      - run:
-          command: |
-            pwd
-            ls -la > tmp/artifacts/afterCache-ls-root.txt
-            ls -la tmp/ > tmp/artifacts/afterCache-ls-tmp.txt
-            ls -la tmp/cache/ > tmp/artifacts/afterCache-ls-cache.txt
-          name: print Filesystem after cache
+          name: print org limits 
 
       - run:
           command: >
-            sfdx force:limits:api:display -u david@mcga.de > tmp/artifacts/limitsAfter.txt
-          name: print org limits after creation
+            node scripts/deployment/node/scratchOrg_create.js tempScratchOrg
+          name: create scratch org
 
+      - run:
+          command: >
+            node scripts/deployment/node/scratchOrg_writeCache.js tempScratchOrg
+          name: retrieve and save scratch org credentials
+
+      - save_cache:
+          key: -v1-credentials-{{ checksum "checksum_24h.cache" }}
+          paths:
+            - "cache"
+       # chaching scratch org credentials - end 
+        
       - store_artifacts:
           path: tmp/artifacts/
-      
-      - store_artifacts:
-          path: tmp/cache/authFile.json
-
-      - store_artifacts:
-          path: ./tmp/cache/base64AuthFile
+          
           
       - run:
           command: >
@@ -187,31 +127,10 @@ jobs:
       - sfdx/auth:
           defaultusername: david@mcga.de
 
-      - restore_cache:
-          name: Restore cached org credentials
-          keys: 
-            - -v7-credentials-{{ checksum "checksum_24h.cache" }}
-          
-      - run:
-          command: |      
-            base64 --decode ./tmp/cache/base64AuthFile > ./tmp/cache/authFile.json
-          name: Decode authfile
-
-      - run:
-          command: |
-            pwd
-            ls -la > tmp/artifacts/push-ls-root.txt
-            ls -la tmp/ > tmp/artifacts/push-ls-tmp.txt
-            ls -la tmp/cache/ > tmp/artifacts/push-ls-cache.txt
-          name: print Filesystem
-          
-      - store_artifacts:
-          path: tmp/cache/authFile.json
-          
       - run:
           command: >
-            scripts/deployment/authorizeWithAuthFile.sh tempScratchOrg tmp/cache/authFile.json
-          name: authorize via AuthFile
+            node scripts/deployment/node/authorizeScratchOrgWithJwt.js tempScratchOrg
+          name: authorize via JWT
 
       - run:
           command: >
@@ -231,91 +150,11 @@ jobs:
       - store_artifacts:
           path: tmp/artifacts/          
 
-  test-install-sfdx-auth:
-    docker:
-      #- image: cimg/node:19.1.0
-      - image: salesforce/salesforcedx:7.178.0-slim
-    steps:
-      - run:
-          command: |
-            node --version
-          name: print node version
-      - run:
-          command: |
-            sfdx --version
-          name: print sfdx version
 
-      - run:
-          command: |
-            echo "$SFDX_JWT_KEY" | base64 --decode > server.key
-            sfdx auth:jwt:grant --clientid $SFDX_CONSUMER_KEY --instanceurl https://login.salesforce.com --jwtkeyfile ./server.key --setdefaultdevhubusername --username david@mcga.de --setalias devHub
-
-            rm server.key
-          name: Authorize Devhub
-      - run:
-          command: |
-            sfdx force:org:display --targetusername  devHub --verbose --json
-          name: Print DevHub Auth Info
-
-      - persist_to_workspace:
-          # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
-          # taken to be the root directory of the workspace.
-          root: ./
-          # Must be relative path from root
-          paths:
-            - ./
-      # - run:
-      #     command: >
-      #     name: Authorize Devhub
-      #      david@mcga.de
-
-  test-install-sfdx-print:
-    docker:
-      - image: salesforce/salesforcedx:7.178.0-slim
-    steps:
-      - attach_workspace:
-          # Must be absolute path or relative path from working_directory
-          at: ./
-      - run:
-          command: >
-            sfdx config:list
-          name: print Config
-      - run:
-          command: >
-            sfdx force:org:list
-          name: print Org list
-
-
-    
 workflows:
-  install-sfdx:
-    when:
-      equal: [ test-sfdx-install, << pipeline.parameters.action >> ]
+  basic-test:
     jobs:
-      - test-install-sfdx-auth
-      - test-install-sfdx-print:
-          requires:
-            - test-install-sfdx-auth
-
-  org-limits:
-    when:
-      equal: [ limits, << pipeline.parameters.action >> ]
-    jobs:
-      - print-org-limits:
-          name: Org Limits
-          filename: orgLimits.txt
-
-
-  deploy-and-test:
-    when:
-      equal: [ build, << pipeline.parameters.action >> ]
-    jobs:
-      - print-org-limits:
-          name: limitsBefore
-          filename: orgLimits.txt
-      - set-up-enviroment:
-          requires:
-            - limitsBefore
+      - set-up-enviroment
       - create-cache-checksum:
           requires:
             - set-up-enviroment
@@ -329,8 +168,3 @@ workflows:
       - push-code-and-run-tests:
           requires:
             - create-scratch-org
-      - print-org-limits:
-          name: limitsAfter
-          filename: orgLimits.txt
-          requires:
-            - push-code-and-run-tests
