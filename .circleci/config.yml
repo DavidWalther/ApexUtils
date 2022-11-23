@@ -195,11 +195,7 @@ jobs:
 # -----------------------
 # Utilities
 # -----------------------
-      # - run:
-      #     command: |
-      #       pwd
-      #       ls -la
-      #     name: print Filesystem
+
 
 
   print-org-limits:
@@ -218,6 +214,19 @@ jobs:
       - store_artifacts:
           path: << parameters.filename >>  
 
+  print-filesystem:
+    executor: sfdx/default
+    steps:
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: ./
+      - run:
+          command: |
+            pwd
+            ls -l
+            ls cache -l
+            ls tmp -l
+          name: print Filesystem
 # -----------------------
 # Workflows
 # -----------------------
