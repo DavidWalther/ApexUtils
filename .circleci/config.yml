@@ -88,14 +88,7 @@ jobs:
           # Must be absolute path or relative path from working_directory
           at: ./
 
-      - run:
-          command: |
-            pwd
-            ls -la
-          name: print Filesystem
-
       - sfdx/install
-
 
   # create / restore credential file
     # chaching - start
