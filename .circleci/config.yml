@@ -3,6 +3,12 @@ version: 2.1
 orbs:
   sfdx: circleci/salesforce-sfdx@2.2.0
 
+parameters:
+  action:
+    type: enum
+    enum: [build, limits, test-sfdx-install]
+    default: test-sfdx-install
+
 jobs:
   set-up-enviroment:
     executor: sfdx/default
