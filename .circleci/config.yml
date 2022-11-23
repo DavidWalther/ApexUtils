@@ -169,6 +169,66 @@ jobs:
           path: tmp/artifacts/          
 
 
+
+# Testjobs with docker-SFDX
+
+  test-install-sfdx-auth:
+    docker:
+      #- image: cimg/node:19.1.0
+      - image: salesforce/salesforcedx:7.178.0-slim
+    steps:
+      - run:
+          command: |
+            node --version
+          name: print node version
+      - run:
+          command: |
+            sfdx --version
+          name: print sfdx version
+
+      - run:
+          command: |
+            echo "$SFDX_JWT_KEY" | base64 --decode > server.key
+            sfdx auth:jwt:grant --clientid $SFDX_CONSUMER_KEY --instanceurl https://login.salesforce.com --jwtkeyfile ./server.key --setdefaultdevhubusername --username david@mcga.de --setalias devHub
+
+            rm server.key
+          name: Authorize Devhub
+      - run:
+          command: |
+            sfdx force:org:display --targetusername  devHub --verbose --json
+          name: Print DevHub Auth Info
+
+      - persist_to_workspace:
+          # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
+          # taken to be the root directory of the workspace.
+          root: ./
+          # Must be relative path from root
+          paths:
+            - ./
+      # - run:
+      #     command: >
+      #     name: Authorize Devhub
+      #      david@mcga.de
+
+  test-install-sfdx-print:
+    docker:
+      - image: salesforce/salesforcedx:7.178.0-slim
+    steps:
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: ./
+      - run:
+          command: >
+            sfdx config:list
+          name: print Config
+      - run:
+          command: >
+            sfdx force:org:list
+          name: print Org list
+
+
+
+
 workflows:
   basic-test:
     jobs:
