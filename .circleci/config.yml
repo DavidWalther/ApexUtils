@@ -107,11 +107,6 @@ jobs:
 
       - run:
           command: >
-            sfdx force:limits:api:display -u david@mcga.de > tmp/artifacts/limitsBefore.txt
-          name: print org limits 
-
-      - run:
-          command: >
             scripts/deployment/createNewScratchOrg.sh tempScratchOrg ./cache/org.credentials
           name: create scratch org
 
@@ -161,11 +156,6 @@ jobs:
           command: >
             sfdx force:apex:test:run --targetusername tempScratchOrg --suitenames=MapUtilities --resultformat=human --codecoverage --wait 60 > tmp/artifacts/testResults.txt
           name: Run APEX Tests
-
-      - run:
-          command: >
-            sfdx force:limits:api:display -u david@mcga.de > tmp/artifacts/limitsAfter.txt
-          name: print org limits
 
       - store_artifacts:
           path: tmp/artifacts/          
