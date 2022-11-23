@@ -286,7 +286,7 @@ workflows:
           name: limitsAfterOrgCreation
           filename: orgLimits.txt
           requires:
-            - push-code-and-run-tests
+            - create-scratch-org
       - push-code-and-run-tests:
           requires:
             - create-scratch-org
