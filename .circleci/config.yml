@@ -224,8 +224,16 @@ jobs:
           command: |
             pwd
             ls -l
+            echo "============="
+            echo ""
             ls cache -l
+            echo "============="
+            echo ""
             ls tmp -l
+          name: print Filesystem
+      - run:
+          command: |
+            cat ./cache/org.credentials
           name: print Filesystem
 # -----------------------
 # Workflows
