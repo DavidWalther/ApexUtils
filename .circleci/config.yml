@@ -34,6 +34,7 @@ jobs:
           command: |
             mkdir tmp
             mkdir tmp/artifacts
+            mkdit cache
           name: create folder for artifacts 
 
       - persist_to_workspace:
