@@ -111,7 +111,7 @@ jobs:
 
       - run:
           command: >
-            node scripts/deployment/node/scratchOrg_create.js tempScratchOrg
+            scripts/deployment/createNewScratchOrg.sh tempScratchOrg ./cache/org.credentials
           name: create scratch org
 
       - run:
