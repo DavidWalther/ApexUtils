@@ -270,6 +270,15 @@ workflows:
           filters:
             branches:
               ignore: master
+      - print-filesystem:
+          name: FileSystem after creating scratchorg
+          requires:
+            - create-scratch-org
+      - print-org-limits:
+          name: limitsAfterOrgCreation
+          filename: orgLimits.txt
+          requires:
+            - push-code-and-run-tests
       - push-code-and-run-tests:
           requires:
             - create-scratch-org
