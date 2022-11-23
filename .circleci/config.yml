@@ -236,9 +236,34 @@ jobs:
 
 
 workflows:
-  basic-test:
+  install-sfdx:
+    when:
+      equal: [ test-sfdx-install, << pipeline.parameters.action >> ]
     jobs:
-      - set-up-enviroment
+      - test-install-sfdx-auth
+      - test-install-sfdx-print:
+          requires:
+            - test-install-sfdx-auth
+
+  org-limits:
+    when:
+      equal: [ limits, << pipeline.parameters.action >> ]
+    jobs:
+      - print-org-limits:
+          name: Org Limits
+          filename: orgLimits.txt
+
+
+  deploy-and-test:
+    when:
+      equal: [ build, << pipeline.parameters.action >> ]
+    jobs:
+      - print-org-limits:
+          name: limitsBefore
+          filename: orgLimits.txt
+      - set-up-enviroment:
+          requires:
+            - limitsBefore
       - create-cache-checksum:
           requires:
             - set-up-enviroment
@@ -252,3 +277,8 @@ workflows:
       - push-code-and-run-tests:
           requires:
             - create-scratch-org
+      - print-org-limits:
+          name: limitsAfter
+          filename: orgLimits.txt
+          requires:
+            - push-code-and-run-tests
