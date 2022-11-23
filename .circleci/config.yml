@@ -61,25 +61,6 @@ jobs:
           root: ./
           paths:
             - ./
-
-
-  print-org-limits:
-    executor: sfdx/default
-    parameters:
-      filename:
-        type: string
-    steps:
-      - sfdx/install
-      - sfdx/auth:
-          defaultusername: david@mcga.de
-      - run:
-          command: >
-            sfdx force:limits:api:display -u david@mcga.de > << parameters.filename >>
-          name: print org limits
-      - store_artifacts:
-          path: << parameters.filename >>  
-       
-                      
             
   create-scratch-org:
     executor: sfdx/default
@@ -211,8 +192,35 @@ jobs:
             sfdx force:org:list
           name: print Org list
 
+# -----------------------
+# Utilities
+# -----------------------
+      # - run:
+      #     command: |
+      #       pwd
+      #       ls -la
+      #     name: print Filesystem
 
 
+  print-org-limits:
+    executor: sfdx/default
+    parameters:
+      filename:
+        type: string
+    steps:
+      - sfdx/install
+      - sfdx/auth:
+          defaultusername: david@mcga.de
+      - run:
+          command: >
+            sfdx force:limits:api:display -u david@mcga.de > << parameters.filename >>
+          name: print org limits
+      - store_artifacts:
+          path: << parameters.filename >>  
+
+# -----------------------
+# Workflows
+# -----------------------
 
 workflows:
   install-sfdx:
