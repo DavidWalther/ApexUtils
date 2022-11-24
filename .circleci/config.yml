@@ -7,7 +7,7 @@ parameters:
   action:
     type: enum
     enum: [build, limits, test-sfdx-install]
-    default: build
+    default: test-sfdx-install
 
 jobs:
   set-up-enviroment:
@@ -174,7 +174,7 @@ jobs:
           name: Authorize Devhub
       - run:
           command: |
-            sfdx force:org:display --targetusername  devHub --verbose --json
+            sfdx force:org:display --targetusername  devHub --verbose
           name: Print DevHub Auth Info
 
       - persist_to_workspace:
