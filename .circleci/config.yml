@@ -131,21 +131,26 @@ jobs:
       - run:
           command: >
             FILEPATH="./cache/org.credentials"
+            echo $FILEPATH
+
             USERNAME_LINE=$( cat $FILEPATH | grep "Username" )
+            echo $USERNAME_LINE
             USERNAME="${USERNAME_LINE/"Username"/}"
             echo $USERNAME
 
             INSTANCE_URL_LINE=$( cat $FILEPATH | grep "Instance Url" )
+            echo $INSTANCE_URL_LINE
             INSTANCE_URL="${INSTANCE_URL_LINE/"Instance Url"/}"
             echo $INSTANCE_URL
 
             ALIAS="Pipeline-Org"
+            echo $ALIAS
 
-            base64 --decode $SFDX_JWT_KEY > server.key
+#            base64 --decode $SFDX_JWT_KEY > server.key
 
-            sfdx auth:jwt:grant --jwtkeyfile server.key --clientid="$SFDX_CONSUMER_KEY" --instanceurl="$INSTANCE_URL" --setalias="$ALIAS" --username="$USERNAME" --setdefaultusername
+#            sfdx auth:jwt:grant --jwtkeyfile server.key --clientid="$SFDX_CONSUMER_KEY" --instanceurl="$INSTANCE_URL" --setalias="$ALIAS" --username="$USERNAME" --setdefaultusername
             
-            rm server.key
+ #           rm server.key
           name: Authorize Scratch org
 
 
