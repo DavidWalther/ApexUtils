@@ -127,6 +127,12 @@ jobs:
             #scripts/deployment/authorize.sh ${SFDX_JWT_KEY} ${SFDX_CONSUMER_KEY} ${CACHED_ORG_DETAILS} ${ORG_ALIAS}
           name: authorize via JWT
 
+
+      - run:
+          command: >
+            sfdx force:org:list
+          name: Print Org list
+
       - run:
           command: >
             sfdx force:source:push --forceoverwrite --wait 60 > tmp/artifacts/DeploymentResults.txt
