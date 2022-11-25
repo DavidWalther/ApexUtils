@@ -129,7 +129,7 @@ jobs:
       #     name: authorize via JWT
 
       - run:
-          command: >
+          command: |
             FILEPATH="./cache/org.credentials"
             echo $FILEPATH
 
