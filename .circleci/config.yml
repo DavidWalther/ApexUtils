@@ -133,10 +133,11 @@ jobs:
             FILEPATH="./cache/org.credentials"
             USERNAME_LINE=$( cat $FILEPATH | grep "Username" )
             USERNAME="${USERNAME_LINE/"Username"/}"
-
+            echo $USERNAME
             INSTANCE_URL_LINE=$( cat $FILEPATH | grep "Instance Url" )
             INSTANCE_URL="${INSTANCE_URL_LINE/"Instance Url"/}"
-
+            echo $INSTANCE_URL
+            
           name: Authorize Scratch org
 
 
