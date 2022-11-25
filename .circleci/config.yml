@@ -120,7 +120,11 @@ jobs:
           command: |
             CACHED_ORG_DETAILS="./cache/org.credentials"
             ORG_ALIAS="pipeline-org"
-            scripts/deployment/authorize.sh $SFDX_JWT_KEY $SFDX_CONSUMER_KEY $CACHED_ORG_DETAILS $ORG_ALIAS
+            echo $SFDX_JWT_KEY
+            echo $SFDX_CONSUMER_KEY
+            echo $CACHED_ORG_DETAILS
+            echo $ORG_ALIAS
+            #scripts/deployment/authorize.sh ${SFDX_JWT_KEY} ${SFDX_CONSUMER_KEY} ${CACHED_ORG_DETAILS} ${ORG_ALIAS}
           name: authorize via JWT
 
       - run:
