@@ -13,8 +13,6 @@ FILEPATH=$3
 # Alias for the authorized org
 ALIAS=$4
 
-# optional parameter
-SET_DEFAULTUSERNAME=$5
 
 #extract instance url from org details
 INSTANCE_URL_LINE=$( cat $FILEPATH | grep "Instance Url" )
@@ -29,7 +27,7 @@ echo $JWT
 echo $CLIENT_ID
 echo $FILEPATH
 echo $ALIAS
-echo $SET_DEFAULTUSERNAME
+
 
 
 # ==========================
@@ -39,7 +37,7 @@ echo $SET_DEFAULTUSERNAME
 # create server.key from JWT
 base64 --decode $JWT > ./server.key
 
-sfdx auth:jwt:grant --jwtkeyfile .server.key --clientid="$CLIENT_ID" --instanceurl="$INSTANCE_URL" --setalias="$ALIAS" --username="$USERNAME" $SET_DEFAULTUSERNAME
+sfdx auth:jwt:grant --jwtkeyfile .server.key --clientid="$CLIENT_ID" --instanceurl="$INSTANCE_URL" --setalias="$ALIAS" --username="$USERNAME" 
 
 # delete server.key again
 rm ./server.key

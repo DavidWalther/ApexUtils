@@ -118,7 +118,7 @@ jobs:
 
       - run:
           command: >
-            scripts/deployment/authorize.sh $SFDX_JWT_KEY $SFDX_CONSUMER_KEY ./cache/org.credentials pipeline-org --setdefaultusername 
+            scripts/deployment/authorize.sh $SFDX_JWT_KEY $SFDX_CONSUMER_KEY ./cache/org.credentials pipeline-org 
           name: authorize via JWT
 
       - run:
