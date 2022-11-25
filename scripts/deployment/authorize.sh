@@ -24,6 +24,13 @@ INSTANCE_URL="${INSTANCE_URL_LINE/"Instance Url"/}"
 USERNAME_LINE=$( cat $FILEPATH | grep "Username" )
 USERNAME="${USERNAME_LINE/"Username"/}"
 
+# print parameters
+echo $JWT
+echo $CLIENT_ID
+echo $FILEPATH
+echo $ALIAS
+echo $SET_DEFAULTUSERNAME
+
 
 # ==========================
 # Logic
