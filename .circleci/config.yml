@@ -141,11 +141,11 @@ jobs:
 
             ALIAS="Pipeline-Org"
 
-            base64 --decode $SFDX_JWT_KEY > ./server.key
+            base64 --decode $SFDX_JWT_KEY > server.key
 
-            sfdx auth:jwt:grant --jwtkeyfile ./server.key --clientid="$SFDX_CONSUMER_KEY" --instanceurl="$INSTANCE_URL" --setalias="$ALIAS" --username="$USERNAME" --setdefaultusername
+            sfdx auth:jwt:grant --jwtkeyfile server.key --clientid="$SFDX_CONSUMER_KEY" --instanceurl="$INSTANCE_URL" --setalias="$ALIAS" --username="$USERNAME" --setdefaultusername
             
-            rm ./server.key
+            rm server.key
           name: Authorize Scratch org
 
 
