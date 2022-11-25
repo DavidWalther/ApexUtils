@@ -131,7 +131,7 @@ jobs:
 
       - run:
           command: |
-            base64 --decode $SFDX_JWT_KEY > server.key
+            echo "$SFDX_JWT_KEY" | base64 --decode > server.key
           name: Authorize Scratch org
 
       - run:
