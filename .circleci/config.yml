@@ -143,7 +143,7 @@ jobs:
             INSTANCE_URL="${INSTANCE_URL_LINE/"Instance Url"/}"
             echo $INSTANCE_URL
 
-            ALIAS="Pipeline-Org"
+            ALIAS="tempScratchOrg"
             echo $ALIAS
 
             sfdx auth:jwt:grant --jwtkeyfile server.key --clientid="$SFDX_CONSUMER_KEY" --instanceurl="$INSTANCE_URL" --setalias="$ALIAS" --username="$USERNAME" --setdefaultusername
