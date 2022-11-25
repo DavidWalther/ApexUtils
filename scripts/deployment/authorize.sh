@@ -1,6 +1,8 @@
 #!/bin/sh
 
-
+# ==========================
+# Parameters
+# ==========================
 
 JWT=$1
 CLIENT_ID=$2
@@ -23,3 +25,14 @@ USERNAME_LINE=$( cat $FILEPATH | grep "Username" )
 USERNAME="${USERNAME_LINE/"Username"/}"
 
 
+# ==========================
+# Logic
+# ==========================
+
+# create server.key from JWT
+base64 --decode $JWT > ./server.key
+
+sfdx auth:jwt:grant --jwtkeyfile .server.key --clientid="$CLIENT_ID" --instanceurl="$INSTANCE_URL" --setalias="$ALIAS" --username="$USERNAME"
+
+# delete server.key again
+rm ./server.key
