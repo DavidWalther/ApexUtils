@@ -124,7 +124,7 @@ jobs:
             echo $SFDX_CONSUMER_KEY
             echo $CACHED_ORG_DETAILS
             echo $ORG_ALIAS
-            scripts/deployment/authorize.sh ${SFDX_JWT_KEY} ${SFDX_CONSUMER_KEY} ${CACHED_ORG_DETAILS} ${ORG_ALIAS}
+            scripts/deployment/authorize.sh "${SFDX_JWT_KEY}" "${SFDX_CONSUMER_KEY}" "${CACHED_ORG_DETAILS}" "${ORG_ALIAS}"
           name: authorize via JWT
 
 
