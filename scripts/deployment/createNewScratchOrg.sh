@@ -9,7 +9,7 @@ if [ ! -f "$CREDFILE" ]; then
   echo "Creating Org"
   echo "------------"
   sfdx force:org:create --setalias "$ALIAS" --definitionfile ./config/project-scratch-def.json --durationdays 1
-  sfdx force:org:display --targetusername "$ALIAS" --verbose --json > "$CREDFILE"
+  sfdx force:org:display --targetusername "$ALIAS" --verbose > "$CREDFILE"
   echo ""
 else
   echo "$CREDFILE does exist. skip Creation"
