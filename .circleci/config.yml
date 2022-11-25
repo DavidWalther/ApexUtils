@@ -113,8 +113,8 @@ jobs:
           at: ./
           
       - sfdx/install
-      - sfdx/auth:
-          defaultusername: david@mcga.de
+      # - sfdx/auth:
+      #     defaultusername: david@mcga.de
 
       # - run:
       #     command: |
