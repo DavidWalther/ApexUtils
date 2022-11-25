@@ -32,7 +32,7 @@ USERNAME="${USERNAME_LINE/"Username"/}"
 # create server.key from JWT
 base64 --decode $JWT > ./server.key
 
-sfdx auth:jwt:grant --jwtkeyfile .server.key --clientid="$CLIENT_ID" --instanceurl="$INSTANCE_URL" --setalias="$ALIAS" --username="$USERNAME" SET_DEFAULTUSERNAME
+sfdx auth:jwt:grant --jwtkeyfile .server.key --clientid="$CLIENT_ID" --instanceurl="$INSTANCE_URL" --setalias="$ALIAS" --username="$USERNAME" $SET_DEFAULTUSERNAME
 
 # delete server.key again
 rm ./server.key
