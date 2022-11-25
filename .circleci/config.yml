@@ -116,17 +116,28 @@ jobs:
       - sfdx/auth:
           defaultusername: david@mcga.de
 
+      # - run:
+      #     command: |
+      #       CACHED_ORG_DETAILS="./cache/org.credentials"
+      #       ORG_ALIAS="pipeline-org"
+      #       echo $SFDX_JWT_KEY
+      #       echo $SFDX_CONSUMER_KEY
+      #       echo $CACHED_ORG_DETAILS
+      #       echo $ORG_ALIAS
+      #       chmod +x scripts/deployment/authorize.sh
+      #       ./scripts/deployment/authorize.sh "${SFDX_JWT_KEY}" "${SFDX_CONSUMER_KEY}" "${CACHED_ORG_DETAILS}" "${ORG_ALIAS}"
+      #     name: authorize via JWT
+
       - run:
-          command: |
-            CACHED_ORG_DETAILS="./cache/org.credentials"
-            ORG_ALIAS="pipeline-org"
-            echo $SFDX_JWT_KEY
-            echo $SFDX_CONSUMER_KEY
-            echo $CACHED_ORG_DETAILS
-            echo $ORG_ALIAS
-            chmod +x scripts/deployment/authorize.sh
-            ./scripts/deployment/authorize.sh "${SFDX_JWT_KEY}" "${SFDX_CONSUMER_KEY}" "${CACHED_ORG_DETAILS}" "${ORG_ALIAS}"
-          name: authorize via JWT
+          command: >
+            FILEPATH="./cache/org.credentials"
+            USERNAME_LINE=$( cat $FILEPATH | grep "Username" )
+            USERNAME="${USERNAME_LINE/"Username"/}"
+
+            INSTANCE_URL_LINE=$( cat $FILEPATH | grep "Instance Url" )
+            INSTANCE_URL="${INSTANCE_URL_LINE/"Instance Url"/}"
+
+          name: Authorize Scratch org
 
 
       - run:
