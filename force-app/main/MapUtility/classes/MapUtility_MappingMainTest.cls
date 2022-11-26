@@ -916,4 +916,17 @@ public with sharing class MapUtility_MappingMainTest {
         OpportunityLineItem testOli3 = (OpportunityLineItem)((List<Object>)mappedData.get(FAMILY_TWO)).get(1);
         System.assertEquals(OLI_IDS[2], testOli3.Id, 'The there was a different OpportunityLineItem mapped for this family');
     }
+
+    //==============================
+    // Multi-Level Mapping vs. key-class
+    //==============================
+
+    /**
+     * Given:
+     *   List of Opportunities with Accounts and Pricebooks
+     * 
+     * Task:
+     *   Map Opportunities by Account.AnnualRevenue and Pricebook.Currency
+     */ 
+
 }
