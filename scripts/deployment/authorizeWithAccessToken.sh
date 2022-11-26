@@ -15,8 +15,11 @@ ACCESS_TOKEN_LINE=$( cat $FILEPATH | grep "Access Token" )
 ACCESS_TOKEN="${ACCESS_TOKEN_LINE/"Access Token"/}"
 
 export SFDX_ACCESS_TOKEN=$ACCESS_TOKEN
+echo "echo"
+echo $SFDX_ACCESS_TOKEN
+echo ""
+echo "printenv"
 printenv $SFDX_ACCESS_TOKEN
-
 
 # ==========================
 # Logic
