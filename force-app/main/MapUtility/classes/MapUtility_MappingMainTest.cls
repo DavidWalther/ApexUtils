@@ -926,7 +926,18 @@ public with sharing class MapUtility_MappingMainTest {
      *   List of Opportunities with Accounts and Pricebooks
      * 
      * Task:
-     *   Map Opportunities by Account.AnnualRevenue and Pricebook.Currency
-     */ 
-
+     *   Map Opportunities by Pricebook.Currency and AccountId
+     *    
+     *   classic:
+     *   EUR
+     *      AccountId1
+     *         List<Opportunity>
+     *       AccountId2
+     *         List<Opportunity>
+     *   USD
+     *       AccountId2
+     *         List<Opportunity>
+     *       AccountId3
+     *         List<Opportunity>
+     */
 }
