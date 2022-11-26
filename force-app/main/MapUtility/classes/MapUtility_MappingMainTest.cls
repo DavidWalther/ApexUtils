@@ -940,7 +940,7 @@ public with sharing class MapUtility_MappingMainTest {
      *       AccountId3
      *         List<Opportunity>
      */
-      
+
     @IsTest
     static void buildMapWithStructuredKey() {
         Account acc01 = createAccount('Account 1');
@@ -949,6 +949,11 @@ public with sharing class MapUtility_MappingMainTest {
         System.assertNotEquals(NULL, acc01.Id);
         System.assertNotEquals(NULL, acc02.Id);
         System.assertNotEquals(NULL, acc03.Id);
+
+        Pricebook2 euroPricebook = createPriceBook('Europe', 'EUR');
+        Pricebook2 americanPricebook = createPriceBook('America', 'USD');
+        System.assertNotEquals(NULL, euroPricebook.Id);
+        System.assertNotEquals(NULL, americanPricebook.Id);
     }
 
     private static Account createAccount(String accountName) {
