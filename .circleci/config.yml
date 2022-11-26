@@ -65,6 +65,7 @@ jobs:
   create-scratch-org:
     executor: sfdx/default
     steps:
+      - no_output_timeout: 30m
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
           at: ./
