@@ -959,4 +959,12 @@ public with sharing class MapUtility_MappingMainTest {
         return result;
     }
 
+    private static Pricebook2 createPriceBook(String priceBookName, String currencyCode) {
+        Pricebook2 result = new Pricebook2(
+            Id = generateFakeId(Pricebook2.getSObjectType()),
+            Name = priceBookName,
+            CurrencyIsoCode = currencyCode
+        );
+        return result;
+    }
 }
