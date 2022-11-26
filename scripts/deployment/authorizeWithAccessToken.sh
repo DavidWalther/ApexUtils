@@ -22,9 +22,6 @@ echo $ACCESS_TOKEN
 export SFDX_ACCESS_TOKEN=$ACCESS_TOKEN
 echo $SFDX_ACCESS_TOKEN
 
-ALIAS="tempScratchOrg"
-echo $ALIAS
-
 
 # ==========================
 # Logic
