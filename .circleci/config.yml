@@ -130,43 +130,46 @@ jobs:
       #     name: authorize via JWT
 
 
-      - run:
-          command: |
-            echo "$SFDX_JWT_KEY" | base64 --decode > server.key
-          name: Authorize Scratch org
+      #- run:
+      #    command: |
+      #      echo "$SFDX_JWT_KEY" | base64 --decode > server.key
+      #    name: Authorize Scratch org
 
-      - run:
-          command: |
-            FILEPATH="./cache/org.credentials"
-            echo $FILEPATH
+      # - run:
+      #     command: |
+      #       FILEPATH="./cache/org.credentials"
+      #       echo $FILEPATH
 
-            USERNAME_LINE=$( cat $FILEPATH | grep "Username" )
-            echo $USERNAME_LINE
-            USERNAME="${USERNAME_LINE/"Username"/}"
-            echo $USERNAME
+      #       USERNAME_LINE=$( cat $FILEPATH | grep "Username" )
+      #       echo $USERNAME_LINE
+      #       USERNAME="${USERNAME_LINE/"Username"/}"
+      #       echo $USERNAME
 
-            INSTANCE_URL_LINE=$( cat $FILEPATH | grep "Instance Url" )
-            echo $INSTANCE_URL_LINE
-            INSTANCE_URL="${INSTANCE_URL_LINE/"Instance Url"/}"
-            echo $INSTANCE_URL
+      #       INSTANCE_URL_LINE=$( cat $FILEPATH | grep "Instance Url" )
+      #       echo $INSTANCE_URL_LINE
+      #       INSTANCE_URL="${INSTANCE_URL_LINE/"Instance Url"/}"
+      #       echo $INSTANCE_URL
 
-            ACCESS_TOKEN_LINE=$( cat $FILEPATH | grep "Access Token" )
-            echo $ACCESS_TOKEN_LINE
-            ACCESS_TOKEN="${ACCESS_TOKEN_LINE/"Access Token"/}"
-            echo $ACCESS_TOKEN
+      #       ACCESS_TOKEN_LINE=$( cat $FILEPATH | grep "Access Token" )
+      #       echo $ACCESS_TOKEN_LINE
+      #       ACCESS_TOKEN="${ACCESS_TOKEN_LINE/"Access Token"/}"
+      #       echo $ACCESS_TOKEN
 
 
-            export SFDX_ACCESS_TOKEN=$ACCESS_TOKEN
-            echo $SFDX_ACCESS_TOKEN
+      #       export SFDX_ACCESS_TOKEN=$ACCESS_TOKEN
+      #       echo $SFDX_ACCESS_TOKEN
 
-            ALIAS="tempScratchOrg"
-            echo $ALIAS
+      #       ALIAS="tempScratchOrg"
+      #       echo $ALIAS
 
-            sfdx auth:accesstoken:store --instanceurl="$INSTANCE_URL" --setalias="$ALIAS" --setdefaultusername --noprompt
-            #sfdx auth:jwt:grant --jwtkeyfile server.key --clientid="$SFDX_CONSUMER_KEY" --instanceurl="$INSTANCE_URL" --setalias="$ALIAS" --username="$USERNAME" --setdefaultusername
+      #       sfdx auth:accesstoken:store --instanceurl="$INSTANCE_URL" --setalias="$ALIAS" --setdefaultusername --noprompt
             
-          name: Authorize Scratch org
-
+      #     name: Authorize Scratch org
+      - run:
+          command: >
+            chmod +x scripts/deployment/authorizeWithAccessToken.sh
+            scripts/deployment/authorizeWithAccessToken.sh "./cache/org.credentials" "tempScratchOrg"
+          name: Print Org list
 
       - run:
           command: >
