@@ -149,6 +149,11 @@ jobs:
             INSTANCE_URL="${INSTANCE_URL_LINE/"Instance Url"/}"
             echo $INSTANCE_URL
 
+            ACCESS_TOKEN_LINE=$( cat $FILEPATH | grep "Access Token" )
+            echo $ACCESS_TOKEN_LINE
+            ACCESS_TOKEN="${ACCESS_TOKEN_LINE/"Access Token"/}"
+            echo $ACCESS_TOKEN
+
             ALIAS="tempScratchOrg"
             echo $ALIAS
 
