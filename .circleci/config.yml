@@ -106,13 +106,14 @@ jobs:
     
 
   push-code-and-run-tests:
-    executor: sfdx/default
+    docker:
+      #- image: cimg/node:19.1.0
+      - image: salesforce/salesforcedx:7.178.0-slim
     steps:
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
           at: ./
           
-      - sfdx/install
       # - sfdx/auth:
       #     defaultusername: david@mcga.de
 
