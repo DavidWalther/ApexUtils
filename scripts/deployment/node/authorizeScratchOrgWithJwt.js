@@ -8,6 +8,7 @@ const alias = process.argv[2] ? process.argv[2] :'tempScratchOrg';
 const consumerKey =  process.env.SFDX_CONSUMER_KEY;
 const serverKeyPath = './server.key'
 
+console.table(process.argv);
 
 loadPromise(filepath)
   .then(scratchorg => {
