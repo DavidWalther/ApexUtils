@@ -335,9 +335,6 @@ workflows:
           requires:
             - set-up-enviroment
             - create-cache-checksum
-          filters:
-            branches:
-              ignore: master
       - print-filesystem:
           name: FileSystem after creating scratchorg
           requires:
