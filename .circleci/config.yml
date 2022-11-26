@@ -168,7 +168,7 @@ jobs:
       - run:
           command: |
             FILEPATH="./cache/org.credentials"
-            ACCESSTOKEN=${.scripts/deployment/readAccessToken.sh "$FILEPATH"}
+            ACCESSTOKEN=$(scripts/deployment/readAccessToken.sh "$FILEPATH")
             echo $ACCESSTOKEN
             export SFDX_ACCESS_TOKEN=$ACCESSTOKEN
 
