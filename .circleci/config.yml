@@ -167,6 +167,9 @@ jobs:
       #     name: Authorize Scratch org
       - run:
           command: |
+            FILEPATH="./cache/org.credentials"
+            export SFDX_ACCESS_TOKEN=$(.scripts/deployment/readAccessToken.sh "$FILEPATH")
+
             chmod +x scripts/deployment/authorizeWithAccessToken.sh
             scripts/deployment/authorizeWithAccessToken.sh "./cache/org.credentials" "tempScratchOrg"
           name: Authorize Scratch Org
