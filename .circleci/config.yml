@@ -162,6 +162,7 @@ jobs:
             echo $ALIAS
 
             sfdx auth -h
+            sfdx --version
             #sfdx auth:accesstoken:store --instanceurl="$INSTANCE_URL" --setalias="$ALIAS" --setdefaultusername --noprompt
             #sfdx auth:jwt:grant --jwtkeyfile server.key --clientid="$SFDX_CONSUMER_KEY" --instanceurl="$INSTANCE_URL" --setalias="$ALIAS" --username="$USERNAME" --setdefaultusername
             
