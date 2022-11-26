@@ -940,4 +940,19 @@ public with sharing class MapUtility_MappingMainTest {
      *       AccountId3
      *         List<Opportunity>
      */
+      
+    @IsTest
+    static void buildMapWithStructuredKey() {
+        Account acc01 = createAccount('Account 1');
+        System.assertNotEquals(NULL, acc01.Id);
+    }
+
+    private Account createAccount(String accountName) {
+        Account result = new Account(
+            Id = generateFakeId(Account.getSObjectType()),
+            Name = accountName
+        );
+        return result;
+    }
+
 }
