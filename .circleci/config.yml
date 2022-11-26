@@ -74,7 +74,7 @@ jobs:
   # create / restore credential file
     # chaching - start
       - restore_cache:
-          key: -v3-credentials-{{ checksum "checksum_24h.cache" }}
+          key: -v4-credentials-{{ checksum "checksum_24h.cache" }}
 
       - sfdx/auth:
           defaultusername: david@mcga.de
@@ -85,7 +85,7 @@ jobs:
           name: create scratch org
 
       - save_cache:
-          key: -v3-credentials-{{ checksum "checksum_24h.cache" }}
+          key: -v4-credentials-{{ checksum "checksum_24h.cache" }}
           paths:
             - "cache"
        # chaching scratch org credentials - end 
@@ -335,9 +335,6 @@ workflows:
           requires:
             - set-up-enviroment
             - create-cache-checksum
-          filters:
-            branches:
-              ignore: master
       - print-filesystem:
           name: FileSystem after creating scratchorg
           requires:
