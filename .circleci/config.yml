@@ -65,7 +65,6 @@ jobs:
   create-scratch-org:
     executor: sfdx/default
     steps:
-      - no_output_timeout: 30m
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
           at: ./
@@ -84,6 +83,7 @@ jobs:
           command: >
             scripts/deployment/createNewScratchOrg.sh tempScratchOrg ./cache/org.credentials
           name: create scratch org
+          no_output_timeout: 30m
 
       - save_cache:
           key: -v2-credentials-{{ checksum "checksum_24h.cache" }}
