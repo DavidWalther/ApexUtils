@@ -8,7 +8,7 @@ if [ ! -f "$CREDFILE" ]; then
   
   echo "Creating Org"
   echo "------------"
-  sfdx force:org:create --setalias "$ALIAS" --clientid="$SFDX_CONSUMER_KEY" --definitionfile ./config/project-scratch-def.json --wait=20 --durationdays 1
+  sfdx force:org:create --setalias "$ALIAS" --clientid="$SFDX_CONSUMER_KEY" --definitionfile ./config/project-scratch-def.json --wait=60 --durationdays 1
   sfdx force:org:display --targetusername "$ALIAS" --verbose > "$CREDFILE"
   echo ""
 else
