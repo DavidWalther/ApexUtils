@@ -944,7 +944,11 @@ public with sharing class MapUtility_MappingMainTest {
     @IsTest
     static void buildMapWithStructuredKey() {
         Account acc01 = createAccount('Account 1');
+        Account acc02 = createAccount('Account 2');
+        Account acc03 = createAccount('Account 2');
         System.assertNotEquals(NULL, acc01.Id);
+        System.assertNotEquals(NULL, acc02.Id);
+        System.assertNotEquals(NULL, acc03.Id);
     }
 
     private static Account createAccount(String accountName) {
