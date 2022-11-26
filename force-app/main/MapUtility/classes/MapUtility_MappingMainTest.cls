@@ -947,7 +947,7 @@ public with sharing class MapUtility_MappingMainTest {
         System.assertNotEquals(NULL, acc01.Id);
     }
 
-    private Account createAccount(String accountName) {
+    private static Account createAccount(String accountName) {
         Account result = new Account(
             Id = generateFakeId(Account.getSObjectType()),
             Name = accountName
