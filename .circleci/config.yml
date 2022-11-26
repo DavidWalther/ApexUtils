@@ -166,7 +166,7 @@ jobs:
             
       #     name: Authorize Scratch org
       - run:
-          command: >
+          command: |
             chmod +x scripts/deployment/authorizeWithAccessToken.sh
             scripts/deployment/authorizeWithAccessToken.sh "./cache/org.credentials" "tempScratchOrg"
           name: Print Org list
