@@ -182,6 +182,10 @@ jobs:
           name: Print Org list
 
       - run:
+          command: |
+            ls -la ./.sfdx/
+
+      - run:
           command: >
             sfdx force:source:push --forceoverwrite --wait 60 > tmp/artifacts/DeploymentResults.txt
           name: SFDX Push Changes
