@@ -184,12 +184,20 @@ jobs:
 
       - run:
           command: |
-            ls -la ~/
             ls -la ~/.sfdx/
 
       - run:
           command: |
             touch ~/.sfdx/test
+
+      - run:
+          command: |
+            ls -la ~/.sfdx/
+
+      - run:
+          command: |
+            cat ~/.sfdx/key.json
+            
 
       - run:
           command: >
