@@ -980,14 +980,9 @@ public with sharing class MapUtility_MappingMainTest {
       
       Opportunity dummyOpp1 = createOpportunity('Dummy Opportunity 1', dummyAcc1);
           
-      Product2 famili1Product = createProduct(PRODUCT_NAME_ONE, 'Family1');
+      Product2 family1Product = createProduct(PRODUCT_NAME_ONE, 'Family1');
 
-      PricebookEntry pbe = new PricebookEntry(
-        Pricebook2Id = generateFakeId(Pricebook2.getSObjectType()),
-        Product2Id = famili1Product.Id,
-        Product2 = famili1Product
-      );
-
+      PricebookEntry pbe = createPriceBookEntry(NULL, family1Product);
 
       OpportunityLineItem oli1 = new OpportunityLineItem(
         Id = generateFakeId(OpportunityLineItem.getSObjectType()),
@@ -1000,31 +995,43 @@ public with sharing class MapUtility_MappingMainTest {
       System.assertEquals(dummyAcc1.Id, oli1.Opportunity.Account.Id);
     }
 
-    private static Account createAccount(String accountName, String countryCode) {
-        Account result = new Account(
-            Id = generateFakeId(Account.getSObjectType()),
-            Name = accountName,
-            ShippingCountry = countryCode
-        );
-        return result;
-    }
-
-    private static Product2 createProduct(String productName, String productFamily) {
-      Product2 result = new Product2(
-        Id = generateFakeId(Product2.getSObjectType()),
-        Name = productName,
-        Family = productFamily
+  private static Account createAccount(String accountName, String countryCode) {
+      Account result = new Account(
+          Id = generateFakeId(Account.getSObjectType()),
+          Name = accountName,
+          ShippingCountry = countryCode
       );
       return result;
-    }
+  }
 
-    private static Opportunity createOpportunity(String opportunityName, Account opportunityAccount) {
-      Opportunity result = new Opportunity(
-        Id = generateFakeId(Opportunity.getSObjectType()),
-        AccountId = opportunityAccount?.Id,
-        Account = opportunityAccount,
-        Name = opportunityName
-      );
-      return result;
+  private static Product2 createProduct(String productName, String productFamily) {
+    Product2 result = new Product2(
+      Id = generateFakeId(Product2.getSObjectType()),
+      Name = productName,
+      Family = productFamily
+    );
+    return result;
+  }
+
+  private static Opportunity createOpportunity(String opportunityName, Account opportunityAccount) {
+    Opportunity result = new Opportunity(
+      Id = generateFakeId(Opportunity.getSObjectType()),
+      AccountId = opportunityAccount?.Id,
+      Account = opportunityAccount,
+      Name = opportunityName
+    );
+    return result;
+  }
+
+  private static PricebookEntry createPriceBookEntry(Pricebook2 pricebook, Product2 product) {
+    PricebookEntry result = new PricebookEntry(
+      Id = generateFakeId(PricebookEntry.getSObjectType()),
+      Pricebook2Id = pricebook?.Id,
+      Pricebook2 = pricebook,
+      
+      Product2Id = product?.Id,
+      Product2 = product
+    );
+    return result;
   }
 }
