@@ -978,12 +978,7 @@ public with sharing class MapUtility_MappingMainTest {
     static void checkStructure() {
       Account dummyAcc1 = createAccount('Dummy Account 1', 'EU');
       
-      Opportunity dummyOpp1 = new Opportunity(
-        Id = generateFakeId(Opportunity.getSObjectType()),
-        AccountId = dummyAcc1.Id,
-        Account = dummyAcc1,
-        Name = 'Dummy Opportunity 1'
-      );
+      Opportunity dummyOpp1 = createOpportunity('Dummy Opportunity 1', dummyAcc1);
           
       Product2 famili1Product = createProduct(PRODUCT_NAME_ONE, 'Family1');
 
@@ -1014,7 +1009,6 @@ public with sharing class MapUtility_MappingMainTest {
         return result;
     }
 
-
     private static Product2 createProduct(String productName, String productFamily) {
       Product2 result = new Product2(
         Id = generateFakeId(Product2.getSObjectType()),
@@ -1023,4 +1017,14 @@ public with sharing class MapUtility_MappingMainTest {
       );
       return result;
     }
+
+    private static Opportunity createOpportunity(String opportunityName, Account opportunityAccount) {
+      Opportunity dummyOpp1 = new Opportunity(
+        Id = generateFakeId(Opportunity.getSObjectType()),
+        AccountId = opportunityAccount?.Id,
+        Account = opportunityAccount,
+        Name = opportunityName
+      );
+      return result;
+  }
 }
