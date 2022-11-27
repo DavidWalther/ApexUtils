@@ -185,10 +185,11 @@ jobs:
       - run:
           command: |
             ls -la ~/
+            ls -la ~/.sfdx/
 
       - run:
           command: |
-            ls -la ./.sfdx/
+            touch ~/.sfdx/test
 
       - run:
           command: >
