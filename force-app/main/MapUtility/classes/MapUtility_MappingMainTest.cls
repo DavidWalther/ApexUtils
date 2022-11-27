@@ -1031,6 +1031,8 @@ public with sharing class MapUtility_MappingMainTest {
           new List<MapUtility_MappingMain.IncludeItemKeyInMapInterface>(),
           new List<MapUtility_MappingMain.IncludeItemInMapInterface>()
         );
+
+        System.assertEquals(1,mappedData.size());
     }
 
     private class CountryAccountFamilyKey {
