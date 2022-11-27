@@ -1021,6 +1021,12 @@ public with sharing class MapUtility_MappingMainTest {
         System.assertEquals(dummyAcc1.Id, oli3.Opportunity.Account.Id);
     }
 
+    private class CountryAccountFamilyKey {
+        private String productFamily;
+        private String accountCountry;
+        private String accountId;
+    }
+
   private static Account createAccount(String accountName, String countryCode) {
       Account result = new Account(
           Id = generateFakeId(Account.getSObjectType()),
