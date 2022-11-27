@@ -953,6 +953,25 @@ public with sharing class MapUtility_MappingMainTest {
      *         List<Product2>
      *       Product.Family2
      *         List<Product2>
+     * 
+     *   Structured Key:
+     *     (EUR, AccountId1, Product.Family1)
+     *       List<Product2>
+     *     (EUR, AccountId1, Product.Family2)
+     *       List<Product2>
+     *     (EUR, AccountId2, Product.Family1)
+     *       List<Product2>
+     *     (EUR, AccountId2, Product.Family2)
+     *       List<Product2>
+     * 
+     *     (USD, AccountId2, Product.Family1)
+     *       List<Product2>
+     *     (USD, AccountId2, Product.Family2)
+     *       List<Product2>
+     *     (USD, AccountId3, Product.Family2)
+     *       List<Product2>
+     *     (USD, AccountId3, Product.Family3)
+     *       List<Product2>
      */
 
     @IsTest
