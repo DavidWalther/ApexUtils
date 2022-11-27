@@ -1049,9 +1049,23 @@ public with sharing class MapUtility_MappingMainTest {
     }
 
     private class CountryAccountFamilyKey {
-        private String productFamily;
-        private String accountCountry;
-        private String accountId;
+      private String productFamily;
+      private String accountCountry;
+      private String accountId;
+
+      public Boolean equals(Object obj) {
+        CountryAccountFamilyKey otherObject = (CountryAccountFamilyKey)obj;
+
+        Boolean result = true;
+        result &= this.productFamily == otherObject.productFamily;
+        result &= this.accountCountry == otherObject.accountCountry;
+        result &= this.accountId == otherObject.accountId;
+        return result;
+      }
+
+      public Integer hashCode() {
+        return (this.productFamily.hashCode() + this.accountCountry.hashCode() + this.accountId.hashCode())+hashCode();
+      }
     }
 
     private class OpportunityKeyReaday implements IValueReader {
@@ -1063,20 +1077,6 @@ public with sharing class MapUtility_MappingMainTest {
         result.accountCountry = oli.Opportunity.Account.ShippingCountry;
         result.accountId = oli.Opportunity.Account.Id;
         return result;
-      }
-
-      public Boolean equals(Object obj) {
-        OpportunityKeyReaday otherObject = (OpportunityKeyReaday)obj;
-
-        Boolean result = true;
-        result &= this.productFamily == otherObject.productFamily;
-        result &= this.accountCountry == otherObject.accountCountry;
-        result &= this.accountId == otherObject.accountId;
-        return result;
-      }
-
-      public Integer hashCode() {
-        return (this.productFamily.hashCode() + this.accountCountry.hashCode() + this.accountId.hashCode())+hashCode();
       }
     }
 
