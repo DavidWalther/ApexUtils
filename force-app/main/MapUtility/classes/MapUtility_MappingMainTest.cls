@@ -1044,7 +1044,7 @@ public with sharing class MapUtility_MappingMainTest {
         OpportunityLineItem oli = (OpportunityLineItem)objectToGetValueFrom;
 
         CountryAccountFamilyKey result = new CountryAccountFamilyKey();
-        result.productFamily = oli.pricebookEntry.product.Family;
+        result.productFamily = oli.pricebookEntry.product2.Family;
         result.accountCountry = oli.Opportunity.Account.ShippingCountry;
         result.accountId = oli.Opportunity.Account.Id;
         return result;
