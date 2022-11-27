@@ -269,9 +269,15 @@ jobs:
           defaultusername: david@mcga.de
       - run:
           command: >
-            sfdx force:limits:api:display -u david@mcga.de 
+            OUTPUT=$(sfdx force:limits:api:display -u david@mcga.de)
+            echo $OUTPUT
+          name: print org from variable
+       - run:
+          command: >
+            sfdx force:limits:api:display -u david@mcga.de > << parameters.filename >>
           name: print org limits
-        
+      - store_artifacts:
+          path: << parameters.filename >>  
 
   print-filesystem:
     executor: sfdx/default
