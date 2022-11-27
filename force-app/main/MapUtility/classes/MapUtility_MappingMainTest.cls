@@ -1020,6 +1020,7 @@ public with sharing class MapUtility_MappingMainTest {
         System.assertEquals(dummyAcc1.Id, oli2.Opportunity.Account.Id);
         System.assertEquals(dummyAcc1.Id, oli3.Opportunity.Account.Id);
         
+        Test.startTest();
         /**
          * Build Map
          */
@@ -1028,10 +1029,14 @@ public with sharing class MapUtility_MappingMainTest {
           opportunityLineList,
           new OpportunityKeyReaday(),
           MAP_RETAIN_MODE.RETAIN_ALL,
-          new List<MapUtility_MappingMain.IncludeItemKeyInMapInterface>(),
-          new List<MapUtility_MappingMain.IncludeItemInMapInterface>()
+          new List<MapUtility_MappingMain.IncludeItemKeyInMapInterface>(), // evaluates to 'true' if not provided
+          new List<MapUtility_MappingMain.IncludeItemInMapInterface>() // evaluates to 'true' if not provided
         );
+        Test.stopTest();
 
+        /**
+         * Check accessing data with artifical key
+         */
         CountryAccountFamilyKey checkKey = new CountryAccountFamilyKey();
         checkKey.productFamily = PRODUCT_FAMILY;
         checkKey.accountCountry = 'EU';
@@ -1040,12 +1045,9 @@ public with sharing class MapUtility_MappingMainTest {
         System.assertEquals(1, mappedData.size());
 
         List<OpportunityLineItem> lineItemsToCheck = (List<OpportunityLineItem>)mappedData.get(checkKey);
-        System.assertEquals(3, lineItemsToCheck.size());
-        
-        //OpportunityLineItem lineItemInMap = (lineItemsToCheck)[0];
-        
-        //System.assertNotEquals(NULL, lineItemInMap);
-        //PRODUCT_NAME_ONE
+        System.assertEquals(oli1.Id, lineItemsToCheck.get(0).Id);
+        System.assertEquals(oli2.Id, lineItemsToCheck.get(1).Id);
+        System.assertEquals(oli3.Id, lineItemsToCheck.get(2).Id);
     }
 
     private class CountryAccountFamilyKey {
