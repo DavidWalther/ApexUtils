@@ -923,15 +923,15 @@ public with sharing class MapUtility_MappingMainTest {
 
     /**
      * Given:
-     *   List of Opportunities with Accounts, PricebookEntries and Products
+     *   List of Opportunities with Accounts, LineItems, PricebookEntries and Products
      * 
      * Task:
-     *   Map Products by Product.Currency, AccountId and Product.Family
+     *   Map Products by Account.BillingCountryCode, AccountId, and Product.Family
      *  
      * Structure:
      * 
      *   classic:
-     *   EUR
+     *   EU
      *     AccountId1
      *       Product.Family1
      *         List<Product2>
@@ -939,10 +939,10 @@ public with sharing class MapUtility_MappingMainTest {
      *         List<Product2>
      *     AccountId2
      *       Product.Family1
-     *         List<Opportunity>
+     *         List<Product2>
      *       Product.Family2
-     *         List<Opportunity>
-     *   USD
+     *         List<Product2>
+     *   GB
      *     AccountId2
      *       Product.Family1
      *         List<Product2>
@@ -968,40 +968,58 @@ public with sharing class MapUtility_MappingMainTest {
      *       List<Product2>
      *     (USD, AccountId2, Product.Family2)
      *       List<Product2>
-     *     (USD, AccountId3, Product.Family2)
+     *     (USD, AccountId3, Product.Family1)
      *       List<Product2>
-     *     (USD, AccountId3, Product.Family3)
+     *     (USD, AccountId3, Product.Family2)
      *       List<Product2>
      */
 
     @IsTest
-    static void buildMapWithStructuredKey() {
-        Account acc01 = createAccount('Account 1');
-        Account acc02 = createAccount('Account 2');
-        Account acc03 = createAccount('Account 2');
-        System.assertNotEquals(NULL, acc01.Id);
-        System.assertNotEquals(NULL, acc02.Id);
-        System.assertNotEquals(NULL, acc03.Id);
+    static void checkStructure() {
+      Account dummyAcc1 = createAccount('Dummy Account 1', 'EU');
+      
+      Opportunity dummyOpp1 = new Opportunity(
+        Id = generateFakeId(Opportunity.getSObjectType()),
+        AccountId = dummyAcc1.Id,
+        Account = dummyAcc1,
+        Name = 'Dummy Opportunity 1'
+      );
+          
+      Product2 famili1Product = createProduct(PRODUCT_NAME_ONE, 'Family1');
 
-        Product2 euroProduct = createProduct('Europe', 'EUR');
-        Product2 americanProduct = createProduct('America', 'USD');
-        System.assertNotEquals(NULL, euroProduct.Id);
-        System.assertNotEquals(NULL, americanProduct.Id);
+      PricebookEntry pbe = new PricebookEntry(
+        Pricebook2Id = generateFakeId(Pricebook2.getSObjectType()),
+        Product2Id = famili1Product.Id,
+        Product2 = famili1Product
+      );
+
+
+      OpportunityLineItem oli1 = new OpportunityLineItem(
+        Id = generateFakeId(OpportunityLineItem.getSObjectType()),
+        OpportunityId = dummyOpp1.Id,
+        Opportunity = dummyOpp1,
+        PricebookEntry = pbe
+      );
+
+      System.assertEquals(famili1Product.Id, oli1.PricebookEntry.Product2.Id);
+      System.assertEquals(dummyAcc1.Id, oli1.Opportunity.Account.Id);
     }
 
-    private static Account createAccount(String accountName) {
+    private static Account createAccount(String accountName, String countryCode) {
         Account result = new Account(
             Id = generateFakeId(Account.getSObjectType()),
-            Name = accountName
+            Name = accountName,
+            ShippingCountry = countryCode
         );
         return result;
     }
 
-    private static Product2 createProduct(String productName, String currencyCode) {
+
+    private static Product2 createProduct(String productName, String productFamily) {
       Product2 result = new Product2(
         Id = generateFakeId(Product2.getSObjectType()),
         Name = productName,
-        CurrencyIsoCode = currencyCode
+        Family = productFamily
       );
       return result;
     }
