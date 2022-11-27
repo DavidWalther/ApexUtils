@@ -1012,8 +1012,8 @@ public with sharing class MapUtility_MappingMainTest {
     private static Product2 createProduct(String productName, String currencyCode) {
       Product2 result = new Product2(
         Id = generateFakeId(Product2.getSObjectType()),
-        Name = productName,
-        CurrencyIsoCode = currencyCode
+        Name = productName
+        //,CurrencyIsoCode = currencyCode
       );
       return result;
     }
