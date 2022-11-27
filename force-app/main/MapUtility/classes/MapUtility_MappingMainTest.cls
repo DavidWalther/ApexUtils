@@ -1008,7 +1008,7 @@ public with sharing class MapUtility_MappingMainTest {
         );
         return result;
     }
-
+/* 
     private static Product2 createProduct(String productName, String currencyCode) {
       Product2 result = new Product2(
         Id = generateFakeId(Product2.getSObjectType()),
@@ -1016,5 +1016,5 @@ public with sharing class MapUtility_MappingMainTest {
         CurrencyIsoCode = currencyCode
       );
       return result;
-    }
+    } */
 }
