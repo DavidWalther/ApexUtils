@@ -1003,11 +1003,11 @@ public with sharing class MapUtility_MappingMainTest {
 
     }
 
-    private static Account createAccount(String accountName, String billingCountryCode) {
+    private static Account createAccount(String accountName, String countryCode) {
         Account result = new Account(
             Id = generateFakeId(Account.getSObjectType()),
             Name = accountName,
-            BillingCountryCode = billingCountryCode
+            ShippingCountryCode = countryCode
         );
         return result;
     }
