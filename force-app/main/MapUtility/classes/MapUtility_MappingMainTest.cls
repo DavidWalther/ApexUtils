@@ -975,7 +975,7 @@ public with sharing class MapUtility_MappingMainTest {
      */
 
     @IsTest
-    static void buildMapWithStructuredKey() {
+    static void checkStructure() {
       Account dummyAcc1 = createAccount('Dummy Account 1', 'EU');
       
       Opportunity dummyOpp1 = new Opportunity(
@@ -1001,6 +1001,8 @@ public with sharing class MapUtility_MappingMainTest {
         PricebookEntry = pbe
       );
 
+      System.assertEquals(famili1Product.Id, oli1.PricebookEntry.Product2.Id);
+      System.assertEquals(dummyAcc1.Id, oli1.Opportunity.Account.Id);
     }
 
     private static Account createAccount(String accountName, String countryCode) {
@@ -1011,6 +1013,7 @@ public with sharing class MapUtility_MappingMainTest {
         );
         return result;
     }
+
 
     private static Product2 createProduct(String productName, String productFamily) {
       Product2 result = new Product2(
