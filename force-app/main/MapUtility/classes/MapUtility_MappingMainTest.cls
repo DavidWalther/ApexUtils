@@ -1023,7 +1023,7 @@ public with sharing class MapUtility_MappingMainTest {
         /**
          * Build Map
          */
-        List<Opportunity> opportunityLineList = new List<Opportunity>{oli1, oli2, oli3};
+        List<OpportunityLineItem> opportunityLineList = new List<OpportunityLineItem>{oli1, oli2, oli3};
         Map<Object, Object> mappedData = new MapUtility_MappingMain().generateMapFromObjectList(
           opportunityLineList,
           new OpportunityKeyReaday(),
