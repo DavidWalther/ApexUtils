@@ -1033,7 +1033,7 @@ public with sharing class MapUtility_MappingMainTest {
         );
 
         CountryAccountFamilyKey checkKey = new CountryAccountFamilyKey();
-        checkKey.productFamily = PRODUCT_NAME_ONE;
+        checkKey.productFamily = PRODUCT_FAMILY;
         checkKey.accountCountry = 'EU';
         checkKey.accountId = dummyAcc1.Id;
 
@@ -1042,6 +1042,7 @@ public with sharing class MapUtility_MappingMainTest {
         OpportunityLineItem lineItemInMap = ((List<OpportunityLineItem>)mappedData.get(checkKey))[0];
         
         System.assertNotEquals(NULL, lineItemInMap);
+        //PRODUCT_NAME_ONE
     }
 
     private class CountryAccountFamilyKey {
