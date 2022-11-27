@@ -976,18 +976,49 @@ public with sharing class MapUtility_MappingMainTest {
 
     @IsTest
     static void creatorsAreSetUp() {
-      Account dummyAcc1 = createAccount('Dummy Account 1', 'EU');
-      
-      Opportunity dummyOpp1 = createOpportunity('Dummy Opportunity 1', dummyAcc1);
-          
-      Product2 family1Product = createProduct(PRODUCT_NAME_ONE, 'Family1');
+        Account dummyAcc1 = createAccount('Dummy Account 1', 'EU');
+        
+        Opportunity dummyOpp1 = createOpportunity('Dummy Opportunity 1', dummyAcc1);
+            
+        Product2 family1Product = createProduct(PRODUCT_NAME_ONE, 'Family1');
 
-      PricebookEntry pbe = createPriceBookEntry(NULL, family1Product);
+        PricebookEntry pbe = createPriceBookEntry(NULL, family1Product);
 
-      OpportunityLineItem oli1 = createOpportunityLineItem(dummyOpp1, pbe);
+        OpportunityLineItem oli1 = createOpportunityLineItem(dummyOpp1, pbe);
 
-      System.assertEquals(family1Product.Id, oli1.PricebookEntry.Product2.Id);
-      System.assertEquals(dummyAcc1.Id, oli1.Opportunity.Account.Id);
+        System.assertEquals(family1Product.Id, oli1.PricebookEntry.Product2.Id);
+        System.assertEquals(dummyAcc1.Id, oli1.Opportunity.Account.Id);
+    }
+
+    @IsTest
+    static void setUpSimpleTestStructure() {
+        final String PRODUCT_FAMILY = 'Family1';
+        Product2 product1 = createProduct(PRODUCT_NAME_ONE, PRODUCT_FAMILY);
+        Product2 product2 = createProduct(PRODUCT_NAME_TWO, PRODUCT_FAMILY);
+        Product2 product3 = createProduct(PRODUCT_NAME_THREE, PRODUCT_FAMILY);
+
+        PricebookEntry pbe1 = createPriceBookEntry(NULL, product1);
+        PricebookEntry pbe2 = createPriceBookEntry(NULL, product2);
+        PricebookEntry pbe3 = createPriceBookEntry(NULL, product3);
+        
+        Account dummyAcc1 = createAccount('Dummy Account 1', 'EU');
+        
+        Opportunity dummyOpp1 = createOpportunity('Dummy Opportunity 1', dummyAcc1);
+
+        OpportunityLineItem oli1 = createOpportunityLineItem(dummyOpp1, pbe1);
+        OpportunityLineItem oli2 = createOpportunityLineItem(dummyOpp1, pbe2);
+        OpportunityLineItem oli3 = createOpportunityLineItem(dummyOpp1, pbe3);
+
+        // Assert connection
+        System.assertEquals(product1.Id, oli1.PricebookEntry.Product2.Id);
+        System.assertEquals(product2.Id, oli2.PricebookEntry.Product2.Id);
+        System.assertEquals(product3.Id, oli3.PricebookEntry.Product2.Id);
+        System.assertEquals(PRODUCT_FAMILY, oli1.PricebookEntry.Product2.Family);
+        System.assertEquals(PRODUCT_FAMILY, oli2.PricebookEntry.Product2.Family);
+        System.assertEquals(PRODUCT_FAMILY, oli3.PricebookEntry.Product2.Family);
+        System.assertEquals(dummyAcc1.Id, oli1.Opportunity.Account.Id);
+        System.assertEquals(dummyAcc1.Id, oli2.Opportunity.Account.Id);
+        System.assertEquals(dummyAcc1.Id, oli3.Opportunity.Account.Id);
     }
 
   private static Account createAccount(String accountName, String countryCode) {
