@@ -1019,7 +1019,7 @@ public with sharing class MapUtility_MappingMainTest {
     }
 
     private static Opportunity createOpportunity(String opportunityName, Account opportunityAccount) {
-      Opportunity dummyOpp1 = new Opportunity(
+      Opportunity result = new Opportunity(
         Id = generateFakeId(Opportunity.getSObjectType()),
         AccountId = opportunityAccount?.Id,
         Account = opportunityAccount,
