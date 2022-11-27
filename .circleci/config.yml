@@ -270,7 +270,7 @@ jobs:
       - run:
           command: |
             OUTPUT=$(sfdx force:limits:api:display -u david@mcga.de)
-            echo $OUTPUT
+            echo -e $OUTPUT
           name: print org from variable
       - run:
           command: >
