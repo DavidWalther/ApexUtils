@@ -1025,7 +1025,11 @@ public with sharing class MapUtility_MappingMainTest {
          */
         List<Opportunity> opportunityLineList = new List<Opportunity>{oli1, oli2, oli3};
         Map<Object, Object> mappedData = new MapUtility_MappingMain().generateMapFromObjectList(
-          opportunityLineList, new KeyReaderVariant1(), MAP_RETAIN_MODE.RETAIN_ALL, keyFilters, new List<MapUtility_MappingMain.IncludeItemInMapInterface>()
+          opportunityLineList,
+          new OpportunityKeyReaday(),
+          MAP_RETAIN_MODE.RETAIN_ALL,
+          new List<MapUtility_MappingMain.IncludeItemKeyInMapInterface>(),
+          new List<MapUtility_MappingMain.IncludeItemInMapInterface>()
         );
     }
 
