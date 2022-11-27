@@ -1037,11 +1037,14 @@ public with sharing class MapUtility_MappingMainTest {
         checkKey.accountCountry = 'EU';
         checkKey.accountId = dummyAcc1.Id;
 
-        System.assertEquals(3,mappedData.size());
+        System.assertEquals(1, mappedData.size());
 
-        OpportunityLineItem lineItemInMap = ((List<OpportunityLineItem>)mappedData.get(checkKey))[0];
+        List<OpportunityLineItem> lineItemsToCheck = (List<OpportunityLineItem>)mappedData.get(checkKey);
+        System.assertEquals(3, lineItemsToCheck.size());
         
-        System.assertNotEquals(NULL, lineItemInMap);
+        //OpportunityLineItem lineItemInMap = (lineItemsToCheck)[0];
+        
+        //System.assertNotEquals(NULL, lineItemInMap);
         //PRODUCT_NAME_ONE
     }
 
