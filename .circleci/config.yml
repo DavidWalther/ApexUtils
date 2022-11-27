@@ -181,6 +181,11 @@ jobs:
             sfdx force:org:list
           name: Print Org list
 
+
+      - run:
+          command: |
+            ls -la ~/
+
       - run:
           command: |
             ls -la ./.sfdx/
