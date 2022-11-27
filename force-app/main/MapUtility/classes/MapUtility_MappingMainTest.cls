@@ -1032,7 +1032,16 @@ public with sharing class MapUtility_MappingMainTest {
           new List<MapUtility_MappingMain.IncludeItemInMapInterface>()
         );
 
+        CountryAccountFamilyKey checkKey = new CountryAccountFamilyKey();
+        checkKey.productFamily = PRODUCT_NAME_ONE;
+        checkKey.accountCountry = 'EU';
+        checkKey.accountId = dummyAcc1.Id;
+
         System.assertEquals(3,mappedData.size());
+
+        OpportunityLineItem lineItemInMap = ((List<OpportunityLineItem>)mappedData.get(checkKey))[0];
+        
+        System.assertNotEquals(NULL, lineItemInMap);
     }
 
     private class CountryAccountFamilyKey {
