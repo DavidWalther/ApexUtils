@@ -1064,7 +1064,7 @@ public with sharing class MapUtility_MappingMainTest {
       }
 
       public Integer hashCode() {
-        return (this.productFamily.hashCode() + this.accountCountry.hashCode() + this.accountId.hashCode()).hashCode();
+        return (this.productFamily.hashCode() + this.accountCountry.hashCode() + this.accountId.hashCode());
       }
     }
 
