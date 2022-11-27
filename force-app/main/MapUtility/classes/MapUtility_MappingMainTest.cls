@@ -1035,8 +1035,10 @@ public with sharing class MapUtility_MappingMainTest {
         Test.stopTest();
 
         /**
-         * Check accessing data with artifical key
+         * Check mapped data
          */
+
+        // create artifical key to access map
         CountryAccountFamilyKey checkKey = new CountryAccountFamilyKey();
         checkKey.productFamily = PRODUCT_FAMILY;
         checkKey.accountCountry = 'EU';
