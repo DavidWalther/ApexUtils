@@ -293,9 +293,7 @@ jobs:
           command: |
             cat ./cache/org.credentials
           name: print Filesystem
-      - run:
-          command: |
-            ls -la ./.sfdx/
+
 # -----------------------
 # Workflows
 # -----------------------
