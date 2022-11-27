@@ -181,24 +181,6 @@ jobs:
             sfdx force:org:list
           name: Print Org list
 
-
-      - run:
-          command: |
-            ls -la ~/.sfdx/
-
-      - run:
-          command: |
-            touch ~/.sfdx/test
-
-      - run:
-          command: |
-            ls -la ~/.sfdx/
-
-      - run:
-          command: |
-            cat ~/.sfdx/key.json
-            
-
       - run:
           command: >
             sfdx force:source:push --forceoverwrite --wait 60 > tmp/artifacts/DeploymentResults.txt
