@@ -975,7 +975,7 @@ public with sharing class MapUtility_MappingMainTest {
      */
 
     @IsTest
-    static void checkStructure() {
+    static void creatorsAreSetUp() {
       Account dummyAcc1 = createAccount('Dummy Account 1', 'EU');
       
       Opportunity dummyOpp1 = createOpportunity('Dummy Opportunity 1', dummyAcc1);
