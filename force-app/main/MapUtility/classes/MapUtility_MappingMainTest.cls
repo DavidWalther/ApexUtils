@@ -984,12 +984,7 @@ public with sharing class MapUtility_MappingMainTest {
 
       PricebookEntry pbe = createPriceBookEntry(NULL, family1Product);
 
-      OpportunityLineItem oli1 = new OpportunityLineItem(
-        Id = generateFakeId(OpportunityLineItem.getSObjectType()),
-        OpportunityId = dummyOpp1.Id,
-        Opportunity = dummyOpp1,
-        PricebookEntry = pbe
-      );
+      OpportunityLineItem oli1 = createOpportunityLineItem(dummyOpp1, pbe);
 
       System.assertEquals(family1Product.Id, oli1.PricebookEntry.Product2.Id);
       System.assertEquals(dummyAcc1.Id, oli1.Opportunity.Account.Id);
@@ -1032,6 +1027,17 @@ public with sharing class MapUtility_MappingMainTest {
       Product2Id = product?.Id,
       Product2 = product
     );
+    return result;
+  }
+
+  private static OpportunityLineItem createOpportunityLineItem(Opportunity opportunity, PricebookEntry pricebookEntry) {
+    OpportunityLineItem result = new OpportunityLineItem(
+        Id = generateFakeId(OpportunityLineItem.getSObjectType()),
+        OpportunityId = opportunity.Id,
+        Opportunity = opportunity,
+        PricebookEntryId = pricebookEntry?.Id,
+        PricebookEntry = pricebookEntry
+      );
     return result;
   }
 }
