@@ -1074,6 +1074,10 @@ public with sharing class MapUtility_MappingMainTest {
         result &= this.accountId == otherObject.accountId;
         return result;
       }
+
+      public Integer hashCode() {
+        return (this.productFamily.hashCode() + this.accountCountry.hashCode() + this.accountId.hashCode())+hashCode();
+      }
     }
 
     private class IncludeOpportunityEvaluator implements MapUtility_MappingMain.IncludeItemInMapInterface {
