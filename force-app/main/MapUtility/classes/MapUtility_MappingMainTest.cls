@@ -1064,6 +1064,16 @@ public with sharing class MapUtility_MappingMainTest {
         result.accountId = oli.Opportunity.Account.Id;
         return result;
       }
+
+      public Boolean equals(Object obj) {
+        OpportunityKeyReaday otherObject = (OpportunityKeyReaday)obj;
+
+        Boolean result = true;
+        result &= this.productFamily == otherObject.productFamily;
+        result &= this.accountCountry == otherObject.accountCountry;
+        result &= this.accountId == otherObject.accountId;
+        return result;
+      }
     }
 
     private class IncludeOpportunityEvaluator implements MapUtility_MappingMain.IncludeItemInMapInterface {
