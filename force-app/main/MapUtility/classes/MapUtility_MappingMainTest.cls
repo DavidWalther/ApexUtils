@@ -923,15 +923,15 @@ public with sharing class MapUtility_MappingMainTest {
 
     /**
      * Given:
-     *   List of Opportunities with Accounts, PricebookEntries and Products
+     *   List of Opportunities with Accounts, LineItems, PricebookEntries and Products
      * 
      * Task:
-     *   Map Products by Product.Currency, AccountId and Product.Family
+     *   Map Products by Account.BillingCountryCode, AccountId, and Product.Family
      *  
      * Structure:
      * 
      *   classic:
-     *   EUR
+     *   EU
      *     AccountId1
      *       Product.Family1
      *         List<Product2>
@@ -939,10 +939,10 @@ public with sharing class MapUtility_MappingMainTest {
      *         List<Product2>
      *     AccountId2
      *       Product.Family1
-     *         List<Opportunity>
+     *         List<Product2>
      *       Product.Family2
-     *         List<Opportunity>
-     *   USD
+     *         List<Product2>
+     *   GB
      *     AccountId2
      *       Product.Family1
      *         List<Product2>
@@ -968,15 +968,27 @@ public with sharing class MapUtility_MappingMainTest {
      *       List<Product2>
      *     (USD, AccountId2, Product.Family2)
      *       List<Product2>
-     *     (USD, AccountId3, Product.Family2)
+     *     (USD, AccountId3, Product.Family1)
      *       List<Product2>
-     *     (USD, AccountId3, Product.Family3)
+     *     (USD, AccountId3, Product.Family2)
      *       List<Product2>
      */
 
     @IsTest
     static void buildMapWithStructuredKey() {
-        Account acc01 = createAccount('Account 1');
+      Account dummyAcc1 = new Account(
+        Id = generateFakeId(Account.getSObjectType()),
+        BillingCountry = 'EU',
+        Name = 'Dummy Account 1');
+      Opportunity dummyOpp1 = new Opportunity(
+          Id = generateFakeId(Opportunity.getSObjectType()),
+          AccountId = dummyAcc1.Id,
+          Account = dummyAcc1,
+          Name = 'Dummy Opportunity 1');
+      
+
+
+      Account acc01 = createAccount('Account 1');
         Account acc02 = createAccount('Account 2');
         Account acc03 = createAccount('Account 2');
         System.assertNotEquals(NULL, acc01.Id);
