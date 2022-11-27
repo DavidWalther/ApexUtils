@@ -1032,7 +1032,7 @@ public with sharing class MapUtility_MappingMainTest {
           new List<MapUtility_MappingMain.IncludeItemInMapInterface>()
         );
 
-        System.assertEquals(1,mappedData.size());
+        System.assertEquals(3,mappedData.size());
     }
 
     private class CountryAccountFamilyKey {
