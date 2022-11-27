@@ -1007,7 +1007,7 @@ public with sharing class MapUtility_MappingMainTest {
         Account result = new Account(
             Id = generateFakeId(Account.getSObjectType()),
             Name = accountName,
-            ShippingCountryCode = countryCode
+            ShippingCountry = countryCode
         );
         return result;
     }
