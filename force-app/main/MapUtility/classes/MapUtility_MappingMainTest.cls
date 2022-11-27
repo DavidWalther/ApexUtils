@@ -923,7 +923,7 @@ public with sharing class MapUtility_MappingMainTest {
 
     /**
      * Given:
-     *   List of Opportunities with Accounts and Pricebooks
+     *   List of Opportunities with Accounts, PricebookEntries and Products
      * 
      * Task:
      *   Map Products by Product.Currency, AccountId and Product.Family
@@ -983,10 +983,10 @@ public with sharing class MapUtility_MappingMainTest {
         System.assertNotEquals(NULL, acc02.Id);
         System.assertNotEquals(NULL, acc03.Id);
 
-        Pricebook2 euroPricebook = createPriceBook('Europe', 'EUR');
-        Pricebook2 americanPricebook = createPriceBook('America', 'USD');
-        System.assertNotEquals(NULL, euroPricebook.Id);
-        System.assertNotEquals(NULL, americanPricebook.Id);
+        Product2 euroProduct = createProduct('Europe', 'EUR');
+        Product2 americanProduct = createProduct('America', 'USD');
+        System.assertNotEquals(NULL, euroProduct.Id);
+        System.assertNotEquals(NULL, americanProduct.Id);
     }
 
     private static Account createAccount(String accountName) {
@@ -997,12 +997,12 @@ public with sharing class MapUtility_MappingMainTest {
         return result;
     }
 
-    private static Pricebook2 createPriceBook(String priceBookName, String currencyCode) {
-        Pricebook2 result = new Pricebook2(
-            Id = generateFakeId(Pricebook2.getSObjectType()),
-            Name = priceBookName,
-            CurrencyIsoCode = currencyCode
-        );
-        return result;
+    private static Product2 createProduct(String productName, String currencyCode) {
+      Product2 result = new Product2(
+        Id = generateFakeId(Product2.getSObjectType()),
+        Name = productName,
+        CurrencyIsoCode = currencyCode
+      );
+      return result;
     }
 }
