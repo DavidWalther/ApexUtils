@@ -1019,6 +1019,14 @@ public with sharing class MapUtility_MappingMainTest {
         System.assertEquals(dummyAcc1.Id, oli1.Opportunity.Account.Id);
         System.assertEquals(dummyAcc1.Id, oli2.Opportunity.Account.Id);
         System.assertEquals(dummyAcc1.Id, oli3.Opportunity.Account.Id);
+        
+        /**
+         * Build Map
+         */
+        List<Opportunity> opportunityLineList = new List<Opportunity>{oli1, oli2, oli3};
+        Map<Object, Object> mappedData = new MapUtility_MappingMain().generateMapFromObjectList(
+          opportunityLineList, new KeyReaderVariant1(), MAP_RETAIN_MODE.RETAIN_ALL, keyFilters, new List<MapUtility_MappingMain.IncludeItemInMapInterface>()
+        );
     }
 
     private class CountryAccountFamilyKey {
@@ -1026,7 +1034,19 @@ public with sharing class MapUtility_MappingMainTest {
         private String accountCountry;
         private String accountId;
     }
-    
+
+    private class OpportunityKeyReaday implements IValueReader {
+      public Object getValue(Object objectToGetValueFrom) {
+        OpportunityLineItem oli = (OpportunityLineItem)objectToGetValueFrom;
+
+        CountryAccountFamilyKey result = new CountryAccountFamilyKey();
+        result.productFamily = oli.pricebookEntry.product.Family;
+        result.accountCountry = oli.Opportunity.Account.ShippingCountry;
+        result.accountId = oli.Opportunity.Account.Id;
+        return result;
+      }
+    }
+
     private class IncludeOpportunityEvaluator implements MapUtility_MappingMain.IncludeItemInMapInterface {
       public Boolean isIncludeItem(Object keyToEvaluate) {
         return false;
