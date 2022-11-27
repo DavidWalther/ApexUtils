@@ -991,7 +991,7 @@ public with sharing class MapUtility_MappingMainTest {
         PricebookEntry = pbe
       );
 
-      System.assertEquals(famili1Product.Id, oli1.PricebookEntry.Product2.Id);
+      System.assertEquals(family1Product.Id, oli1.PricebookEntry.Product2.Id);
       System.assertEquals(dummyAcc1.Id, oli1.Opportunity.Account.Id);
     }
 
