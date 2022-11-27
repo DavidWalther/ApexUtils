@@ -269,7 +269,8 @@ jobs:
           defaultusername: david@mcga.de
       - run:
           command: >
-            sfdx force:limits:api:display -u david@mcga.de 
+            sfdx force:limits:api:display -u david@mcga.de
+          name: Print org API Limits
 
   print-filesystem:
     executor: sfdx/default
