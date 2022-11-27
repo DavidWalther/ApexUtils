@@ -976,44 +976,47 @@ public with sharing class MapUtility_MappingMainTest {
 
     @IsTest
     static void buildMapWithStructuredKey() {
-      Account dummyAcc1 = new Account(
-        Id = generateFakeId(Account.getSObjectType()),
-        BillingCountry = 'EU',
-        Name = 'Dummy Account 1');
-      Opportunity dummyOpp1 = new Opportunity(
-          Id = generateFakeId(Opportunity.getSObjectType()),
-          AccountId = dummyAcc1.Id,
-          Account = dummyAcc1,
-          Name = 'Dummy Opportunity 1');
+      Account dummyAcc1 = createAccount('Dummy Account 1', 'EU');
       
+      Opportunity dummyOpp1 = new Opportunity(
+        Id = generateFakeId(Opportunity.getSObjectType()),
+        AccountId = dummyAcc1.Id,
+        Account = dummyAcc1,
+        Name = 'Dummy Opportunity 1'
+      );
+          
+      Product2 famili1Product = createProduct(PRODUCT_NAME_ONE, 'Family1');
+
+      PricebookEntry pbe = new PricebookEntry(
+        Pricebook2Id = generateFakeId(Pricebook2.getSObjectType()),
+        Product2Id = famili1Product.Id,
+        Product2 = famili1Product
+      );
 
 
-      Account acc01 = createAccount('Account 1');
-        Account acc02 = createAccount('Account 2');
-        Account acc03 = createAccount('Account 2');
-        System.assertNotEquals(NULL, acc01.Id);
-        System.assertNotEquals(NULL, acc02.Id);
-        System.assertNotEquals(NULL, acc03.Id);
+      OpportunityLineItem oli1 = new OpportunityLineItem(
+        Id = generateFakeId(OpportunityLineItem.getSObjectType()),
+        OpportunityId = dummyOpp1.Id,
+        Opportunity = dummyOpp1,
+        PricebookEntry = pbe
+      );
 
-        Product2 euroProduct = createProduct('Europe', 'EUR');
-        Product2 americanProduct = createProduct('America', 'USD');
-        System.assertNotEquals(NULL, euroProduct.Id);
-        System.assertNotEquals(NULL, americanProduct.Id);
     }
 
-    private static Account createAccount(String accountName) {
+    private static Account createAccount(String accountName, String billingCountryCode) {
         Account result = new Account(
             Id = generateFakeId(Account.getSObjectType()),
-            Name = accountName
+            Name = accountName,
+            BillingCountryCode = billingCountryCode
         );
         return result;
     }
 
-    private static Product2 createProduct(String productName, String currencyCode) {
+    private static Product2 createProduct(String productName, String productFamily) {
       Product2 result = new Product2(
         Id = generateFakeId(Product2.getSObjectType()),
-        Name = productName
-        //,CurrencyIsoCode = currencyCode
+        Name = productName,
+        Family = productFamily
       );
       return result;
     }
