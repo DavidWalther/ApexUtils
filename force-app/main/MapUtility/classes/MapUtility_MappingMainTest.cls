@@ -926,19 +926,33 @@ public with sharing class MapUtility_MappingMainTest {
      *   List of Opportunities with Accounts and Pricebooks
      * 
      * Task:
-     *   Map Opportunities by Pricebook.Currency and AccountId
-     *    
+     *   Map Products by Product.Currency, AccountId and Product.Family
+     *  
+     * Structure:
+     * 
      *   classic:
      *   EUR
-     *      AccountId1
+     *     AccountId1
+     *       Product.Family1
+     *         List<Product2>
+     *       Product.Family2
+     *         List<Product2>
+     *     AccountId2
+     *       Product.Family1
      *         List<Opportunity>
-     *       AccountId2
+     *       Product.Family2
      *         List<Opportunity>
      *   USD
-     *       AccountId2
-     *         List<Opportunity>
-     *       AccountId3
-     *         List<Opportunity>
+     *     AccountId2
+     *       Product.Family1
+     *         List<Product2>
+     *       Product.Family2
+     *         List<Product2>
+     *     AccountId3
+     *       Product.Family1
+     *         List<Product2>
+     *       Product.Family2
+     *         List<Product2>
      */
 
     @IsTest
