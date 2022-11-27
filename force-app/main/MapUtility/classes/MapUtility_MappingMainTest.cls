@@ -975,7 +975,7 @@ public with sharing class MapUtility_MappingMainTest {
      */
 
     @IsTest
-    static void creatorsAreSetUp() {
+    static void structuredKey_creatorsAreSetUp() {
         Account dummyAcc1 = createAccount('Dummy Account 1', 'EU');
         
         Opportunity dummyOpp1 = createOpportunity('Dummy Opportunity 1', dummyAcc1);
@@ -991,7 +991,7 @@ public with sharing class MapUtility_MappingMainTest {
     }
 
     @IsTest
-    static void setUpSimpleTestStructure() {
+    static void structuredKey_setUpSimpleTestStructure() {
         final String PRODUCT_FAMILY = 'Family1';
         Product2 product1 = createProduct(PRODUCT_NAME_ONE, PRODUCT_FAMILY);
         Product2 product2 = createProduct(PRODUCT_NAME_TWO, PRODUCT_FAMILY);
