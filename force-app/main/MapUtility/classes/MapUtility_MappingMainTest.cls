@@ -1026,15 +1026,27 @@ public with sharing class MapUtility_MappingMainTest {
         private String accountCountry;
         private String accountId;
     }
+    
+    private class IncludeOpportunityEvaluator implements MapUtility_MappingMain.IncludeItemInMapInterface {
+      public Boolean isIncludeItem(Object keyToEvaluate) {
+        return false;
+      }
+    }
+  
+    public class IncludeOpportunityKey implements MapUtility_MappingMain.IncludeItemKeyInMapInterface {
+      public Boolean isIncludeItemKey(Object keyToEvaluate) {
+        return false;
+      }
+    }
 
-  private static Account createAccount(String accountName, String countryCode) {
+    private static Account createAccount(String accountName, String countryCode) {
       Account result = new Account(
-          Id = generateFakeId(Account.getSObjectType()),
-          Name = accountName,
-          ShippingCountry = countryCode
+        Id = generateFakeId(Account.getSObjectType()),
+        Name = accountName,
+        ShippingCountry = countryCode
       );
       return result;
-  }
+    }
 
   private static Product2 createProduct(String productName, String productFamily) {
     Product2 result = new Product2(
