@@ -269,10 +269,8 @@ jobs:
           defaultusername: david@mcga.de
       - run:
           command: >
-            sfdx force:limits:api:display -u david@mcga.de > << parameters.filename >>
-          name: print org limits
-      - store_artifacts:
-          path: << parameters.filename >>  
+            sfdx force:limits:api:display -u david@mcga.de
+          name: Print org API Limits
 
   print-filesystem:
     executor: sfdx/default
@@ -283,18 +281,19 @@ jobs:
       - run:
           command: |
             pwd
-            ls -l
+            ls -la
             echo "============="
             echo ""
-            ls cache -l
+            ls cache -la
             echo "============="
             echo ""
-            ls tmp -l
+            ls tmp -la
           name: print Filesystem
       - run:
           command: |
             cat ./cache/org.credentials
           name: print Filesystem
+
 # -----------------------
 # Workflows
 # -----------------------
