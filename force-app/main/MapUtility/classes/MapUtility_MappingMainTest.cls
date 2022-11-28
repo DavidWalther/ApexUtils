@@ -1112,6 +1112,12 @@ public with sharing class MapUtility_MappingMainTest {
       private String accountCountry;
       private String accountId;
 
+      public CountryAccountFamilyKey(OpportunityLineItem oli) {
+        this.productFamily = oli.pricebookEntry.product2.Family;
+        this.accountCountry = oli.Opportunity.Account.ShippingCountry;
+        this.accountId = oli.Opportunity.Account.Id;
+      }
+
       public Boolean equals(Object obj) {
         CountryAccountFamilyKey otherObject = (CountryAccountFamilyKey)obj;
 
@@ -1133,11 +1139,7 @@ public with sharing class MapUtility_MappingMainTest {
     private class OpportunityKeyReader implements IValueReader {
       public Object getValue(Object objectToGetValueFrom) {
         OpportunityLineItem oli = (OpportunityLineItem)objectToGetValueFrom;
-
-        CountryAccountFamilyKey result = new CountryAccountFamilyKey();
-        result.productFamily = oli.pricebookEntry.product2.Family;
-        result.accountCountry = oli.Opportunity.Account.ShippingCountry;
-        result.accountId = oli.Opportunity.Account.Id;
+        CountryAccountFamilyKey result = new CountryAccountFamilyKey(oli);
         return result;
       }
     }
