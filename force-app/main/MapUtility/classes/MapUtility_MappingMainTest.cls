@@ -1013,11 +1013,17 @@ public with sharing class MapUtility_MappingMainTest {
               pbe3
 
         product1
+          - PRODUCT_FAMILY1
           pbe1
         product2
+          - PRODUCT_FAMILY1
           pbe2
         product3
+          - PRODUCT_FAMILY1
           pbe3
+        product4
+          - PRODUCT_FAMILY2
+          pbe4
       */
 
       final String PRODUCT_FAMILY1 = 'Family1';
@@ -1097,6 +1103,9 @@ public with sharing class MapUtility_MappingMainTest {
       System.assertEquals(1, lineItemsToCheck.size());
     }
 
+    /**
+     * all elements of the result are mapped by an instance of this class
+     */
     private class CountryAccountFamilyKey {
       private String productFamily;
       private String accountCountry;
@@ -1117,6 +1126,9 @@ public with sharing class MapUtility_MappingMainTest {
       }
     }
 
+    /**
+     * This class generates a structured Key for each OpportunityLineItem
+     */
     private class OpportunityKeyReader implements IValueReader {
       public Object getValue(Object objectToGetValueFrom) {
         OpportunityLineItem oli = (OpportunityLineItem)objectToGetValueFrom;
