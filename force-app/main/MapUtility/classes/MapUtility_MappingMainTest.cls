@@ -992,64 +992,84 @@ public with sharing class MapUtility_MappingMainTest {
 
     @IsTest
     static void structuredKey_setUpSimpleTestStructure() {
-        final String PRODUCT_FAMILY = 'Family1';
-        Product2 product1 = createProduct(PRODUCT_NAME_ONE, PRODUCT_FAMILY);
-        Product2 product2 = createProduct(PRODUCT_NAME_TWO, PRODUCT_FAMILY);
-        Product2 product3 = createProduct(PRODUCT_NAME_THREE, PRODUCT_FAMILY);
+      /*
+        Given Simple structure
 
-        PricebookEntry pbe1 = createPriceBookEntry(NULL, product1);
-        PricebookEntry pbe2 = createPriceBookEntry(NULL, product2);
-        PricebookEntry pbe3 = createPriceBookEntry(NULL, product3);
-        
-        Account dummyAcc1 = createAccount('Dummy Account 1', 'EU');
-        
-        Opportunity dummyOpp1 = createOpportunity('Dummy Opportunity 1', dummyAcc1);
+        dummyAcc1
+          dummyOpp1
+            oli1
+              pbe1
+            oli2
+              pbe2
+            oli3
+              pbe3
 
-        OpportunityLineItem oli1 = createOpportunityLineItem(dummyOpp1, pbe1);
-        OpportunityLineItem oli2 = createOpportunityLineItem(dummyOpp1, pbe2);
-        OpportunityLineItem oli3 = createOpportunityLineItem(dummyOpp1, pbe3);
+        product1
+          pbe1
+        product2
+          pbe2
+        product3
+          pbe3
+      */
 
-        // Assert connection
-        System.assertEquals(product1.Id, oli1.PricebookEntry.Product2.Id);
-        System.assertEquals(product2.Id, oli2.PricebookEntry.Product2.Id);
-        System.assertEquals(product3.Id, oli3.PricebookEntry.Product2.Id);
-        System.assertEquals(PRODUCT_FAMILY, oli1.PricebookEntry.Product2.Family);
-        System.assertEquals(PRODUCT_FAMILY, oli2.PricebookEntry.Product2.Family);
-        System.assertEquals(PRODUCT_FAMILY, oli3.PricebookEntry.Product2.Family);
-        System.assertEquals(dummyAcc1.Id, oli1.Opportunity.Account.Id);
-        System.assertEquals(dummyAcc1.Id, oli2.Opportunity.Account.Id);
-        System.assertEquals(dummyAcc1.Id, oli3.Opportunity.Account.Id);
-        
-        Test.startTest();
-        /**
-         * Build Map
-         */
-        List<OpportunityLineItem> opportunityLineList = new List<OpportunityLineItem>{oli1, oli2, oli3};
-        Map<Object, Object> mappedData = new MapUtility_MappingMain().generateMapFromObjectList(
-          opportunityLineList,
-          new OpportunityKeyReaday(),
-          MAP_RETAIN_MODE.RETAIN_ALL,
-          new List<MapUtility_MappingMain.IncludeItemKeyInMapInterface>(), // evaluates to 'true' if not provided
-          new List<MapUtility_MappingMain.IncludeItemInMapInterface>() // evaluates to 'true' if not provided
-        );
-        Test.stopTest();
+      final String PRODUCT_FAMILY = 'Family1';
+      Product2 product1 = createProduct(PRODUCT_NAME_ONE, PRODUCT_FAMILY);
+      Product2 product2 = createProduct(PRODUCT_NAME_TWO, PRODUCT_FAMILY);
+      Product2 product3 = createProduct(PRODUCT_NAME_THREE, PRODUCT_FAMILY);
 
-        /**
-         * Check mapped data
-         */
+      PricebookEntry pbe1 = createPriceBookEntry(NULL, product1);
+      PricebookEntry pbe2 = createPriceBookEntry(NULL, product2);
+      PricebookEntry pbe3 = createPriceBookEntry(NULL, product3);
+      
+      Account dummyAcc1 = createAccount('Dummy Account 1', 'EU');
+      
+      Opportunity dummyOpp1 = createOpportunity('Dummy Opportunity 1', dummyAcc1);
 
-        // create artifical key to access map
-        CountryAccountFamilyKey checkKey = new CountryAccountFamilyKey();
-        checkKey.productFamily = PRODUCT_FAMILY;
-        checkKey.accountCountry = 'EU';
-        checkKey.accountId = dummyAcc1.Id;
+      OpportunityLineItem oli1 = createOpportunityLineItem(dummyOpp1, pbe1);
+      OpportunityLineItem oli2 = createOpportunityLineItem(dummyOpp1, pbe2);
+      OpportunityLineItem oli3 = createOpportunityLineItem(dummyOpp1, pbe3);
 
-        System.assertEquals(1, mappedData.size());
+      // Assert connection
+      System.assertEquals(product1.Id, oli1.PricebookEntry.Product2.Id);
+      System.assertEquals(product2.Id, oli2.PricebookEntry.Product2.Id);
+      System.assertEquals(product3.Id, oli3.PricebookEntry.Product2.Id);
+      System.assertEquals(PRODUCT_FAMILY, oli1.PricebookEntry.Product2.Family);
+      System.assertEquals(PRODUCT_FAMILY, oli2.PricebookEntry.Product2.Family);
+      System.assertEquals(PRODUCT_FAMILY, oli3.PricebookEntry.Product2.Family);
+      System.assertEquals(dummyAcc1.Id, oli1.Opportunity.Account.Id);
+      System.assertEquals(dummyAcc1.Id, oli2.Opportunity.Account.Id);
+      System.assertEquals(dummyAcc1.Id, oli3.Opportunity.Account.Id);
+      
+      Test.startTest();
+      /**
+       * Build Map
+       */
+      List<OpportunityLineItem> opportunityLineList = new List<OpportunityLineItem>{oli1, oli2, oli3};
+      Map<Object, Object> mappedData = new MapUtility_MappingMain().generateMapFromObjectList(
+        opportunityLineList,
+        new OpportunityKeyReaday(),
+        MAP_RETAIN_MODE.RETAIN_ALL,
+        new List<MapUtility_MappingMain.IncludeItemKeyInMapInterface>(), // evaluates to 'true' if not provided
+        new List<MapUtility_MappingMain.IncludeItemInMapInterface>() // evaluates to 'true' if not provided
+      );
+      Test.stopTest();
 
-        List<OpportunityLineItem> lineItemsToCheck = (List<OpportunityLineItem>)mappedData.get(checkKey);
-        System.assertEquals(oli1.Id, lineItemsToCheck.get(0).Id);
-        System.assertEquals(oli2.Id, lineItemsToCheck.get(1).Id);
-        System.assertEquals(oli3.Id, lineItemsToCheck.get(2).Id);
+      /**
+       * Check mapped data
+       */
+
+      // create artifical key to access map
+      CountryAccountFamilyKey checkKey = new CountryAccountFamilyKey();
+      checkKey.productFamily = PRODUCT_FAMILY;
+      checkKey.accountCountry = 'EU';
+      checkKey.accountId = dummyAcc1.Id;
+
+      System.assertEquals(1, mappedData.size());
+
+      List<OpportunityLineItem> lineItemsToCheck = (List<OpportunityLineItem>)mappedData.get(checkKey);
+      System.assertEquals(oli1.Id, lineItemsToCheck.get(0).Id);
+      System.assertEquals(oli2.Id, lineItemsToCheck.get(1).Id);
+      System.assertEquals(oli3.Id, lineItemsToCheck.get(2).Id);
     }
 
     private class CountryAccountFamilyKey {
