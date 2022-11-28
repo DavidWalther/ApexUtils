@@ -1004,6 +1004,13 @@ public with sharing class MapUtility_MappingMainTest {
               pbe2
             oli3
               pbe3
+          dummyOpp2
+            oli4
+              pbe1
+            oli5
+              pbe2
+            oli6
+              pbe3
 
         product1
           pbe1
@@ -1013,14 +1020,17 @@ public with sharing class MapUtility_MappingMainTest {
           pbe3
       */
 
-      final String PRODUCT_FAMILY = 'Family1';
-      Product2 product1 = createProduct(PRODUCT_NAME_ONE, PRODUCT_FAMILY);
-      Product2 product2 = createProduct(PRODUCT_NAME_TWO, PRODUCT_FAMILY);
-      Product2 product3 = createProduct(PRODUCT_NAME_THREE, PRODUCT_FAMILY);
+      final String PRODUCT_FAMILY1 = 'Family1';
+      final String PRODUCT_FAMILY2 = 'Family2';
+      Product2 product1 = createProduct(PRODUCT_NAME_ONE, PRODUCT_FAMILY1);
+      Product2 product2 = createProduct(PRODUCT_NAME_TWO, PRODUCT_FAMILY1);
+      Product2 product3 = createProduct(PRODUCT_NAME_THREE, PRODUCT_FAMILY1);
+      Product2 product4 = createProduct(PRODUCT_NAME_THREE, PRODUCT_FAMILY2);
 
       PricebookEntry pbe1 = createPriceBookEntry(NULL, product1);
       PricebookEntry pbe2 = createPriceBookEntry(NULL, product2);
       PricebookEntry pbe3 = createPriceBookEntry(NULL, product3);
+      PricebookEntry pbe4 = createPriceBookEntry(NULL, product4);
 
       Account dummyAcc1 = createAccount('Dummy Account 1', 'EU');
 
@@ -1030,22 +1040,17 @@ public with sharing class MapUtility_MappingMainTest {
       OpportunityLineItem oli2 = createOpportunityLineItem(dummyOpp1, pbe2);
       OpportunityLineItem oli3 = createOpportunityLineItem(dummyOpp1, pbe3);
 
-      // Assert connection
-      System.assertEquals(product1.Id, oli1.PricebookEntry.Product2.Id);
-      System.assertEquals(product2.Id, oli2.PricebookEntry.Product2.Id);
-      System.assertEquals(product3.Id, oli3.PricebookEntry.Product2.Id);
-      System.assertEquals(PRODUCT_FAMILY, oli1.PricebookEntry.Product2.Family);
-      System.assertEquals(PRODUCT_FAMILY, oli2.PricebookEntry.Product2.Family);
-      System.assertEquals(PRODUCT_FAMILY, oli3.PricebookEntry.Product2.Family);
-      System.assertEquals(dummyAcc1.Id, oli1.Opportunity.Account.Id);
-      System.assertEquals(dummyAcc1.Id, oli2.Opportunity.Account.Id);
-      System.assertEquals(dummyAcc1.Id, oli3.Opportunity.Account.Id);
+      Opportunity dummyOpp2 = createOpportunity('Dummy Opportunity 2', dummyAcc1);
+
+      OpportunityLineItem oli4 = createOpportunityLineItem(dummyOpp2, pbe1);
+      OpportunityLineItem oli5 = createOpportunityLineItem(dummyOpp2, pbe2);
+      OpportunityLineItem oli6 = createOpportunityLineItem(dummyOpp2, pbe4);
 
       Test.startTest();
       /**
        * Build Map
        */
-      List<OpportunityLineItem> opportunityLineList = new List<OpportunityLineItem>{oli1, oli2, oli3};
+      List<OpportunityLineItem> opportunityLineList = new List<OpportunityLineItem>{oli1, oli2, oli3, oli4, oli5, oli6};
       Map<Object, Object> mappedData = new MapUtility_MappingMain().generateMapFromObjectList(
         opportunityLineList,
         new OpportunityKeyReaday(),
@@ -1057,20 +1062,39 @@ public with sharing class MapUtility_MappingMainTest {
 
       /**
        * Check mapped data
+       *
+       *  Structure:
+       *  (PRODUCT_FAMILY1, EU, dummyAcc1.Id)
+       *    [oli1, oli2, oli3, oli4, oli5]
+       *  (PRODUCT_FAMILY2, EU, dummyAcc1.Id)
+       *    [oli6]
        */
+      System.assertEquals(2, mappedData.size());
 
       // create artifical key to access map
       CountryAccountFamilyKey checkKey = new CountryAccountFamilyKey();
-      checkKey.productFamily = PRODUCT_FAMILY;
+      checkKey.productFamily = PRODUCT_FAMILY1;
       checkKey.accountCountry = 'EU';
       checkKey.accountId = dummyAcc1.Id;
 
-      System.assertEquals(1, mappedData.size());
-
       List<OpportunityLineItem> lineItemsToCheck = (List<OpportunityLineItem>)mappedData.get(checkKey);
+
       System.assertEquals(oli1.Id, lineItemsToCheck.get(0).Id);
       System.assertEquals(oli2.Id, lineItemsToCheck.get(1).Id);
       System.assertEquals(oli3.Id, lineItemsToCheck.get(2).Id);
+      System.assertEquals(oli4.Id, lineItemsToCheck.get(3).Id);
+      System.assertEquals(oli5.Id, lineItemsToCheck.get(4).Id);
+      System.assertEquals(5, lineItemsToCheck.size());
+
+      // Change key to look for (value: Family)
+      checkKey = new CountryAccountFamilyKey();
+      checkKey.productFamily = PRODUCT_FAMILY2;
+      checkKey.accountCountry = 'EU';
+      checkKey.accountId = dummyAcc1.Id;
+
+      lineItemsToCheck = (List<OpportunityLineItem>)mappedData.get(checkKey);
+      System.assertEquals(oli6.Id, lineItemsToCheck.get(0).Id);
+      System.assertEquals(1, lineItemsToCheck.size());
     }
 
     private class CountryAccountFamilyKey {
