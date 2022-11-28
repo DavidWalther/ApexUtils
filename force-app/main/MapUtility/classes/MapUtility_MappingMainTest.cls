@@ -921,59 +921,6 @@ public with sharing class MapUtility_MappingMainTest {
     // Multi-Level Mapping vs. key-class
     //==============================
 
-    /**
-     * Given:
-     *   List of Opportunities with Accounts, LineItems, PricebookEntries and Products
-     *
-     * Task:
-     *   Map Products by Account.BillingCountryCode, AccountId, and Product.Family
-     *
-     * Structure:
-     *
-     *   classic:
-     *   EU
-     *     AccountId1
-     *       Product.Family1
-     *         List<Product2>
-     *       Product.Family2
-     *         List<Product2>
-     *     AccountId2
-     *       Product.Family1
-     *         List<Product2>
-     *       Product.Family2
-     *         List<Product2>
-     *   GB
-     *     AccountId2
-     *       Product.Family1
-     *         List<Product2>
-     *       Product.Family2
-     *         List<Product2>
-     *     AccountId3
-     *       Product.Family1
-     *         List<Product2>
-     *       Product.Family2
-     *         List<Product2>
-     *
-     *   Structured Key:
-     *     (EUR, AccountId1, Product.Family1)
-     *       List<Product2>
-     *     (EUR, AccountId1, Product.Family2)
-     *       List<Product2>
-     *     (EUR, AccountId2, Product.Family1)
-     *       List<Product2>
-     *     (EUR, AccountId2, Product.Family2)
-     *       List<Product2>
-     *
-     *     (USD, AccountId2, Product.Family1)
-     *       List<Product2>
-     *     (USD, AccountId2, Product.Family2)
-     *       List<Product2>
-     *     (USD, AccountId3, Product.Family1)
-     *       List<Product2>
-     *     (USD, AccountId3, Product.Family2)
-     *       List<Product2>
-     */
-
     @IsTest
     static void structuredKey_creatorsAreSetUp() {
         Account dummyAcc1 = createAccount('Dummy Account 1', 'EU');
