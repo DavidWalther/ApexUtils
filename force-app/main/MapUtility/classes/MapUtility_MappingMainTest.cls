@@ -667,9 +667,9 @@ public with sharing class MapUtility_MappingMainTest {
     }
 
     //----------------------------
-    // complex mapping szenario 
+    // complex mapping szenario
     //----------------------------
-    
+
     /**
      * - In this Szenario we'll map OpportunityLineItems by their Products's family field.
      * - we'll include only certain families
@@ -683,7 +683,7 @@ public with sharing class MapUtility_MappingMainTest {
     private static final String PRODUCT_NAME_TWO = 'Product 2';
     private static final String PRODUCT_NAME_THREE = 'Product 3';
     private static final String PRODUCT_NAME_FOUR = 'Product 4';
-    
+
     private static final List<Id> OLI_IDS = new List<Id>{
         generateFakeId(OpportunityLineItem.getSObjectType()), // 'familiy one' => mapped
         generateFakeId(OpportunityLineItem.getSObjectType()), // 'familiy two' => mapped
@@ -695,7 +695,7 @@ public with sharing class MapUtility_MappingMainTest {
 
     /**
      * This method creates Data. The strukture is:
-        
+
         Opportunity (CloseDate: Today +10)
             OpportunityLineItem
                 PricebookEntry
@@ -709,7 +709,7 @@ public with sharing class MapUtility_MappingMainTest {
             OpportunityLineItem
                 PricebookEntry
                     Product(Name: PRODUCT_NAME_FOUR, Family: FAMILY_THREE)
-        
+
         Opportunity (CloseDate: Today -1)
             OpportunityLineItem
                 PricebookEntry
@@ -776,7 +776,7 @@ public with sharing class MapUtility_MappingMainTest {
     // Variant 1
     // Use MapUtility_ItemEvalImplementations.IgnoreKeyNull and IValueReader.getValue to exclude Keys
     //----------------------------
-    
+
     /**
      * This class will do two things:
      * 1. Read the LineItem's Products Family field
@@ -785,16 +785,16 @@ public with sharing class MapUtility_MappingMainTest {
     private class KeyReaderVariant1 implements IValueReader{
         public Object getValue(Object objectToGetValueFrom) {
             OpportunityLineItem oli = (OpportunityLineItem)objectToGetValueFrom;
-            
+
             if(oli?.Opportunity?.CloseDate <= Date.Today()) {
                 // returning NULL will result in oli not being mapped
                 return NULL;
             }
-            
+
             // this String might be NULL
             String productFamily = oli?.PriceBookEntry?.Product2?.Family;
             return productFamily;
-        }      
+        }
     }
 
 
@@ -805,7 +805,7 @@ public with sharing class MapUtility_MappingMainTest {
          * Test data created by factory method
          */
         List<OpportunityLineItem> lineItemsToCreateMapFrom = createOppurtunityLineItemsWithData();
-        
+
         List<MapUtility_MappingMain.IncludeItemKeyInMapInterface> keyFilters = new List<MapUtility_MappingMain.IncludeItemKeyInMapInterface>{
             new MapUtility_ItemEvalImplementations.IgnoreKeyNull(),
             new MapUtility_ItemEvalImplementations.IncludeOnly(new Set<Object>{FAMILY_ONE, FAMILY_TWO})
@@ -829,24 +829,24 @@ public with sharing class MapUtility_MappingMainTest {
         System.assert(!mappedData.containsKey(FAMILY_THREE), 'Map must not contain ' + FAMILY_THREE);
 
         System.assertEquals(1, ((List<Object>)mappedData.get(FAMILY_ONE)).size(), 'A single record was created for \'' + FAMILY_ONE + '\'. The mapping by family was not correct!');
-        
+
         OpportunityLineItem testOli1 = (OpportunityLineItem)((List<Object>)mappedData.get(FAMILY_ONE)).get(0);
         System.assertEquals(OLI_IDS[0], testOli1.Id, 'The there was a different OpportunityLineItem mapped for this family');
-        
+
         System.assertEquals(2, ((List<Object>)mappedData.get(FAMILY_TWO)).size(), 'Two records were created for \'' + FAMILY_TWO + '\'. The mapping by family was not correct!');
         OpportunityLineItem testOli2 = (OpportunityLineItem)((List<Object>)mappedData.get(FAMILY_TWO)).get(0);
         System.assertEquals(OLI_IDS[1], testOli2.Id, 'The there was a different OpportunityLineItem mapped for this family');
-        
+
         OpportunityLineItem testOli3 = (OpportunityLineItem)((List<Object>)mappedData.get(FAMILY_TWO)).get(1);
         System.assertEquals(OLI_IDS[2], testOli3.Id, 'The there was a different OpportunityLineItem mapped for this family');
     }
 
-    
+
     //----------------------------
     // Variant 2
     // Exclude items with MapUtility_MappingMain.IncludeItemInMapInterface
     //----------------------------
-      
+
     /**
      * This class will read the LineItem's Products Family field
      */
@@ -855,7 +855,7 @@ public with sharing class MapUtility_MappingMainTest {
             OpportunityLineItem oli = (OpportunityLineItem)objectToGetValueFrom;
             String productFamily = oli?.PriceBookEntry?.Product2?.Family;
             return productFamily;
-        }      
+        }
     }
 
     /**
@@ -868,7 +868,7 @@ public with sharing class MapUtility_MappingMainTest {
                 return oli?.Opportunity?.CloseDate > Date.Today();
             }
             return false;
-        }      
+        }
     }
 
     @IsTest
@@ -878,11 +878,11 @@ public with sharing class MapUtility_MappingMainTest {
          * Test data created by factory method
          */
         List<OpportunityLineItem> lineItemsToCreateMapFrom = createOppurtunityLineItemsWithData();
-        
+
         List<MapUtility_MappingMain.IncludeItemKeyInMapInterface> keyFilters = new List<MapUtility_MappingMain.IncludeItemKeyInMapInterface>{
             new MapUtility_ItemEvalImplementations.IncludeOnly(new Set<Object>{FAMILY_ONE, FAMILY_TWO})
         };
-        
+
         List<MapUtility_MappingMain.IncludeItemInMapInterface> itemFilters = new List<MapUtility_MappingMain.IncludeItemInMapInterface>{
             new IncludeOnlyLineItemsOfClosedOpportunities()
         };
@@ -905,14 +905,14 @@ public with sharing class MapUtility_MappingMainTest {
         System.assert(!mappedData.containsKey(FAMILY_THREE), 'Map must not contain ' + FAMILY_THREE);
 
         System.assertEquals(1, ((List<Object>)mappedData.get(FAMILY_ONE)).size(), 'A single record was created for \'' + FAMILY_ONE + '\'. The mapping by family was not correct!');
-        
+
         OpportunityLineItem testOli1 = (OpportunityLineItem)((List<Object>)mappedData.get(FAMILY_ONE)).get(0);
         System.assertEquals(OLI_IDS[0], testOli1.Id, 'The there was a different OpportunityLineItem mapped for this family');
-        
+
         System.assertEquals(2, ((List<Object>)mappedData.get(FAMILY_TWO)).size(), 'Two records were created for \'' + FAMILY_TWO + '\'. The mapping by family was not correct!');
         OpportunityLineItem testOli2 = (OpportunityLineItem)((List<Object>)mappedData.get(FAMILY_TWO)).get(0);
         System.assertEquals(OLI_IDS[1], testOli2.Id, 'The there was a different OpportunityLineItem mapped for this family');
-        
+
         OpportunityLineItem testOli3 = (OpportunityLineItem)((List<Object>)mappedData.get(FAMILY_TWO)).get(1);
         System.assertEquals(OLI_IDS[2], testOli3.Id, 'The there was a different OpportunityLineItem mapped for this family');
     }
@@ -924,12 +924,12 @@ public with sharing class MapUtility_MappingMainTest {
     /**
      * Given:
      *   List of Opportunities with Accounts, LineItems, PricebookEntries and Products
-     * 
+     *
      * Task:
      *   Map Products by Account.BillingCountryCode, AccountId, and Product.Family
-     *  
+     *
      * Structure:
-     * 
+     *
      *   classic:
      *   EU
      *     AccountId1
@@ -953,7 +953,7 @@ public with sharing class MapUtility_MappingMainTest {
      *         List<Product2>
      *       Product.Family2
      *         List<Product2>
-     * 
+     *
      *   Structured Key:
      *     (EUR, AccountId1, Product.Family1)
      *       List<Product2>
@@ -963,7 +963,7 @@ public with sharing class MapUtility_MappingMainTest {
      *       List<Product2>
      *     (EUR, AccountId2, Product.Family2)
      *       List<Product2>
-     * 
+     *
      *     (USD, AccountId2, Product.Family1)
      *       List<Product2>
      *     (USD, AccountId2, Product.Family2)
@@ -977,9 +977,9 @@ public with sharing class MapUtility_MappingMainTest {
     @IsTest
     static void structuredKey_creatorsAreSetUp() {
         Account dummyAcc1 = createAccount('Dummy Account 1', 'EU');
-        
+
         Opportunity dummyOpp1 = createOpportunity('Dummy Opportunity 1', dummyAcc1);
-            
+
         Product2 family1Product = createProduct(PRODUCT_NAME_ONE, 'Family1');
 
         PricebookEntry pbe = createPriceBookEntry(NULL, family1Product);
@@ -1020,9 +1020,9 @@ public with sharing class MapUtility_MappingMainTest {
       PricebookEntry pbe1 = createPriceBookEntry(NULL, product1);
       PricebookEntry pbe2 = createPriceBookEntry(NULL, product2);
       PricebookEntry pbe3 = createPriceBookEntry(NULL, product3);
-      
+
       Account dummyAcc1 = createAccount('Dummy Account 1', 'EU');
-      
+
       Opportunity dummyOpp1 = createOpportunity('Dummy Opportunity 1', dummyAcc1);
 
       OpportunityLineItem oli1 = createOpportunityLineItem(dummyOpp1, pbe1);
@@ -1039,7 +1039,7 @@ public with sharing class MapUtility_MappingMainTest {
       System.assertEquals(dummyAcc1.Id, oli1.Opportunity.Account.Id);
       System.assertEquals(dummyAcc1.Id, oli2.Opportunity.Account.Id);
       System.assertEquals(dummyAcc1.Id, oli3.Opportunity.Account.Id);
-      
+
       Test.startTest();
       /**
        * Build Map
@@ -1109,7 +1109,7 @@ public with sharing class MapUtility_MappingMainTest {
         return false;
       }
     }
-  
+
     public class IncludeOpportunityKey implements MapUtility_MappingMain.IncludeItemKeyInMapInterface {
       public Boolean isIncludeItemKey(Object keyToEvaluate) {
         return false;
@@ -1149,7 +1149,7 @@ public with sharing class MapUtility_MappingMainTest {
       Id = generateFakeId(PricebookEntry.getSObjectType()),
       Pricebook2Id = pricebook?.Id,
       Pricebook2 = pricebook,
-      
+
       Product2Id = product?.Id,
       Product2 = product
     );
