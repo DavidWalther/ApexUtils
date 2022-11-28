@@ -1033,10 +1033,11 @@ public with sharing class MapUtility_MappingMainTest {
       Product2 product3 = createProduct(PRODUCT_NAME_THREE, PRODUCT_FAMILY1);
       Product2 product4 = createProduct(PRODUCT_NAME_THREE, PRODUCT_FAMILY2);
 
-      PricebookEntry pbe1 = createPriceBookEntry(NULL, product1);
-      PricebookEntry pbe2 = createPriceBookEntry(NULL, product2);
-      PricebookEntry pbe3 = createPriceBookEntry(NULL, product3);
-      PricebookEntry pbe4 = createPriceBookEntry(NULL, product4);
+      Pricebook2 pricebook = new Pricebook2();
+      PricebookEntry pbe1 = createPriceBookEntry(pricebook, product1);
+      PricebookEntry pbe2 = createPriceBookEntry(pricebook, product2);
+      PricebookEntry pbe3 = createPriceBookEntry(pricebook, product3);
+      PricebookEntry pbe4 = createPriceBookEntry(pricebook, product4);
 
       Account dummyAcc1 = createAccount('Dummy Account 1', 'EU');
 
