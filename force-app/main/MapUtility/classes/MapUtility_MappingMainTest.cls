@@ -996,6 +996,7 @@ public with sharing class MapUtility_MappingMainTest {
         Given Simple structure
 
         dummyAcc1
+          - 'EU'
           dummyOpp1
             oli1
               pbe1
