@@ -1112,6 +1112,8 @@ public with sharing class MapUtility_MappingMainTest {
       private String accountCountry;
       private String accountId;
 
+      public CountryAccountFamilyKey() {}
+
       public CountryAccountFamilyKey(OpportunityLineItem oli) {
         this.productFamily = oli.pricebookEntry.product2.Family;
         this.accountCountry = oli.Opportunity.Account.ShippingCountry;
