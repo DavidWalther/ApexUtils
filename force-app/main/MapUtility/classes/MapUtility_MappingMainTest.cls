@@ -1053,7 +1053,7 @@ public with sharing class MapUtility_MappingMainTest {
       List<OpportunityLineItem> opportunityLineList = new List<OpportunityLineItem>{oli1, oli2, oli3, oli4, oli5, oli6};
       Map<Object, Object> mappedData = new MapUtility_MappingMain().generateMapFromObjectList(
         opportunityLineList,
-        new OpportunityKeyReaday(),
+        new OpportunityKeyReader(),
         MAP_RETAIN_MODE.RETAIN_ALL,
         new List<MapUtility_MappingMain.IncludeItemKeyInMapInterface>(), // evaluates to 'true' if not provided
         new List<MapUtility_MappingMain.IncludeItemInMapInterface>() // evaluates to 'true' if not provided
@@ -1117,7 +1117,7 @@ public with sharing class MapUtility_MappingMainTest {
       }
     }
 
-    private class OpportunityKeyReaday implements IValueReader {
+    private class OpportunityKeyReader implements IValueReader {
       public Object getValue(Object objectToGetValueFrom) {
         OpportunityLineItem oli = (OpportunityLineItem)objectToGetValueFrom;
 
