@@ -918,7 +918,7 @@ public with sharing class MapUtility_MappingMainTest {
     }
 
     //==============================
-    // Multi-Level Mapping vs. key-class
+    // Mapping with structured Key (Alternative to Multilevel Mapping)
     //==============================
 
     @IsTest
@@ -940,38 +940,40 @@ public with sharing class MapUtility_MappingMainTest {
     @IsTest
     static void structuredKey_setUpSimpleTestStructure() {
       /*
-        Given Simple structure
-
-        dummyAcc1
-          - 'EU'
-          dummyOpp1
-            oli1
-              pbe1
-            oli2
-              pbe2
-            oli3
-              pbe3
-          dummyOpp2
-            oli4
-              pbe1
-            oli5
-              pbe2
-            oli6
-              pbe3
-
-        product1
-          - PRODUCT_FAMILY1
-          pbe1
-        product2
-          - PRODUCT_FAMILY1
-          pbe2
-        product3
-          - PRODUCT_FAMILY1
-          pbe3
-        product4
-          - PRODUCT_FAMILY2
-          pbe4
-      */
+       *   Product data:
+       *   All products are in Family1, except product4
+       *
+       *   +-------------------------------------------------------------+
+       *   |                          pricebook                          |
+       *   +-------------+--+------------+--+------------+--+------------+
+       *   |    pbe1     |  |   pbe2     |  |   pbe3     |  |   pbe4     |
+       *   +-------------+  +------------+  +------------+  +------------+
+       *   | product1    |  | product2   |  | product3   |  | product4   |
+       *   |   - Family: |  |  - Family: |  |  - Family: |  |  - Family: |
+       *   |     Family1 |  |    Family1 |  |    Family1 |  |    Family2 |
+       *   +-------------+  +------------+  +------------+  +------------+
+       *
+       *   Account data:
+       *   Only OpportunityLineItem6 is refering to aproduct with Family2
+       *
+       *   + -------------------------------------------------------+
+       *   |                      dummyAcc1                         |
+       *   |                       - Id                             |
+       *   |                       - ShippingCountry: EU            |
+       *   + -------------------------+-----------------------------+
+       *   |      DummyOpp1           |  |         DummyOpp2        |
+       *   +--------------------------+  +--------------------------+
+       *   | Oli1 |  | Oli2 |  | Oli3 |  | Oli4 |  | Oli5 |  | Oli6 |
+       *   + -----+  +------+  +------+  +------+  +------+  +------+
+       *   | pbe1 |  | pbe2 |  | pbe3 |  | pbe1 |  | pbe2 |  | pbe4 |
+       *   + -----+  +------+  +------+  +------+  +------+  +------+
+       *
+       *   Task:
+       *   Map OpportunityLineItems by
+       *      - Product.Family
+       *      - Account.ShippingCountry
+       *      - Account.Id
+       */
 
       final String PRODUCT_FAMILY1 = 'Family1';
       final String PRODUCT_FAMILY2 = 'Family2';
