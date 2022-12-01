@@ -667,9 +667,9 @@ public with sharing class MapUtility_MappingMainTest {
     }
 
     //----------------------------
-    // complex mapping szenario 
+    // complex mapping szenario
     //----------------------------
-    
+
     /**
      * - In this Szenario we'll map OpportunityLineItems by their Products's family field.
      * - we'll include only certain families
@@ -683,7 +683,7 @@ public with sharing class MapUtility_MappingMainTest {
     private static final String PRODUCT_NAME_TWO = 'Product 2';
     private static final String PRODUCT_NAME_THREE = 'Product 3';
     private static final String PRODUCT_NAME_FOUR = 'Product 4';
-    
+
     private static final List<Id> OLI_IDS = new List<Id>{
         generateFakeId(OpportunityLineItem.getSObjectType()), // 'familiy one' => mapped
         generateFakeId(OpportunityLineItem.getSObjectType()), // 'familiy two' => mapped
@@ -695,7 +695,7 @@ public with sharing class MapUtility_MappingMainTest {
 
     /**
      * This method creates Data. The strukture is:
-        
+
         Opportunity (CloseDate: Today +10)
             OpportunityLineItem
                 PricebookEntry
@@ -709,7 +709,7 @@ public with sharing class MapUtility_MappingMainTest {
             OpportunityLineItem
                 PricebookEntry
                     Product(Name: PRODUCT_NAME_FOUR, Family: FAMILY_THREE)
-        
+
         Opportunity (CloseDate: Today -1)
             OpportunityLineItem
                 PricebookEntry
@@ -776,7 +776,7 @@ public with sharing class MapUtility_MappingMainTest {
     // Variant 1
     // Use MapUtility_ItemEvalImplementations.IgnoreKeyNull and IValueReader.getValue to exclude Keys
     //----------------------------
-    
+
     /**
      * This class will do two things:
      * 1. Read the LineItem's Products Family field
@@ -785,16 +785,16 @@ public with sharing class MapUtility_MappingMainTest {
     private class KeyReaderVariant1 implements IValueReader{
         public Object getValue(Object objectToGetValueFrom) {
             OpportunityLineItem oli = (OpportunityLineItem)objectToGetValueFrom;
-            
+
             if(oli?.Opportunity?.CloseDate <= Date.Today()) {
                 // returning NULL will result in oli not being mapped
                 return NULL;
             }
-            
+
             // this String might be NULL
             String productFamily = oli?.PriceBookEntry?.Product2?.Family;
             return productFamily;
-        }      
+        }
     }
 
 
@@ -805,7 +805,7 @@ public with sharing class MapUtility_MappingMainTest {
          * Test data created by factory method
          */
         List<OpportunityLineItem> lineItemsToCreateMapFrom = createOppurtunityLineItemsWithData();
-        
+
         List<MapUtility_MappingMain.IncludeItemKeyInMapInterface> keyFilters = new List<MapUtility_MappingMain.IncludeItemKeyInMapInterface>{
             new MapUtility_ItemEvalImplementations.IgnoreKeyNull(),
             new MapUtility_ItemEvalImplementations.IncludeOnly(new Set<Object>{FAMILY_ONE, FAMILY_TWO})
@@ -829,24 +829,24 @@ public with sharing class MapUtility_MappingMainTest {
         System.assert(!mappedData.containsKey(FAMILY_THREE), 'Map must not contain ' + FAMILY_THREE);
 
         System.assertEquals(1, ((List<Object>)mappedData.get(FAMILY_ONE)).size(), 'A single record was created for \'' + FAMILY_ONE + '\'. The mapping by family was not correct!');
-        
+
         OpportunityLineItem testOli1 = (OpportunityLineItem)((List<Object>)mappedData.get(FAMILY_ONE)).get(0);
         System.assertEquals(OLI_IDS[0], testOli1.Id, 'The there was a different OpportunityLineItem mapped for this family');
-        
+
         System.assertEquals(2, ((List<Object>)mappedData.get(FAMILY_TWO)).size(), 'Two records were created for \'' + FAMILY_TWO + '\'. The mapping by family was not correct!');
         OpportunityLineItem testOli2 = (OpportunityLineItem)((List<Object>)mappedData.get(FAMILY_TWO)).get(0);
         System.assertEquals(OLI_IDS[1], testOli2.Id, 'The there was a different OpportunityLineItem mapped for this family');
-        
+
         OpportunityLineItem testOli3 = (OpportunityLineItem)((List<Object>)mappedData.get(FAMILY_TWO)).get(1);
         System.assertEquals(OLI_IDS[2], testOli3.Id, 'The there was a different OpportunityLineItem mapped for this family');
     }
 
-    
+
     //----------------------------
     // Variant 2
     // Exclude items with MapUtility_MappingMain.IncludeItemInMapInterface
     //----------------------------
-      
+
     /**
      * This class will read the LineItem's Products Family field
      */
@@ -855,7 +855,7 @@ public with sharing class MapUtility_MappingMainTest {
             OpportunityLineItem oli = (OpportunityLineItem)objectToGetValueFrom;
             String productFamily = oli?.PriceBookEntry?.Product2?.Family;
             return productFamily;
-        }      
+        }
     }
 
     /**
@@ -868,7 +868,7 @@ public with sharing class MapUtility_MappingMainTest {
                 return oli?.Opportunity?.CloseDate > Date.Today();
             }
             return false;
-        }      
+        }
     }
 
     @IsTest
@@ -878,11 +878,11 @@ public with sharing class MapUtility_MappingMainTest {
          * Test data created by factory method
          */
         List<OpportunityLineItem> lineItemsToCreateMapFrom = createOppurtunityLineItemsWithData();
-        
+
         List<MapUtility_MappingMain.IncludeItemKeyInMapInterface> keyFilters = new List<MapUtility_MappingMain.IncludeItemKeyInMapInterface>{
             new MapUtility_ItemEvalImplementations.IncludeOnly(new Set<Object>{FAMILY_ONE, FAMILY_TWO})
         };
-        
+
         List<MapUtility_MappingMain.IncludeItemInMapInterface> itemFilters = new List<MapUtility_MappingMain.IncludeItemInMapInterface>{
             new IncludeOnlyLineItemsOfClosedOpportunities()
         };
@@ -905,15 +905,256 @@ public with sharing class MapUtility_MappingMainTest {
         System.assert(!mappedData.containsKey(FAMILY_THREE), 'Map must not contain ' + FAMILY_THREE);
 
         System.assertEquals(1, ((List<Object>)mappedData.get(FAMILY_ONE)).size(), 'A single record was created for \'' + FAMILY_ONE + '\'. The mapping by family was not correct!');
-        
+
         OpportunityLineItem testOli1 = (OpportunityLineItem)((List<Object>)mappedData.get(FAMILY_ONE)).get(0);
         System.assertEquals(OLI_IDS[0], testOli1.Id, 'The there was a different OpportunityLineItem mapped for this family');
-        
+
         System.assertEquals(2, ((List<Object>)mappedData.get(FAMILY_TWO)).size(), 'Two records were created for \'' + FAMILY_TWO + '\'. The mapping by family was not correct!');
         OpportunityLineItem testOli2 = (OpportunityLineItem)((List<Object>)mappedData.get(FAMILY_TWO)).get(0);
         System.assertEquals(OLI_IDS[1], testOli2.Id, 'The there was a different OpportunityLineItem mapped for this family');
-        
+
         OpportunityLineItem testOli3 = (OpportunityLineItem)((List<Object>)mappedData.get(FAMILY_TWO)).get(1);
         System.assertEquals(OLI_IDS[2], testOli3.Id, 'The there was a different OpportunityLineItem mapped for this family');
     }
+
+    //==============================
+    // Mapping with structured Key (Alternative to Multilevel Mapping)
+    //==============================
+
+    @IsTest
+    static void structuredKey_creatorsAreSetUp() {
+        Account dummyAcc1 = createAccount('Dummy Account 1', 'EU');
+
+        Opportunity dummyOpp1 = createOpportunity('Dummy Opportunity 1', dummyAcc1);
+
+        Product2 family1Product = createProduct(PRODUCT_NAME_ONE, 'Family1');
+
+        PricebookEntry pbe = createPriceBookEntry(NULL, family1Product);
+
+        OpportunityLineItem oli1 = createOpportunityLineItem(dummyOpp1, pbe);
+
+        System.assertEquals(family1Product.Id, oli1.PricebookEntry.Product2.Id);
+        System.assertEquals(dummyAcc1.Id, oli1.Opportunity.Account.Id);
+    }
+
+    @IsTest
+    static void structuredKey_setUpSimpleTestStructure() {
+      /*
+       *   Product data:
+       *   Two Products in each Family
+       * 
+       *   +-------------------------------------------------------------+
+       *   |                          pricebook                          |
+       *   +-------------+--+------------+--+------------+--+------------+
+       *   |    pbe1     |  |   pbe2     |  |   pbe3     |  |   pbe4     |
+       *   +-------------+  +------------+  +------------+  +------------+
+       *   | product1    |  | product2   |  | product3   |  | product4   |
+       *   |   - Family: |  |  - Family: |  |  - Family: |  |  - Family: |
+       *   |     Family1 |  |    Family2 |  |    Family1 |  |    Family2 |
+       *   +-------------+  +------------+  +------------+  +------------+
+       *
+       *   Account data:
+       *   Both Opportunities  are connected to each Family
+       *
+       *   + -------------------------------------------------------+
+       *   |                      dummyAcc1                         |
+       *   |                       - Id                             |
+       *   |                       - ShippingCountry: EU            |
+       *   + -------------------------+-----------------------------+
+       *   |      DummyOpp1           |  |         DummyOpp2        |
+       *   +--------------------------+  +--------------------------+
+       *   | Oli1 |  | Oli2 |  | Oli3 |  | Oli4 |  | Oli5 |  | Oli6 |
+       *   + -----+  +------+  +------+  +------+  +------+  +------+
+       *   | pbe1 |  | pbe2 |  | pbe3 |  | pbe1 |  | pbe2 |  | pbe4 |
+       *   + -----+  +------+  +------+  +------+  +------+  +------+
+       *
+       *   Task:
+       *   Map OpportunityLineItems by
+       *      - Product.Family
+       *      - Account.ShippingCountry
+       *      - Account.Id
+       */
+
+      final String PRODUCT_FAMILY1 = 'Family1';
+      final String PRODUCT_FAMILY2 = 'Family2';
+      Product2 product1 = createProduct(PRODUCT_NAME_ONE, PRODUCT_FAMILY1);
+      Product2 product2 = createProduct(PRODUCT_NAME_TWO, PRODUCT_FAMILY2);
+      Product2 product3 = createProduct(PRODUCT_NAME_THREE, PRODUCT_FAMILY1);
+      Product2 product4 = createProduct(PRODUCT_NAME_THREE, PRODUCT_FAMILY2);
+
+      Pricebook2 pricebook = new Pricebook2();
+      PricebookEntry pbe1 = createPriceBookEntry(pricebook, product1);
+      PricebookEntry pbe2 = createPriceBookEntry(pricebook, product2);
+      PricebookEntry pbe3 = createPriceBookEntry(pricebook, product3);
+      PricebookEntry pbe4 = createPriceBookEntry(pricebook, product4);
+
+      Account dummyAcc1 = createAccount('Dummy Account 1', 'EU');
+
+      Opportunity dummyOpp1 = createOpportunity('Dummy Opportunity 1', dummyAcc1);
+
+      OpportunityLineItem oli1 = createOpportunityLineItem(dummyOpp1, pbe1);
+      OpportunityLineItem oli2 = createOpportunityLineItem(dummyOpp1, pbe2);
+      OpportunityLineItem oli3 = createOpportunityLineItem(dummyOpp1, pbe3);
+
+      Opportunity dummyOpp2 = createOpportunity('Dummy Opportunity 2', dummyAcc1);
+
+      OpportunityLineItem oli4 = createOpportunityLineItem(dummyOpp2, pbe1);
+      OpportunityLineItem oli5 = createOpportunityLineItem(dummyOpp2, pbe2);
+      OpportunityLineItem oli6 = createOpportunityLineItem(dummyOpp2, pbe4);
+
+      Test.startTest();
+      /**
+       * Build Map
+       */
+      List<OpportunityLineItem> opportunityLineList = new List<OpportunityLineItem>{oli1, oli2, oli3, oli4, oli5, oli6};
+      Map<Object, Object> mappedData = new MapUtility_MappingMain().generateMapFromObjectList(
+        opportunityLineList,
+        new OpportunityKeyReader(),
+        MAP_RETAIN_MODE.RETAIN_ALL,
+        new List<MapUtility_MappingMain.IncludeItemKeyInMapInterface>(), // evaluates to 'true' if not provided
+        new List<MapUtility_MappingMain.IncludeItemInMapInterface>() // evaluates to 'true' if not provided
+      );
+      Test.stopTest();
+
+      /**
+       * Check mapped data
+       *
+       *  Structure:
+       *  (PRODUCT_FAMILY1, EU, dummyAcc1.Id)
+       *    [oli1, oli3, oli4]
+       *  (PRODUCT_FAMILY2, EU, dummyAcc1.Id)
+       *    [oli2, oli5, oli6]
+       */
+      System.assertEquals(2, mappedData.size());
+
+      // create artifical key to access map
+      CountryAccountFamilyKey checkKey = new CountryAccountFamilyKey();
+      checkKey.productFamily = PRODUCT_FAMILY1;
+      checkKey.accountCountry = 'EU';
+      checkKey.accountId = dummyAcc1.Id;
+
+      List<OpportunityLineItem> lineItemsToCheck = (List<OpportunityLineItem>)mappedData.get(checkKey);
+
+      System.assertEquals(oli1.Id, lineItemsToCheck.get(0).Id);
+      System.assertEquals(oli3.Id, lineItemsToCheck.get(1).Id);
+      System.assertEquals(oli4.Id, lineItemsToCheck.get(2).Id);
+      System.assertEquals(3, lineItemsToCheck.size());
+      
+      // Change key to look for (value: Family)
+      checkKey = new CountryAccountFamilyKey();
+      checkKey.productFamily = PRODUCT_FAMILY2;
+      checkKey.accountCountry = 'EU';
+      checkKey.accountId = dummyAcc1.Id;
+      
+      lineItemsToCheck = (List<OpportunityLineItem>)mappedData.get(checkKey);
+      System.assertEquals(oli2.Id, lineItemsToCheck.get(0).Id);
+      System.assertEquals(oli5.Id, lineItemsToCheck.get(1).Id);
+      System.assertEquals(oli6.Id, lineItemsToCheck.get(2).Id);
+      System.assertEquals(3, lineItemsToCheck.size());
+    }
+
+    /**
+     * all elements of the result are mapped by an instance of this class
+     */
+    private class CountryAccountFamilyKey {
+      private String productFamily;
+      private String accountCountry;
+      private String accountId;
+
+      public CountryAccountFamilyKey() {}
+
+      public CountryAccountFamilyKey(OpportunityLineItem oli) {
+        this.productFamily = oli.pricebookEntry.product2.Family;
+        this.accountCountry = oli.Opportunity.Account.ShippingCountry;
+        this.accountId = oli.Opportunity.Account.Id;
+      }
+
+      public Boolean equals(Object obj) {
+        CountryAccountFamilyKey otherObject = (CountryAccountFamilyKey)obj;
+
+        Boolean result = true;
+        result &= this.productFamily == otherObject.productFamily;
+        result &= this.accountCountry == otherObject.accountCountry;
+        result &= this.accountId == otherObject.accountId;
+        return result;
+      }
+
+      public Integer hashCode() {
+        return (this.productFamily.hashCode() + this.accountCountry.hashCode() + this.accountId.hashCode());
+      }
+    }
+
+    /**
+     * This class generates a structured Key for each OpportunityLineItem
+     */
+    private class OpportunityKeyReader implements IValueReader {
+      public Object getValue(Object objectToGetValueFrom) {
+        OpportunityLineItem oli = (OpportunityLineItem)objectToGetValueFrom;
+        CountryAccountFamilyKey result = new CountryAccountFamilyKey(oli);
+        return result;
+      }
+    }
+
+    private class IncludeOpportunityEvaluator implements MapUtility_MappingMain.IncludeItemInMapInterface {
+      public Boolean isIncludeItem(Object keyToEvaluate) {
+        return false;
+      }
+    }
+
+    public class IncludeOpportunityKey implements MapUtility_MappingMain.IncludeItemKeyInMapInterface {
+      public Boolean isIncludeItemKey(Object keyToEvaluate) {
+        return false;
+      }
+    }
+
+    private static Account createAccount(String accountName, String countryCode) {
+      Account result = new Account(
+        Id = generateFakeId(Account.getSObjectType()),
+        Name = accountName,
+        ShippingCountry = countryCode
+      );
+      return result;
+    }
+
+  private static Product2 createProduct(String productName, String productFamily) {
+    Product2 result = new Product2(
+      Id = generateFakeId(Product2.getSObjectType()),
+      Name = productName,
+      Family = productFamily
+    );
+    return result;
+  }
+
+  private static Opportunity createOpportunity(String opportunityName, Account opportunityAccount) {
+    Opportunity result = new Opportunity(
+      Id = generateFakeId(Opportunity.getSObjectType()),
+      AccountId = opportunityAccount?.Id,
+      Account = opportunityAccount,
+      Name = opportunityName
+    );
+    return result;
+  }
+
+  private static PricebookEntry createPriceBookEntry(Pricebook2 pricebook, Product2 product) {
+    PricebookEntry result = new PricebookEntry(
+      Id = generateFakeId(PricebookEntry.getSObjectType()),
+      Pricebook2Id = pricebook?.Id,
+      Pricebook2 = pricebook,
+
+      Product2Id = product?.Id,
+      Product2 = product
+    );
+    return result;
+  }
+
+  private static OpportunityLineItem createOpportunityLineItem(Opportunity opportunity, PricebookEntry pricebookEntry) {
+    OpportunityLineItem result = new OpportunityLineItem(
+        Id = generateFakeId(OpportunityLineItem.getSObjectType()),
+        OpportunityId = opportunity.Id,
+        Opportunity = opportunity,
+        PricebookEntryId = pricebookEntry?.Id,
+        PricebookEntry = pricebookEntry
+      );
+    return result;
+  }
 }
