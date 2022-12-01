@@ -1021,9 +1021,9 @@ public with sharing class MapUtility_MappingMainTest {
        *
        *  Structure:
        *  (PRODUCT_FAMILY1, EU, dummyAcc1.Id)
-       *    [oli1, oli3, oli5]
+       *    [oli1, oli3, oli4]
        *  (PRODUCT_FAMILY2, EU, dummyAcc1.Id)
-       *    [oli2, oli4, oli6]
+       *    [oli2, oli5, oli6]
        */
       System.assertEquals(2, mappedData.size());
 
@@ -1037,7 +1037,7 @@ public with sharing class MapUtility_MappingMainTest {
 
       System.assertEquals(oli1.Id, lineItemsToCheck.get(0).Id);
       System.assertEquals(oli3.Id, lineItemsToCheck.get(1).Id);
-      System.assertEquals(oli5.Id, lineItemsToCheck.get(2).Id);
+      System.assertEquals(oli4.Id, lineItemsToCheck.get(2).Id);
       System.assertEquals(3, lineItemsToCheck.size());
       
       // Change key to look for (value: Family)
@@ -1048,7 +1048,7 @@ public with sharing class MapUtility_MappingMainTest {
       
       lineItemsToCheck = (List<OpportunityLineItem>)mappedData.get(checkKey);
       System.assertEquals(oli2.Id, lineItemsToCheck.get(0).Id);
-      System.assertEquals(oli4.Id, lineItemsToCheck.get(1).Id);
+      System.assertEquals(oli5.Id, lineItemsToCheck.get(1).Id);
       System.assertEquals(oli6.Id, lineItemsToCheck.get(2).Id);
       System.assertEquals(3, lineItemsToCheck.size());
     }
