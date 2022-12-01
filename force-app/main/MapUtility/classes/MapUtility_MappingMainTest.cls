@@ -941,8 +941,8 @@ public with sharing class MapUtility_MappingMainTest {
     static void structuredKey_setUpSimpleTestStructure() {
       /*
        *   Product data:
-       *   All products are in Family1, except product4
-       *
+       *   Two Products in each Family
+       * 
        *   +-------------------------------------------------------------+
        *   |                          pricebook                          |
        *   +-------------+--+------------+--+------------+--+------------+
@@ -950,11 +950,11 @@ public with sharing class MapUtility_MappingMainTest {
        *   +-------------+  +------------+  +------------+  +------------+
        *   | product1    |  | product2   |  | product3   |  | product4   |
        *   |   - Family: |  |  - Family: |  |  - Family: |  |  - Family: |
-       *   |     Family1 |  |    Family1 |  |    Family1 |  |    Family2 |
+       *   |     Family1 |  |    Family2 |  |    Family1 |  |    Family2 |
        *   +-------------+  +------------+  +------------+  +------------+
        *
        *   Account data:
-       *   Only OpportunityLineItem6 is refering to aproduct with Family2
+       *   Both Opportunities  are connected to each Family
        *
        *   + -------------------------------------------------------+
        *   |                      dummyAcc1                         |
@@ -978,7 +978,7 @@ public with sharing class MapUtility_MappingMainTest {
       final String PRODUCT_FAMILY1 = 'Family1';
       final String PRODUCT_FAMILY2 = 'Family2';
       Product2 product1 = createProduct(PRODUCT_NAME_ONE, PRODUCT_FAMILY1);
-      Product2 product2 = createProduct(PRODUCT_NAME_TWO, PRODUCT_FAMILY1);
+      Product2 product2 = createProduct(PRODUCT_NAME_TWO, PRODUCT_FAMILY2);
       Product2 product3 = createProduct(PRODUCT_NAME_THREE, PRODUCT_FAMILY1);
       Product2 product4 = createProduct(PRODUCT_NAME_THREE, PRODUCT_FAMILY2);
 
@@ -1021,9 +1021,9 @@ public with sharing class MapUtility_MappingMainTest {
        *
        *  Structure:
        *  (PRODUCT_FAMILY1, EU, dummyAcc1.Id)
-       *    [oli1, oli2, oli3, oli4, oli5]
+       *    [oli1, oli3, oli5]
        *  (PRODUCT_FAMILY2, EU, dummyAcc1.Id)
-       *    [oli6]
+       *    [oli2, oli4, oli6]
        */
       System.assertEquals(2, mappedData.size());
 
@@ -1036,21 +1036,21 @@ public with sharing class MapUtility_MappingMainTest {
       List<OpportunityLineItem> lineItemsToCheck = (List<OpportunityLineItem>)mappedData.get(checkKey);
 
       System.assertEquals(oli1.Id, lineItemsToCheck.get(0).Id);
-      System.assertEquals(oli2.Id, lineItemsToCheck.get(1).Id);
-      System.assertEquals(oli3.Id, lineItemsToCheck.get(2).Id);
-      System.assertEquals(oli4.Id, lineItemsToCheck.get(3).Id);
-      System.assertEquals(oli5.Id, lineItemsToCheck.get(4).Id);
-      System.assertEquals(5, lineItemsToCheck.size());
-
+      System.assertEquals(oli3.Id, lineItemsToCheck.get(1).Id);
+      System.assertEquals(oli5.Id, lineItemsToCheck.get(2).Id);
+      System.assertEquals(3, lineItemsToCheck.size());
+      
       // Change key to look for (value: Family)
       checkKey = new CountryAccountFamilyKey();
       checkKey.productFamily = PRODUCT_FAMILY2;
       checkKey.accountCountry = 'EU';
       checkKey.accountId = dummyAcc1.Id;
-
+      
       lineItemsToCheck = (List<OpportunityLineItem>)mappedData.get(checkKey);
-      System.assertEquals(oli6.Id, lineItemsToCheck.get(0).Id);
-      System.assertEquals(1, lineItemsToCheck.size());
+      System.assertEquals(oli2.Id, lineItemsToCheck.get(0).Id);
+      System.assertEquals(oli4.Id, lineItemsToCheck.get(1).Id);
+      System.assertEquals(oli6.Id, lineItemsToCheck.get(2).Id);
+      System.assertEquals(3, lineItemsToCheck.size());
     }
 
     /**
