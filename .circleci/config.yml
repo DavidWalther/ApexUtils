@@ -7,7 +7,7 @@ parameters:
   action:
     type: enum
     enum: [build, limits, test-sfdx-install]
-    default: build
+    default: limits
 
 jobs:
   set-up-enviroment:
@@ -258,19 +258,30 @@ jobs:
 
 
 
-  print-org-limits:
+  print-org-status:
     executor: sfdx/default
     parameters:
       filename:
         type: string
     steps:
+      - checkout
+
       - sfdx/install
       - sfdx/auth:
           defaultusername: david@mcga.de
+      
       - run:
           command: >
             sfdx force:limits:api:display -u david@mcga.de
           name: Print org API Limits
+      - run:
+          command: >
+            sfdx force:package:list
+          name: Print packages
+      - run:
+          command: >
+            sfdx force:package:version:list
+          name: Print packages versions
 
   print-filesystem:
     executor: sfdx/default
@@ -312,7 +323,7 @@ workflows:
     when:
       equal: [ limits, << pipeline.parameters.action >> ]
     jobs:
-      - print-org-limits:
+      - print-org-status:
           name: Org Limits
           filename: orgLimits.txt
 
@@ -321,7 +332,7 @@ workflows:
     when:
       equal: [ build, << pipeline.parameters.action >> ]
     jobs:
-      - print-org-limits:
+      - print-org-status:
           name: limitsBefore
           filename: orgLimits.txt
       - set-up-enviroment:
@@ -338,7 +349,7 @@ workflows:
           name: FileSystem after creating scratchorg
           requires:
             - create-scratch-org
-      - print-org-limits:
+      - print-org-status:
           name: limitsAfterOrgCreation
           filename: orgLimits.txt
           requires:
@@ -346,7 +357,7 @@ workflows:
       - push-code-and-run-tests:
           requires:
             - create-scratch-org
-      - print-org-limits:
+      - print-org-status:
           name: limitsAfter
           filename: orgLimits.txt
           requires:
