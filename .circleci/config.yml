@@ -277,7 +277,11 @@ jobs:
       - run:
           command: >
             sfdx force:package:list
-          name: Print package versions
+          name: Print packages
+      - run:
+          command: >
+            sfdx force:package:version:list
+          name: Print packages versions
 
   print-filesystem:
     executor: sfdx/default
