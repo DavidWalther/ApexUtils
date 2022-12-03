@@ -273,7 +273,7 @@ jobs:
           name: Print org API Limits
       - run:
           command: >
-            sfdx force:package:list -u david@mcga.de
+            sfdx force:package:list
           name: Print package versions
 
   print-filesystem:
