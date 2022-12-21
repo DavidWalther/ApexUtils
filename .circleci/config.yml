@@ -163,7 +163,26 @@ jobs:
 
       - run:
           command: |
-          name: authorize via JWT
+            ORG_ALIAS="pipeline-org"
+            CACHED_ORG_DETAILS="./cache/org.credentials"
+
+            echo
+            INSTANCE_URL=$(scripts/deployment/readInstanceUrl.sh "$CACHED_ORG_DETAILS")
+            echo Instance
+            echo $INSTANCE_URL
+            #https://test.salesforce.com
+            echo
+            USER_NAME=$(scripts/deployment/readUsername.sh "$CACHED_ORG_DETAILS")
+            echo Username
+            echo $USER_NAME
+            echo
+            
+            CLIENT_ID=$SFDX_CONSUMER_KEY
+            base64 --decode $SFDX_JWT_KEY > ./server.key
+
+            sfdx auth:jwt:grant --clientid $CLIENT_ID --jwtkeyfile ./server.key --username $USER_NAME --instanceurl $INSTANCE_URL
+
+          name: authorize via auth:jwt:grant
       #=============================================
       # Authorize with JWT - all in on - call script
       #=============================================
