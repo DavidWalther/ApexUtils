@@ -182,6 +182,11 @@ jobs:
             sfdx auth:jwt:grant --clientid $CLIENT_ID --jwtkeyfile ./server.key --username $USER_NAME --instanceurl $INSTANCE_URL --setdefaultusername
 
           name: authorize via auth:jwt:grant
+
+      - run:
+          command: |
+            sfdx force:org:open --urlonly
+          name: print scratch org url
       #=============================================
       # Authorize with JWT - all in on - call script
       #=============================================
