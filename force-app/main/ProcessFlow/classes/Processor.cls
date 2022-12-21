@@ -6,12 +6,6 @@ public class Processor {
   public Processor(ProcessStepLibrary library) {
     this.library = library;
   }
-
-  public ProcessDto executeProcess(String processKey, Object record) {
-    ProcessDto dto = new ProcessDto();
-    dto.processData.put('record', record);
-    return executeProcess(processKey, dto);
-  }
  
   public ProcessDto executeProcess(String processKey, ProcessDto dto) {
     Set<String> processedKeys = new Set<String>();
