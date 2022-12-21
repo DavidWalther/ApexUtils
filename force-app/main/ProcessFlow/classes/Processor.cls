@@ -1,4 +1,6 @@
 public class Processor {
+  final static String LOG_STRING_PATTERN = '[{datetime}] | {executingUnit} | {message}';
+
   private ProcessStepLibrary library;
 
   public Processor(ProcessStepLibrary library) {
@@ -31,7 +33,21 @@ public class Processor {
 
     // Execute all steps in the correct order
     for (ProcessStepInterface s : steps.values()) {
+      dto.log.add(
+        LOG_STRING_PATTERN
+          .replace('{datetime}', json.serialize(datetime.now()))
+          .replace('{executingUnit}', 'Prozessor')
+          .replace('{message}', 'start: ' + s.getGeneratedProcessKey())
+      );
+
       s.execute(dto);
+
+      dto.log.add(
+        LOG_STRING_PATTERN
+          .replace('{datetime}', json.serialize(datetime.now()))
+          .replace('{executingUnit}', 'Prozessor')
+          .replace('{message}', 'end: ' + s.getGeneratedProcessKey())
+      );
     }
   }
 }
