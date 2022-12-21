@@ -263,8 +263,7 @@ jobs:
           
       - run:
           command: >
-            #sfdx force:apex:test:run --suitenames=MapUtilities --resultformat=human --codecoverage --wait 60 > tmp/artifacts/testResults.txt
-            sfdx force:apex:test:run --resultformat=human --codecoverage --wait 60 > tmp/artifacts/testResults.txt
+            sfdx force:apex:test:run -l RunLocalTests --resultformat=human --codecoverage --wait 60 --outputdir tmp/artifacts/testResults
           name: Run APEX Tests
 
       - store_artifacts:
