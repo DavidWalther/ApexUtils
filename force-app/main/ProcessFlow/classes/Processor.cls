@@ -33,7 +33,7 @@ public class Processor {
 
     // Execute all steps in the correct order
     for (ProcessStepInterface s : steps.values()) {
-      dto.log.add(
+      dto.logMessages.add(
         LOG_STRING_PATTERN
           .replace('{datetime}', json.serialize(datetime.now()))
           .replace('{executingUnit}', 'Prozessor')
@@ -42,7 +42,7 @@ public class Processor {
 
       s.execute(dto);
 
-      dto.log.add(
+      dto.logMessages.add(
         LOG_STRING_PATTERN
           .replace('{datetime}', json.serialize(datetime.now()))
           .replace('{executingUnit}', 'Prozessor')
