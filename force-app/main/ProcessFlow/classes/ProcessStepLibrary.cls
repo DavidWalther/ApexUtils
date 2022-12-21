@@ -1,11 +1,9 @@
 public class ProcessStepLibrary {
+  @TestVisible
   private Map<String, Type> processStepMap;
   
   public ProcessStepLibrary() {
-    processStepMap = new Map<String, Type>{
-      'process_step_1' => ProcessStep1.class,
-      'process_step_2' => ProcessStep2.class
-    };
+    processStepMap = new Map<String, Type>();
   }
   
   public ProcessStepInterface getProcessStep(String processKey) {
