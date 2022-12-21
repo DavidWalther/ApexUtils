@@ -8,6 +8,11 @@ public class Processor {
   }
  
   public void executeProcess(String processKey, ProcessDto dto) {
+    Map<String, ProcessStepInterface> steps = getAllDependencies(processKey);
+    executeAllDependencies(steps, dto);
+  }
+  
+  private Map<String, ProcessStepInterface> getAllDependencies(String processKey) {
     Set<String> processedKeys = new Set<String>();
     Map<String, ProcessStepInterface> steps = new Map<String, ProcessStepInterface>();
   
@@ -29,25 +34,42 @@ public class Processor {
       }
       keysToProcess = newKeysToProcess;
     }
+    
+    return steps;
+  }
+  
+  private void executeAllDependencies(Map<String, ProcessStepInterface> steps, ProcessDto dto) {
+    Set<String> processedKeys = new Set<String>();
   
     // Execute all steps in the correct order
-    for (ProcessStepInterface s : steps.values()) {
-      dto.logMessages.add(
-        LOG_STRING_PATTERN
-          .replace('{datetime}', json.serialize(datetime.now()))
-          .replace('{executingUnit}', 'Processor')
-          .replace('{message}', 'start: ' + s.getGeneratedProcessKey())
-      );
+    while (!steps.isEmpty()) {
+      Set<String> keysToRemove = new Set<String>();
+      for (String key : steps.keySet()) {
+        ProcessStepInterface step = steps.get(key);
+        Set<String> requiredKeys = step.getRequiredProcessKeys();
+        if (requiredKeys.isEmpty() || requiredKeys.removeAll(processedKeys).isEmpty()) {
+          dto.logMessages.add(
+            LOG_STRING_PATTERN
+              .replace('{datetime}', json.serialize(datetime.now()))
+              .replace('{executingUnit}', 'Processor')
+              .replace('{message}', 'start: ' + step.getGeneratedProcessKey())
+          );
   
-      s.execute(dto);
+          step.execute(dto);
   
-      dto.logMessages.add(
-        LOG_STRING_PATTERN
-          .replace('{datetime}', json.serialize(datetime.now()))
-          .replace('{executingUnit}', 'Processor')
-          .replace('{message}', 'end: ' + s.getGeneratedProcessKey())
-      );
+          dto.logMessages.add(
+            LOG_STRING_PATTERN
+              .replace('{datetime}', json.serialize(datetime.now()))
+              .replace('{executingUnit}', 'Processor')
+              .replace('{message}', 'end: ' + step.getGeneratedProcessKey())
+          );
+  
+          processedKeys.add(key);
+          keysToRemove.add(key);
+        }
+      }
+      steps.keySet().removeAll(keysToRemove);
     }
-  }
+  }  
 }
   
