@@ -170,36 +170,36 @@ jobs:
       #------------
       # Authorize with auth:accesstoken:store
       #------------
-      # - run:
-      #     command: |
-      #       FILEPATH="./cache/org.credentials"
-      #       ACCESSTOKEN=$(scripts/deployment/readAccessToken.sh "$FILEPATH")
-      #       echo $ACCESSTOKEN
-      #       export SFDX_ACCESS_TOKEN=$ACCESSTOKEN
-
-      #       chmod +x scripts/deployment/authorizeWithAccessToken.sh
-      #       scripts/deployment/authorizeWithAccessToken.sh "./cache/org.credentials" "tempScratchOrg"
-      #     name: Authorize Scratch Org
-
-
-      #------------
-      # Authorize with auth:accesstoken:store
-      #------------
       - run:
           command: |
             FILEPATH="./cache/org.credentials"
+            ACCESSTOKEN=$(scripts/deployment/readAccessToken.sh "$FILEPATH")
+            #echo $ACCESSTOKEN
+            export SFDX_ACCESS_TOKEN=$ACCESSTOKEN
 
-            INSTANCE_URL=$(scripts/deployment/readInstanceUrl.sh "$FILEPATH")
-            echo $INSTANCE_URL
-            sfdx config:set instanceUrl=$INSTANCE_URL
-
-            SFDX_ACCESS_TOKEN=$(scripts/deployment/readAccessToken.sh "$FILEPATH")
-            echo $SFDX_ACCESS_TOKEN
-
-            sfdx force:source:deploy --checkonly --sourcepath ./force-app/main/ --targetusername $SFDX_ACCESS_TOKEN
-
-
+            chmod +x scripts/deployment/authorizeWithAccessToken.sh
+            scripts/deployment/authorizeWithAccessToken.sh "./cache/org.credentials" "tempScratchOrg"
           name: Authorize Scratch Org
+
+
+      #------------
+      # Skip auth and use accesstoken as targetUsername
+      #------------
+      # - run:
+      #     command: |
+      #       FILEPATH="./cache/org.credentials"
+
+      #       INSTANCE_URL=$(scripts/deployment/readInstanceUrl.sh "$FILEPATH")
+      #       echo $INSTANCE_URL
+      #       sfdx config:set instanceUrl=$INSTANCE_URL
+
+      #       SFDX_ACCESS_TOKEN=$(scripts/deployment/readAccessToken.sh "$FILEPATH")
+      #       echo $SFDX_ACCESS_TOKEN
+
+      #       sfdx force:source:deploy --checkonly --sourcepath ./force-app/main/ --targetusername $SFDX_ACCESS_TOKEN
+
+
+      #     name: Authorize Scratch Org
 
 
       - run:

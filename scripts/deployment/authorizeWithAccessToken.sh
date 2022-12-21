@@ -12,10 +12,12 @@ INSTANCE_URL_LINE=$( cat $FILEPATH | grep "Instance Url" )
 INSTANCE_URL="${INSTANCE_URL_LINE/"Instance Url"/}"
 
 echo "echo"
+echo $INSTANCE_URL
 echo $SFDX_ACCESS_TOKEN
+echo $ALIAS
 echo ""
-echo "printenv"
-printenv $SFDX_ACCESS_TOKEN
+#echo "printenv"
+#printenv $SFDX_ACCESS_TOKEN
 
 # ==========================
 # Logic
