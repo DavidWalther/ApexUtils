@@ -49,12 +49,12 @@ private class ProcessorTest {
     Processor processor = new Processor(library);
 
     Test.startTest();
-    processor.executeProcess('process_key_2', NULL);
+    ProcessDto dto = processor.executeProcess('process_key_2', NULL);
     Test.stopTest();
 
 
     // Verify that the steps were executed in the correct order
-    List<String> logMessages = processor.getDto().logMessages;
+    List<String> logMessages = dto.logMessages;
     System.assertEquals(6, logMessages.size());
 
     System.assert(logMessages[0].contains('Prozessor'));
