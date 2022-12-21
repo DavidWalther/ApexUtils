@@ -49,7 +49,7 @@ private class ProcessorTest {
     Processor processor = new Processor(library);
 
     Test.startTest();
-    processor.executeProcess('process_key_2', record);
+    processor.executeProcess('process_key_2', NULL);
     Test.stopTest();
 
 
