@@ -56,6 +56,7 @@ private class ProcessorTest {
 
     // Verify that the steps were executed in the correct order
     List<String> logMessages = dto.logMessages;
+    System.debug(System.LoggingLevel.Info, JSON.serializePretty(logMessages));
     System.assertEquals(6, logMessages.size());
 
     System.assert(logMessages[0].contains('Prozessor'));
