@@ -156,7 +156,14 @@ jobs:
             
       #     name: Authorize Scratch org
       
-      
+
+      #=============================================
+      # Authorize with JWT - all in on - without auth script
+      #=============================================
+
+      - run:
+          command: |
+          name: authorize via JWT
       #=============================================
       # Authorize with JWT - all in on - call script
       #=============================================
