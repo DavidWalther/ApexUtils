@@ -2,7 +2,7 @@
 private class ProcessorTest {
     public class ProcessStep1 implements ProcessStepInterface {
     public void execute(ProcessDto dto) {
-        dto.log.add(
+        dto.logMessages.add(
             Processor.LOG_STRING_PATTERN
               .replace('{datetime}', json.serialize(datetime.now()))
               .replace('{executingUnit}', 'ProcessStep1')
@@ -22,7 +22,7 @@ private class ProcessorTest {
     
     public class ProcessStep2 implements ProcessStepInterface {
       public void execute(ProcessDto dto) {
-        dto.log.add(
+        dto.logMessages.add(
             Processor.LOG_STRING_PATTERN
               .replace('{datetime}', json.serialize(datetime.now()))
               .replace('{executingUnit}', 'ProcessStep2')
