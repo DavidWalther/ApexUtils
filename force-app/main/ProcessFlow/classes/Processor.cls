@@ -7,13 +7,13 @@ public class Processor {
     this.library = library;
   }
 
-  public void executeProcess(String processKey, Object record) {
+  public ProcessDto executeProcess(String processKey, Object record) {
     ProcessDto dto = new ProcessDto();
-    dto.processData = new Map<String, Object>{
-      'record' => record
-    };
-    dto.logMessages = new List<String>();
-
+    dto.processData.put('record', record);
+    return executeProcess(processKey, dto);
+  }
+ 
+  public ProcessDto executeProcess(String processKey, ProcessDto dto) {
     Set<String> processedKeys = new Set<String>();
     Map<String, ProcessStepInterface> steps = new Map<String, ProcessStepInterface>();
 
@@ -49,6 +49,8 @@ public class Processor {
           .replace('{message}', 'end: ' + s.getGeneratedProcessKey())
       );
     }
+
+    return dto;
   }
 }
   
