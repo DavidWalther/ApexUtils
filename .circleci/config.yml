@@ -113,7 +113,7 @@ jobs:
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
           at: ./
-          
+   
       # - sfdx/auth:
       #     defaultusername: david@mcga.de
 
@@ -194,6 +194,20 @@ jobs:
       - store_artifacts:
           path: tmp/artifacts/          
 
+
+  authorize-scratch-org-with-jwt:
+    docker:
+      #- image: cimg/node:19.1.0
+      - image: salesforce/salesforcedx:7.178.0-slim
+    steps:
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: ./
+
+      - run:
+          command: |
+            sfdx auth:jwt:grant --help
+          name: Print auth help
 
 
 # Testjobs with docker-SFDX
@@ -345,6 +359,10 @@ workflows:
           requires:
             - set-up-enviroment
             - create-cache-checksum
+      - authorize-scratch-org-with-jwt:
+          name: Use JWT to authorize with scratch org
+          requires:
+            - create-scratch-org
       - print-filesystem:
           name: FileSystem after creating scratchorg
           requires:
