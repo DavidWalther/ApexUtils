@@ -1,5 +1,5 @@
 public class Processor {
-  final static String LOG_STRING_PATTERN = '[{datetime}] | {executingUnit} | {message}';
+  public final static String LOG_STRING_PATTERN = '[{datetime}] | {executingUnit} | {message}';
 
   private ProcessStepLibrary library;
 
