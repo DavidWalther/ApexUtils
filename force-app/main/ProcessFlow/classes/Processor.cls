@@ -7,7 +7,7 @@ public class Processor {
     this.library = library;
   }
  
-  public ProcessDto executeProcess(String processKey, ProcessDto dto) {
+  public void executeProcess(String processKey, ProcessDto dto) {
     Set<String> processedKeys = new Set<String>();
     Map<String, ProcessStepInterface> steps = new Map<String, ProcessStepInterface>();
 
@@ -43,8 +43,6 @@ public class Processor {
           .replace('{message}', 'end: ' + s.getGeneratedProcessKey())
       );
     }
-
-    return dto;
   }
 }
   

@@ -47,9 +47,10 @@ private class ProcessorTest {
     library.processStepMap.put('process_step_2', ProcessStep2.class);
 
     Processor processor = new Processor(library);
+    ProcessDto dto = new ProcessDto();
 
     Test.startTest();
-    ProcessDto dto = processor.executeProcess('process_key_2', NULL);
+    processor.executeProcess('process_key_2', dto);
     Test.stopTest();
 
 
