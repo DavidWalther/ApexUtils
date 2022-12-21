@@ -163,10 +163,8 @@ jobs:
 
       - run:
           command: |
-            ORG_ALIAS="pipeline-org"
             CACHED_ORG_DETAILS="./cache/org.credentials"
 
-            echo
             INSTANCE_URL=$(scripts/deployment/readInstanceUrl.sh "$CACHED_ORG_DETAILS")
             echo Instance
             echo $INSTANCE_URL
@@ -179,8 +177,7 @@ jobs:
             
             CLIENT_ID=$SFDX_CONSUMER_KEY
 
-            echo $SFDX_JWT_KEY > JWT.file
-            base64 --decode JWT.file > ./server.key
+            echo "$SFDX_JWT_KEY" | base64 --decode > server.key
 
             sfdx auth:jwt:grant --clientid $CLIENT_ID --jwtkeyfile ./server.key --username $USER_NAME --instanceurl $INSTANCE_URL --setdefaultusername
 
