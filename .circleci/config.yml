@@ -182,7 +182,7 @@ jobs:
             echo $SFDX_JWT_KEY > JWT.file
             base64 --decode JWT.file > ./server.key
 
-            sfdx auth:jwt:grant --clientid $CLIENT_ID --jwtkeyfile ./server.key --username $USER_NAME --instanceurl $INSTANCE_URL
+            sfdx auth:jwt:grant --clientid $CLIENT_ID --jwtkeyfile ./server.key --username $USER_NAME --instanceurl $INSTANCE_URL --setdefaultusername
 
           name: authorize via auth:jwt:grant
       #=============================================
