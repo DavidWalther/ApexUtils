@@ -1,4 +1,4 @@
 public class ProcessDto {
-    public Map<String, Object> processData;
-    public List<String> logMessages;
-  }
+  public Map<String, Object> processData;
+  public List<String> logMessages;
+}
