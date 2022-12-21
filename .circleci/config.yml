@@ -185,7 +185,7 @@ jobs:
       #------------
       # Authorize with auth:accesstoken:store
       #------------
-        - run:
+      - run:
           command: |
             FILEPATH="./cache/org.credentials"
 
