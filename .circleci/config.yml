@@ -7,7 +7,7 @@ parameters:
   action:
     type: enum
     enum: [build, limits, test-sfdx-install]
-    default: limits
+    default: build
 
 jobs:
   set-up-enviroment:
