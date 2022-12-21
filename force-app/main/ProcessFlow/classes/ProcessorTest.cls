@@ -50,7 +50,7 @@ private class ProcessorTest {
     ProcessDto dto = new ProcessDto();
 
     Test.startTest();
-    processor.executeProcess('process_key_2', dto);
+    processor.executeProcess('process_step_2', dto);
     Test.stopTest();
 
 
