@@ -64,7 +64,7 @@ public class Processor {
           LOG_STRING_PATTERN
             .replace('{datetime}', json.serialize(datetime.now()))
             .replace('{executingUnit}', 'Executor')
-            .replace('{message}', 'No instance defined for ' + stepToExecute.getGeneratedProcessKey())
+            .replace('{message}', 'No instance defined for ' + stepInstance.getGeneratedProcessKey())
         );
         throw new ExecutorException(this.dto);
       }
