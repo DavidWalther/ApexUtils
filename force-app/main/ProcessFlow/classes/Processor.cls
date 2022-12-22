@@ -39,6 +39,13 @@ public class Processor {
     return steps;
   }
   
+  public class ExecutorException extends Exception {
+    public ProcessDto dto;
+    public ExecutorException(ProcessDto dto) {
+      this.dto = dto;
+    }
+  }
+
   public class Executor {
     private Map<String, ProcessStepInterface> steps;
     private Set<String> processedSteps;
@@ -53,7 +60,13 @@ public class Processor {
     public void execute(String stepToExecute) {
       ProcessStepInterface stepInstance = this.steps.get(stepToExecute);
       if(stepInstance == NULL) {
-        throw new Exception(stepToExecute + ' is undefined');
+        this.dto.logMessages.add(
+          LOG_STRING_PATTERN
+            .replace('{datetime}', json.serialize(datetime.now()))
+            .replace('{executingUnit}', 'Executor')
+            .replace('{message}', 'No instance defined for ' + step.getGeneratedProcessKey())
+        );
+        throw new ExecutorException(this.dto);
       }
 
       // Don't execute a step twice
@@ -76,7 +89,7 @@ public class Processor {
       this.dto.logMessages.add(
         LOG_STRING_PATTERN
           .replace('{datetime}', json.serialize(datetime.now()))
-          .replace('{executingUnit}', 'Executor')
+          .replace('{executingUnit}', 'Prozessor')
           .replace('{message}', 'start: ' + step.getGeneratedProcessKey())
       );
 
@@ -86,7 +99,7 @@ public class Processor {
       this.dto.logMessages.add(
         LOG_STRING_PATTERN
           .replace('{datetime}', json.serialize(datetime.now()))
-          .replace('{executingUnit}', 'Executor')
+          .replace('{executingUnit}', 'Prozessor')
           .replace('{message}', 'end: ' + step.getGeneratedProcessKey())
       );
     }
