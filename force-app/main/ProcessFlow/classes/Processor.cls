@@ -39,6 +39,10 @@ public class Processor {
     return steps;
   }
   
+  //----------------------------
+  // Manual Implementation
+  //----------------------------
+
   public class ExecutorException extends Exception {
     public ProcessDto dto;
     public ExecutorException(ProcessDto dto) {
