@@ -1,18 +1,156 @@
 @IsTest
 public with sharing class Processor_ComplexTest {
     
-/**
- * ChatGPT was not able to generate code for this requirement:
- * create a test class for Processor. create seven child-classes implementing ProcessStepInterface. the execute method of every step must use Processor.LOG_STRING_PATTERN to enter it's name into the dto.logMessages. The Dependencies are as following:
- * - process_1: -
- * - process_2: -
- * - process_3: process_7
- * - process_4: process_1, process_2, process_3
- * - process_5: process_4, process_6
- * - process_6: process_1, process_4
- * - process_7: -
- * 
- */
+    /**
+    * 
+    request for ChatGPT:
+    
+    create a test class for Processor. create seven child-classes implementing ProcessStepInterface. the execute method of every step must use Processor.LOG_STRING_PATTERN to enter it's name into the dto.logMessages. The Dependencies are as following:
+    - process_1: -
+    - process_2: -
+    - process_3: process_7
+    - process_4: process_1, process_2, process_3
+    - process_5: process_4, process_6
+    - process_6: process_1, process_4
+    - process_7: -
+    
+    The Test should only request process_5 to be calculated. every dependency must be considered implicitly
+    
+    
+    result was 'not correct'
+    
+    */
+    public class ProcessStep1 implements ProcessStepInterface {
+        public void execute(ProcessDto dto) {
+            dto.logMessages.add(
+            Processor.LOG_STRING_PATTERN
+            .replace('{datetime}', json.serialize(datetime.now()))
+            .replace('{executingUnit}', 'ProcessStep1')
+            .replace('{message}', 'processing ')
+            );
+        }
+        
+        public String getGeneratedProcessKey() {
+            return 'process_1';
+        }
+        
+        public Set<String> getRequiredProcessKeys() {
+            return new Set<String>();
+        }
+    }
 
+    public class ProcessStep2 implements ProcessStepInterface {
+        public void execute(ProcessDto dto) {
+            dto.logMessages.add(
+            Processor.LOG_STRING_PATTERN
+            .replace('{datetime}', json.serialize(datetime.now()))
+            .replace('{executingUnit}', 'ProcessStep2')
+            .replace('{message}', 'processing ')
+            );
+        }
+        
+        public String getGeneratedProcessKey() {
+            return 'process_2';
+        }
+        
+        public Set<String> getRequiredProcessKeys() {
+            return new Set<String>();
+        }
+    }
+
+    public class ProcessStep3 implements ProcessStepInterface {
+        public void execute(ProcessDto dto) {
+            dto.logMessages.add(
+            Processor.LOG_STRING_PATTERN
+            .replace('{datetime}', json.serialize(datetime.now()))
+            .replace('{executingUnit}', 'ProcessStep3')
+            .replace('{message}', 'processing ')
+            );
+        }
+        
+        public String getGeneratedProcessKey() {
+            return 'process_3';
+        }
+        
+        public Set<String> getRequiredProcessKeys() {
+            return new Set<String>{'process_7'};
+        }
+    }
+
+    public class ProcessStep4 implements ProcessStepInterface {
+        public void execute(ProcessDto dto) {
+            dto.logMessages.add(
+            Processor.LOG_STRING_PATTERN
+            .replace('{datetime}', json.serialize(datetime.now()))
+            .replace('{executingUnit}', 'ProcessStep4')
+            .replace('{message}', 'processing ')
+            );
+        }
+        
+        public String getGeneratedProcessKey() {
+            return 'process_4';
+        }
+        
+        public Set<String> getRequiredProcessKeys() {
+            return new Set<String>{'process_1', 'process_2', 'process_3'};
+        }
+    }
+
+    public class ProcessStep5 implements ProcessStepInterface {
+        public void execute(ProcessDto dto) {
+            dto.logMessages.add(
+            Processor.LOG_STRING_PATTERN
+            .replace('{datetime}', json.serialize(datetime.now()))
+            .replace('{executingUnit}', 'ProcessStep5')
+            .replace('{message}', 'processing ')
+            );
+        }
+        
+        public String getGeneratedProcessKey() {
+            return 'process_5';
+        }
+        
+        public Set<String> getRequiredProcessKeys() {
+            return new Set<String>{'process_4', 'process_6'};
+        }
+    }
+
+    public class ProcessStep6 implements ProcessStepInterface {
+        public void execute(ProcessDto dto) {
+            dto.logMessages.add(
+            Processor.LOG_STRING_PATTERN
+            .replace('{datetime}', json.serialize(datetime.now()))
+            .replace('{executingUnit}', 'ProcessStep6')
+            .replace('{message}', 'processing ')
+            );
+        }
+        
+        public String getGeneratedProcessKey() {
+            return 'process_6';
+        }
+        
+        public Set<String> getRequiredProcessKeys() {
+            return new Set<String>{'process_1', 'process_4'};
+        }
+    }
+
+    public class ProcessStep7 implements ProcessStepInterface {
+        public void execute(ProcessDto dto) {
+            dto.logMessages.add(
+            Processor.LOG_STRING_PATTERN
+            .replace('{datetime}', json.serialize(datetime.now()))
+            .replace('{executingUnit}', 'ProcessStep7')
+            .replace('{message}', 'processing ')
+            );
+        }
+        
+        public String getGeneratedProcessKey() {
+            return 'process_7';
+        }
+        
+        public Set<String> getRequiredProcessKeys() {
+            return new Set<String>();
+        }
+    }
     
 }
