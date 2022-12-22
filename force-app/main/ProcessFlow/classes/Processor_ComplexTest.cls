@@ -30,19 +30,21 @@ public with sharing class Processor_ComplexTest {
     @isTest
     static void testExecuteProcess() {
       ProcessStepLibrary library = new ComplexTestLibrary();
-  
+  s
       Processor processor = new Processor(library);
       ProcessDto dto = new ProcessDto();
   
       Test.startTest();
       processor.executeProcess('process_5', dto);
       Test.stopTest();
+
+      System.debug(System.LoggingLevel.Info, logMessages);
     }
 
 
     public class ComplexTestLibrary extends ProcessStepLibrary {
 
-        public ComplexTestLibrary() {
+        public ComplexTestLibrarys() {
             super();
             this.processStepMap.put('process_1', ProcessStep1.class);
             this.processStepMap.put('process_2', ProcessStep2.class);
