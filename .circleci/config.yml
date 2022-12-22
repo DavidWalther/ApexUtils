@@ -7,7 +7,7 @@ parameters:
   action:
     type: enum
     enum: [build, limits, test-sfdx-install]
-    default: limits
+    default: build
 
 jobs:
   set-up-enviroment:
@@ -113,21 +113,11 @@ jobs:
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
           at: ./
-          
+   
       # - sfdx/auth:
       #     defaultusername: david@mcga.de
 
-      # - run:
-      #     command: |
-      #       CACHED_ORG_DETAILS="./cache/org.credentials"
-      #       ORG_ALIAS="pipeline-org"
-      #       echo $SFDX_JWT_KEY
-      #       echo $SFDX_CONSUMER_KEY
-      #       echo $CACHED_ORG_DETAILS
-      #       echo $ORG_ALIAS
-      #       chmod +x scripts/deployment/authorize.sh
-      #       ./scripts/deployment/authorize.sh "${SFDX_JWT_KEY}" "${SFDX_CONSUMER_KEY}" "${CACHED_ORG_DETAILS}" "${ORG_ALIAS}"
-      #     name: authorize via JWT
+      
 
 
       #- run:
@@ -165,16 +155,106 @@ jobs:
       #       sfdx auth:accesstoken:store --instanceurl="$INSTANCE_URL" --setalias="$ALIAS" --setdefaultusername --noprompt
             
       #     name: Authorize Scratch org
+      
+
+      #=============================================
+      # Authorize with JWT - all in on - without auth script
+      #=============================================
+
       - run:
           command: |
-            FILEPATH="./cache/org.credentials"
-            ACCESSTOKEN=$(scripts/deployment/readAccessToken.sh "$FILEPATH")
-            echo $ACCESSTOKEN
-            export SFDX_ACCESS_TOKEN=$ACCESSTOKEN
+            CACHED_ORG_DETAILS="./cache/org.credentials"
 
-            chmod +x scripts/deployment/authorizeWithAccessToken.sh
-            scripts/deployment/authorizeWithAccessToken.sh "./cache/org.credentials" "tempScratchOrg"
-          name: Authorize Scratch Org
+            INSTANCE_URL=$(scripts/deployment/readInstanceUrl.sh "$CACHED_ORG_DETAILS")
+            echo Instance
+            echo $INSTANCE_URL
+            #https://test.salesforce.com
+            echo
+            USER_NAME=$(scripts/deployment/readUsername.sh "$CACHED_ORG_DETAILS")
+            echo Username
+            echo $USER_NAME
+            echo
+            
+            CLIENT_ID=$SFDX_CONSUMER_KEY
+
+            echo "$SFDX_JWT_KEY" | base64 --decode > server.key
+
+            sfdx auth:jwt:grant --clientid $CLIENT_ID --jwtkeyfile ./server.key --username $USER_NAME --instanceurl $INSTANCE_URL --setdefaultusername
+
+          name: authorize via auth:jwt:grant
+
+      - run:
+          command: |
+            sfdx force:org:open --urlonly
+          name: print scratch org url
+      #=============================================
+      # Authorize with JWT - all in on - call script
+      #=============================================
+
+      # - run:
+      #     command: |
+      #       CACHED_ORG_DETAILS="./cache/org.credentials"
+      #       ORG_ALIAS="pipeline-org"
+      #       echo $SFDX_JWT_KEY
+      #       echo $SFDX_CONSUMER_KEY
+      #       echo $CACHED_ORG_DETAILS
+      #       echo $ORG_ALIAS
+      #       chmod +x scripts/deployment/authorize.sh
+      #       ./scripts/deployment/authorize.sh "${SFDX_JWT_KEY}" "${SFDX_CONSUMER_KEY}" "${CACHED_ORG_DETAILS}" "${ORG_ALIAS}"
+      #     name: authorize via JWT
+
+      #=============================================
+      # Authorize with JWT - split steps
+      #=============================================
+      # - run:
+      #     command: |
+      #       base64 --decode $SFDX_JWT_KEY > ./server.key
+      #     name: create ./server.key 
+      
+      # - run:
+      #     command: |
+      #       CACHED_ORG_DETAILS="./cache/org.credentials"
+      #       ORG_ALIAS="pipeline-org"
+      #       echo $SFDX_CONSUMER_KEY
+      #       echo $CACHED_ORG_DETAILS
+      #       echo $ORG_ALIAS
+      #       chmod +x scripts/deployment/authorize.sh
+      #       ./scripts/deployment/authorize.sh "${SFDX_JWT_KEY}" "${SFDX_CONSUMER_KEY}" "${CACHED_ORG_DETAILS}" "${ORG_ALIAS}"
+      #     name: authorize via JWT
+
+
+      #------------
+      # Authorize with auth:accesstoken:store
+      #------------
+      # - run:
+      #     command: |
+      #       FILEPATH="./cache/org.credentials"
+      #       ACCESSTOKEN=$(scripts/deployment/readAccessToken.sh "$FILEPATH")
+      #       #echo $ACCESSTOKEN
+      #       export SFDX_ACCESS_TOKEN=$ACCESSTOKEN
+
+      #       chmod +x scripts/deployment/authorizeWithAccessToken.sh
+      #       scripts/deployment/authorizeWithAccessToken.sh "./cache/org.credentials" "tempScratchOrg"
+      #     name: Authorize with accesstoken
+
+
+      #------------
+      # Skip auth and use accesstoken as targetUsername
+      #------------
+      # - run:
+      #     command: |
+      #       FILEPATH="./cache/org.credentials"
+
+      #       INSTANCE_URL=$(scripts/deployment/readInstanceUrl.sh "$FILEPATH")
+      #       echo $INSTANCE_URL
+      #       sfdx config:set instanceUrl=$INSTANCE_URL
+
+      #       SFDX_ACCESS_TOKEN=$(scripts/deployment/readAccessToken.sh "$FILEPATH")
+      #       echo $SFDX_ACCESS_TOKEN
+
+      #       sfdx force:source:deploy --checkonly --sourcepath ./force-app/main/ --targetusername $SFDX_ACCESS_TOKEN
+      #     name: Use accesstoken as username
+
 
       - run:
           command: >
@@ -188,12 +268,26 @@ jobs:
           
       - run:
           command: >
-            sfdx force:apex:test:run  --suitenames=MapUtilities --resultformat=human --codecoverage --wait 60 > tmp/artifacts/testResults.txt
+            sfdx force:apex:test:run -l RunLocalTests --resultformat=human --codecoverage --wait 60 --outputdir tmp/artifacts/testResults
           name: Run APEX Tests
 
       - store_artifacts:
           path: tmp/artifacts/          
 
+
+  authorize-scratch-org-with-jwt:
+    docker:
+      #- image: cimg/node:19.1.0
+      - image: salesforce/salesforcedx:7.178.0-slim
+    steps:
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: ./
+
+      - run:
+          command: |
+            sfdx auth:jwt:grant --help
+          name: Print auth help
 
 
 # Testjobs with docker-SFDX
@@ -345,6 +439,10 @@ workflows:
           requires:
             - set-up-enviroment
             - create-cache-checksum
+      - authorize-scratch-org-with-jwt:
+          name: Use JWT to authorize with scratch org
+          requires:
+            - create-scratch-org
       - print-filesystem:
           name: FileSystem after creating scratchorg
           requires:
