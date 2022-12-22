@@ -20,6 +20,27 @@ public with sharing class Processor_ComplexTest {
     result was 'not correct'
     
     */
+
+
+    
+    //----------------------------
+    // Manual Implementation
+    //----------------------------
+    
+    public class ComplexTestLibrary extends ProcessStepLibrary {
+
+        public ComplexTestLibrary() {
+            super();
+            this.processStepMap.put('process_1', ProcessStep1.class);
+            this.processStepMap.put('process_2', ProcessStep2.class);
+            this.processStepMap.put('process_3', ProcessStep3.class);
+            this.processStepMap.put('process_4', ProcessStep4.class);
+            this.processStepMap.put('process_5', ProcessStep5.class);
+            this.processStepMap.put('process_6', ProcessStep6.class);
+            this.processStepMap.put('process_7', ProcessStep7.class);
+        }
+    }
+    
     public class ProcessStep1 implements ProcessStepInterface {
         public void execute(ProcessDto dto) {
             dto.logMessages.add(
