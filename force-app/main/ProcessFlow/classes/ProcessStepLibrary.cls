@@ -1,4 +1,4 @@
-public class ProcessStepLibrary {
+public virtual class ProcessStepLibrary {
   @TestVisible
   private Map<String, Type> processStepMap;
   
