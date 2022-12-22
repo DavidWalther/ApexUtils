@@ -32,6 +32,16 @@ public with sharing class Processor_ComplexTest {
   
   @isTest
   static void testExecuteProcess() {
+    /**
+     * Description by ChatGPT:
+     * 
+     * The testExecuteProcess method is a test method for the Processor class. It creates an instance of the Processor class and an instance of the ProcessDto class. Then it calls the executeProcess method on the Processor instance, passing in the string "process_5" and the ProcessDto instance as arguments. The executeProcess method will create all required implementations of ProcessStepInterface and execute them in the correct order for the given process key.
+
+     * After calling the executeProcess method, the test method checks the size of the logMessages list in the ProcessDto instance and then performs a series of assertions to check the order of the steps in the list. It checks that the correct start and end messages for each step are present in the list and that the steps are executed in the correct order.
+
+     * Finally, the test method calls the System.debug method to log the logMessages list to the debug log and the System.assertEquals method to check that the size of the logMessages list is 21.
+    */
+
     ProcessStepLibrary library = new ComplexTestLibrary();
     
     Processor processor = new Processor(library);
