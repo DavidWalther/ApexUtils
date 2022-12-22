@@ -27,6 +27,19 @@ public with sharing class Processor_ComplexTest {
     // Manual Implementation
     //----------------------------
     
+    @isTest
+    static void testExecuteProcess() {
+      ProcessStepLibrary library = new ComplexTestLibrary();
+  
+      Processor processor = new Processor(library);
+      ProcessDto dto = new ProcessDto();
+  
+      Test.startTest();
+      processor.executeProcess('process_5', dto);
+      Test.stopTest();
+    }
+
+
     public class ComplexTestLibrary extends ProcessStepLibrary {
 
         public ComplexTestLibrary() {
