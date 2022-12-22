@@ -9,7 +9,8 @@ public class Processor {
  
   public void executeProcess(String processKey, ProcessDto dto) {
     Map<String, ProcessStepInterface> steps = getAllDependencies(processKey);
-    executeAllDependencies(steps, dto);
+
+    (new Executor(steps, dto)).execute(processKey);
   }
   
   private Map<String, ProcessStepInterface> getAllDependencies(String processKey) {
@@ -38,38 +39,57 @@ public class Processor {
     return steps;
   }
   
-  private void executeAllDependencies(Map<String, ProcessStepInterface> steps, ProcessDto dto) {
-    Set<String> processedKeys = new Set<String>();
+  public class Executor {
+    private Map<String, ProcessStepInterface> steps;
+    private Set<String> processedSteps;
+    private ProcessDto dto;
   
-    // Execute all steps in the correct order
-    while (!steps.isEmpty()) {
-      Set<String> keysToRemove = new Set<String>();
-      for (String key : steps.keySet()) {
-        ProcessStepInterface step = steps.get(key);
-        Set<String> requiredKeys = step.getRequiredProcessKeys();
-        if (requiredKeys.isEmpty() || requiredKeys.removeAll(processedKeys).isEmpty()) {
-          dto.logMessages.add(
-            LOG_STRING_PATTERN
-              .replace('{datetime}', json.serialize(datetime.now()))
-              .replace('{executingUnit}', 'Processor')
-              .replace('{message}', 'start: ' + step.getGeneratedProcessKey())
-          );
-  
-          step.execute(dto);
-  
-          dto.logMessages.add(
-            LOG_STRING_PATTERN
-              .replace('{datetime}', json.serialize(datetime.now()))
-              .replace('{executingUnit}', 'Processor')
-              .replace('{message}', 'end: ' + step.getGeneratedProcessKey())
-          );
-  
-          processedKeys.add(key);
-          keysToRemove.add(key);
-        }
-      }
-      steps.keySet().removeAll(keysToRemove);
+    public Executor(Map<String, ProcessStepInterface> steps, ProcessDto dto) {
+      this.steps = steps;
+      this.dto = dto;
+      this.processedSteps = new Set<String>();
     }
-  }  
+  
+    public void execute(String stepToExecute) {
+      ProcessStepInterface stepInstance = this.steps.get(stepToExecute);
+      if(stepInstance == NULL) {
+        throw new Exception(stepToExecute + ' is undefined');
+      }
+
+      // Don't execute a step twice
+      if(this.processedSteps.contains(stepToExecute)) {
+        return;
+      }
+      
+      // Execute if all dependencies were executed
+      Set<String> requiredKeys = stepInstance.getRequiredProcessKeys();
+      for(String requiredStepKey : requiredKeys) {
+        // this is where recursion happens
+        this.execute(requiredStepKey);
+      }
+      
+      // after all required keys are executed also execute the requested one
+      this.executeStep(stepInstance);
+    }
+
+    private void executeStep(ProcessStepInterface step) {
+      this.dto.logMessages.add(
+        LOG_STRING_PATTERN
+          .replace('{datetime}', json.serialize(datetime.now()))
+          .replace('{executingUnit}', 'Executor')
+          .replace('{message}', 'start: ' + step.getGeneratedProcessKey())
+      );
+
+      step.execute(this.dto);
+      this.processedSteps.add(step.getGeneratedProcessKey());
+
+      this.dto.logMessages.add(
+        LOG_STRING_PATTERN
+          .replace('{datetime}', json.serialize(datetime.now()))
+          .replace('{executingUnit}', 'Executor')
+          .replace('{message}', 'end: ' + step.getGeneratedProcessKey())
+      );
+    }
+  }
 }
   
