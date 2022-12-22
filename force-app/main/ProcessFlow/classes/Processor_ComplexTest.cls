@@ -16,13 +16,16 @@ public with sharing class Processor_ComplexTest {
   
   The Test should only request process_5 to be calculated. every dependency must be considered implicitly
   
+  -------------
   
+  Expected order of steps: 1, 2, 7, 3, 4, 6, 5
+  
+  -------------
   result was 'not correct'
+
   
   */
-  
-  
-  
+
   //----------------------------
   // Manual Implementation
   //----------------------------
@@ -42,15 +45,35 @@ public with sharing class Processor_ComplexTest {
     System.debug(System.LoggingLevel.Info, logMessages);
     System.assertEquals(21, logMessages.size());
     
+
     // check order of steps
+    System.assert(logMessages[0].contains('start: process_1'));
     System.assert(logMessages[1].contains('ProcessStep1'));
-    System.assert(logMessages[1].contains('processing'));
+    System.assert(logMessages[2].contains('end: process_1'));
 
+    System.assert(logMessages[3].contains('start: process_2'));
     System.assert(logMessages[4].contains('ProcessStep2'));
-    System.assert(logMessages[4].contains('processing'));
+    System.assert(logMessages[5].contains('end: process_2'));
 
+    System.assert(logMessages[6].contains('start: process_7'));
     System.assert(logMessages[7].contains('ProcessStep7'));
-    System.assert(logMessages[7].contains('processing'));
+    System.assert(logMessages[8].contains('end: process_7'));
+
+    System.assert(logMessages[9].contains('start: process_3'));
+    System.assert(logMessages[10].contains('ProcessStep3'));
+    System.assert(logMessages[11].contains('end: process_3'));
+
+    System.assert(logMessages[12].contains('start: process_4'));
+    System.assert(logMessages[13].contains('ProcessStep4'));
+    System.assert(logMessages[14].contains('end: process_4'));
+
+    System.assert(logMessages[15].contains('start: process_6'));
+    System.assert(logMessages[16].contains('ProcessStep6'));
+    System.assert(logMessages[17].contains('end: process_6'));
+
+    System.assert(logMessages[18].contains('start: process_5'));
+    System.assert(logMessages[19].contains('ProcessStep5'));
+    System.assert(logMessages[20].contains('end: process_5'));
   }
   
   
