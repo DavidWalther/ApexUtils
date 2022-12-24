@@ -40,6 +40,22 @@ public class Processor {
   }
   
   //----------------------------
+  // Manual Refactoring: getAllDependencies
+  //----------------------------
+
+  public class DependencyResolverExeception extends System.Exception {
+
+  }
+
+  public class DependencyResolver {
+    public ProcessStepLibrary library;
+
+    public DependencyResolver(ProcessStepLibrary library) {
+      this.library = library;
+    }
+  }
+
+  //----------------------------
   // Manual Implementation
   //----------------------------
 
