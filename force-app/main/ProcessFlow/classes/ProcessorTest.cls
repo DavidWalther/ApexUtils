@@ -85,7 +85,7 @@ private class ProcessorTest {
     Processor.DependencyResolver resolver = new Processor.DependencyResolver(library);
 
     Test.startTest();
-    Map<String, ProcessStepInterface> allDependencies = resolver.getAllDependencies(process_5);
+    Map<String, ProcessStepInterface> allDependencies = resolver.getAllDependencies('process_5');
     Test.stopTest();
 
     System.assertNotEquals(null, allDependencies);
