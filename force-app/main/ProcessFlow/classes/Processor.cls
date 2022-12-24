@@ -62,7 +62,7 @@ public class Processor {
       }
       
       if(this.resolvedProcessSteps.containsKey(processKey)) {
-        return;
+        return new Map<String,ProcessStepInterface>();
       }
       
       return Null;
