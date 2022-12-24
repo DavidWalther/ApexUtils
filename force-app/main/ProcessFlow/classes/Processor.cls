@@ -53,6 +53,10 @@ public class Processor {
     public DependencyResolver(ProcessStepLibrary library) {
       this.library = library;
     }
+
+    public Map<String, ProcessStepInterface> getAllDependencies(String processKey) {
+      return Null;
+    }
   }
 
   //----------------------------
