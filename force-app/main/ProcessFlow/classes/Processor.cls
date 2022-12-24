@@ -43,7 +43,7 @@ public class Processor {
   // Manual Refactoring: getAllDependencies
   //----------------------------
 
-  public class DependencyResolverExeception extends System.Exception {
+  public class DependencyResolverException extends System.Exception {
 
   }
 
