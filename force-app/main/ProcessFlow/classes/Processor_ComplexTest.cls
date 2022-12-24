@@ -245,4 +245,20 @@ public with sharing class Processor_ComplexTest {
 
     System.assertNotEquals(null, allDependencies);
   }
+
+  @IsTest
+  static void exceptionOnUndefinedProcessKey(){
+    ProcessStepLibrary library = new Processor_ComplexTest.ComplexTestLibrary();
+    Processor.DependencyResolver resolver = new Processor.DependencyResolver(library);
+  
+    try {
+      Test.startTest();
+      Map<String, ProcessStepInterface> allDependencies = resolver.getAllDependencies('process_8');
+      Test.stopTest();
+
+      System.assert(false, 'An exception is supposed to be thrown on an invalid key');
+    } catch (Processor.DependencyResolverException exc) {
+      System.assert(true);
+    }
+  }
 }
