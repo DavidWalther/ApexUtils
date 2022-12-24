@@ -53,7 +53,7 @@ public class Processor {
     }
 
     public Map<String, ProcessStepInterface> getAllDependencies(String processKey) {
-      System.Type mappedProccessType = this.library.getProcessStep(processKey);
+      ProcessStepInterface mappedProccessType = this.library.getProcessStep(processKey);
 
       if(mappedProccessType == NULL) {
         throw new DependencyResolverException('No process step mapped for key \'' + processKey + '\'');
