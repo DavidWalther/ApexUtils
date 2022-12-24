@@ -78,16 +78,4 @@ private class ProcessorTest {
     System.assert(logMessages[5].contains('Prozessor'));
     System.assert(logMessages[5].contains('end: process_step_2'));
   }
-  
-  @IsTest
-  static void complexDependenciesAreResolved(){
-    ProcessStepLibrary library = new Processor_ComplexTest.ComplexTestLibrary();
-    Processor.DependencyResolver resolver = new Processor.DependencyResolver(library);
-
-    Test.startTest();
-    Map<String, ProcessStepInterface> allDependencies = resolver.getAllDependencies('process_5');
-    Test.stopTest();
-
-    System.assertNotEquals(null, allDependencies);
-  }
 }

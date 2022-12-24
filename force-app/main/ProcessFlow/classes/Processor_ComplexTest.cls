@@ -234,4 +234,15 @@ public with sharing class Processor_ComplexTest {
     }
   }
   
+  @IsTest
+  static void complexDependenciesAreResolved(){
+    ProcessStepLibrary library = new Processor_ComplexTest.ComplexTestLibrary();
+    Processor.DependencyResolver resolver = new Processor.DependencyResolver(library);
+
+    Test.startTest();
+    Map<String, ProcessStepInterface> allDependencies = resolver.getAllDependencies('process_5');
+    Test.stopTest();
+
+    System.assertNotEquals(null, allDependencies);
+  }
 }
