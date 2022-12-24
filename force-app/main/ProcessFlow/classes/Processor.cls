@@ -47,9 +47,11 @@ public class Processor {
 
   public class DependencyResolver {
     public ProcessStepLibrary library;
+    private Map<String, ProcessStepInterface> resolvedProcessSteps;
 
     public DependencyResolver(ProcessStepLibrary library) {
       this.library = library;
+      this.resolvedProcessSteps = new Map<String, ProcessStepInterface>();
     }
 
     public Map<String, ProcessStepInterface> getAllDependencies(String processKey) {
@@ -57,6 +59,10 @@ public class Processor {
 
       if(mappedProccessType == NULL) {
         throw new DependencyResolverException('No process step mapped for key \'' + processKey + '\'');
+      }
+      
+      if(this.resolvedProcessSteps.containsKey(processKey)) {
+        return;
       }
       
       return Null;
