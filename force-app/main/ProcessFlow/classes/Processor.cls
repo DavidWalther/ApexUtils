@@ -43,9 +43,7 @@ public class Processor {
   // Manual Refactoring: getAllDependencies
   //----------------------------
 
-  public class DependencyResolverException extends System.Exception {
-
-  }
+  public class DependencyResolverException extends System.Exception {}
 
   public class DependencyResolver {
     public ProcessStepLibrary library;
@@ -55,6 +53,12 @@ public class Processor {
     }
 
     public Map<String, ProcessStepInterface> getAllDependencies(String processKey) {
+      System.Type mappedProccessType = this.library.getProcessStep(processKey);
+
+      if(mappedProccessType == NULL) {
+        throw new DependencyResolverException('No process step mapped for key \'' + processKey + '\'');
+      }
+      
       return Null;
     }
   }
