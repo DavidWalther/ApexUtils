@@ -64,8 +64,16 @@ public class Processor {
       if(this.resolvedProcessSteps.containsKey(processKey)) {
         return new Map<String,ProcessStepInterface>();
       }
-      
-      return Null;
+
+      // At this point the step instance is defined and not resolved yet
+
+      for(String requiredStepKey : requiredKeys) {
+        // this is where recursion happens
+        this.resolvedProcessSteps
+          .putAll(this.getAllDependencies(requiredStepKey));
+      }
+
+      return this.resolvedProcessSteps;
     }
   }
 
