@@ -88,7 +88,10 @@ public with sharing class Processor_ComplexTest {
   
   
   public class ComplexTestLibrary extends ProcessStepLibrary {
-    
+    public Set<String> getAllKeys() {
+      return this.processStepMap.keySet();
+    }
+
     public ComplexTestLibrary() {
       super();
       this.processStepMap.put('process_1', ProcessStep1.class);
@@ -244,6 +247,7 @@ public with sharing class Processor_ComplexTest {
     Test.stopTest();
 
     System.assertNotEquals(null, allDependencies);
+    System.assert(allDependencies.keySet().containsAll(library.getAllKeys()), 'process_5 is set up to require all keys. Result did not contain all of them');
   }
 
   @IsTest
