@@ -74,7 +74,8 @@ public class Processor {
         this.resolvedProcessSteps
           .putAll(this.getAllDependencies(requiredStepKey));
       }
-
+      this.resolvedProcessSteps.put(processKey, processStep);
+      
       return this.resolvedProcessSteps;
     }
   }
