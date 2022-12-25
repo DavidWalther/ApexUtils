@@ -55,18 +55,20 @@ public class Processor {
     }
 
     public Map<String, ProcessStepInterface> getAllDependencies(String processKey) {
-      ProcessStepInterface mappedProccessType = this.library.getProcessStep(processKey);
+      ProcessStepInterface processStep = this.library.getProcessStep(processKey);
 
-      if(mappedProccessType == NULL) {
+      if(processStep == NULL) {
         throw new DependencyResolverException('No process step mapped for key \'' + processKey + '\'');
       }
       
+      // don't resolve a step twice
       if(this.resolvedProcessSteps.containsKey(processKey)) {
         return new Map<String,ProcessStepInterface>();
       }
 
       // At this point the step instance is defined and not resolved yet
 
+      Set<String> requiredKeys = processStep.getRequiredProcessKeys();
       for(String requiredStepKey : requiredKeys) {
         // this is where recursion happens
         this.resolvedProcessSteps
