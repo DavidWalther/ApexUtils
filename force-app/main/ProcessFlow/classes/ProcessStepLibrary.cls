@@ -6,6 +6,10 @@ public virtual class ProcessStepLibrary {
     processStepMap = new Map<String, Type>();
   }
   
+  public Set<String> getAllKeys() {
+    return this.processStepMap.keySet();
+  }
+  
   public ProcessStepInterface getProcessStep(String processKey) {
     Type stepType = processStepMap.get(processKey);
     if (stepType == null) {
