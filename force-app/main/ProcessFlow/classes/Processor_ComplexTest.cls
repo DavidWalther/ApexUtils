@@ -268,7 +268,7 @@ public with sharing class Processor_ComplexTest {
     }
     
     public Set<String> getRequiredProcessKeys() {
-      return new Set<String>();
+      return new Set<String>{'process_8', 'process_10'};
     }
   }
 
