@@ -245,6 +245,16 @@ public with sharing class Processor_ComplexTest {
 
     System.assertNotEquals(null, allDependencies);
     System.assert(!allDependencies.isEmpty(), 'the map of all dependencies must not be empty');
+    System.assert(allDependencies.containsKey('process_1'), 'Dependency \'process_1\' was not found.');
+    System.assert(allDependencies.containsKey('process_2'), 'Dependency \'process_2\' was not found.');
+    System.assert(allDependencies.containsKey('process_3'), 'Dependency \'process_3\' was not found.');
+    System.assert(allDependencies.containsKey('process_4'), 'Dependency \'process_4\' was not found.');
+    System.assert(allDependencies.containsKey('process_5'), 'Dependency \'process_5\' was not found.');
+    System.assert(allDependencies.containsKey('process_6'), 'Dependency \'process_6\' was not found.');
+    System.assert(allDependencies.containsKey('process_7'), 'Dependency \'process_7\' was not found.');
+    //ystem.assertEquals(7, allDependencies.size(), );
+
+
   }
 
   @IsTest
