@@ -8,11 +8,17 @@ public class Processor {
   }
  
   public void executeProcess(String processKey, ProcessDto dto) {
-    Map<String, ProcessStepInterface> steps = getAllDependencies(processKey);
+    DependencyResolver resolver = new DependencyResolver(this.library);
+
+    Map<String, ProcessStepInterface> steps = resolver.getAllDependencies(processKey);
 
     (new Executor(steps, dto)).execute(processKey);
   }
   
+  //----------------------------
+  // ChatGPT: getAllDependencies
+  //----------------------------
+
   private Map<String, ProcessStepInterface> getAllDependencies(String processKey) {
     Set<String> processedKeys = new Set<String>();
     Map<String, ProcessStepInterface> steps = new Map<String, ProcessStepInterface>();
