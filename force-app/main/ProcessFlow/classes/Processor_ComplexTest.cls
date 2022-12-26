@@ -98,6 +98,9 @@ public with sharing class Processor_ComplexTest {
       this.processStepMap.put('process_5', ProcessStep5.class);
       this.processStepMap.put('process_6', ProcessStep6.class);
       this.processStepMap.put('process_7', ProcessStep7.class);
+      this.processStepMap.put('process_8', ProcessStep8.class);
+      this.processStepMap.put('process_9', ProcessStep9.class);
+      this.processStepMap.put('process_10', ProcessStep10.class);
     }
   }
   
