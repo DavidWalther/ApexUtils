@@ -8,11 +8,17 @@ public class Processor {
   }
  
   public void executeProcess(String processKey, ProcessDto dto) {
-    Map<String, ProcessStepInterface> steps = getAllDependencies(processKey);
+    DependencyResolver resolver = new DependencyResolver(this.library);
+
+    Map<String, ProcessStepInterface> steps = resolver.getAllDependencies(processKey);
 
     (new Executor(steps, dto)).execute(processKey);
   }
   
+  //----------------------------
+  // ChatGPT: getAllDependencies
+  //----------------------------
+
   private Map<String, ProcessStepInterface> getAllDependencies(String processKey) {
     Set<String> processedKeys = new Set<String>();
     Map<String, ProcessStepInterface> steps = new Map<String, ProcessStepInterface>();
@@ -39,6 +45,47 @@ public class Processor {
     return steps;
   }
   
+  //----------------------------
+  // Manual Refactoring: getAllDependencies
+  //----------------------------
+
+  public class DependencyResolverException extends System.Exception {}
+
+  public class DependencyResolver {
+    public ProcessStepLibrary library;
+    private Map<String, ProcessStepInterface> resolvedProcessSteps;
+
+    public DependencyResolver(ProcessStepLibrary library) {
+      this.library = library;
+      this.resolvedProcessSteps = new Map<String, ProcessStepInterface>();
+    }
+
+    public Map<String, ProcessStepInterface> getAllDependencies(String processKey) {
+      ProcessStepInterface processStep = this.library.getProcessStep(processKey);
+
+      if(processStep == NULL) {
+        throw new DependencyResolverException('No process step mapped for key \'' + processKey + '\'');
+      }
+      
+      // don't resolve a step twice
+      if(this.resolvedProcessSteps.containsKey(processKey)) {
+        return new Map<String,ProcessStepInterface>();
+      }
+
+      // At this point the step instance is defined and not resolved yet
+
+      Set<String> requiredKeys = processStep.getRequiredProcessKeys();
+      for(String requiredStepKey : requiredKeys) {
+        // this is where recursion happens
+        this.resolvedProcessSteps
+          .putAll(this.getAllDependencies(requiredStepKey));
+      }
+      this.resolvedProcessSteps.put(processKey, processStep);
+      
+      return this.resolvedProcessSteps;
+    }
+  }
+
   //----------------------------
   // Manual Implementation
   //----------------------------

@@ -88,7 +88,7 @@ public with sharing class Processor_ComplexTest {
   
   
   public class ComplexTestLibrary extends ProcessStepLibrary {
-    
+
     public ComplexTestLibrary() {
       super();
       this.processStepMap.put('process_1', ProcessStep1.class);
@@ -98,6 +98,9 @@ public with sharing class Processor_ComplexTest {
       this.processStepMap.put('process_5', ProcessStep5.class);
       this.processStepMap.put('process_6', ProcessStep6.class);
       this.processStepMap.put('process_7', ProcessStep7.class);
+      this.processStepMap.put('process_8', ProcessStep8.class);
+      this.processStepMap.put('process_9', ProcessStep9.class);
+      this.processStepMap.put('process_10', ProcessStep10.class);
     }
   }
   
@@ -234,4 +237,97 @@ public with sharing class Processor_ComplexTest {
     }
   }
   
+  public class ProcessStep8 implements ProcessStepInterface {
+    public void execute(ProcessDto dto) {
+      dto.logMessages.add(
+      Processor.LOG_STRING_PATTERN
+      .replace('{datetime}', json.serialize(datetime.now()))
+      .replace('{executingUnit}', 'ProcessStep8')
+      .replace('{message}', 'processing ')
+      );
+    }
+    
+    public String getGeneratedProcessKey() {
+      return 'process_8';
+    }
+    
+    public Set<String> getRequiredProcessKeys() {
+      return new Set<String>();
+    }
+  }
+
+  public class ProcessStep9 implements ProcessStepInterface {
+    public void execute(ProcessDto dto) {
+      dto.logMessages.add(
+      Processor.LOG_STRING_PATTERN
+      .replace('{datetime}', json.serialize(datetime.now()))
+      .replace('{executingUnit}', 'ProcessStep9')
+      .replace('{message}', 'processing ')
+      );
+    }
+    
+    public String getGeneratedProcessKey() {
+      return 'process_9';
+    }
+    
+    public Set<String> getRequiredProcessKeys() {
+      return new Set<String>{'process_8', 'process_10'};
+    }
+  }
+
+  public class ProcessStep10 implements ProcessStepInterface {
+    public void execute(ProcessDto dto) {
+      dto.logMessages.add(
+      Processor.LOG_STRING_PATTERN
+      .replace('{datetime}', json.serialize(datetime.now()))
+      .replace('{executingUnit}', 'ProcessStep10')
+      .replace('{message}', 'processing ')
+      );
+    }
+    
+    public String getGeneratedProcessKey() {
+      return 'process_10';
+    }
+    
+    public Set<String> getRequiredProcessKeys() {
+      return new Set<String>();
+    }
+  }
+
+  @IsTest
+  static void complexDependenciesAreResolved(){
+    ProcessStepLibrary library = new Processor_ComplexTest.ComplexTestLibrary();
+    Processor.DependencyResolver resolver = new Processor.DependencyResolver(library);
+
+    Test.startTest();
+    Map<String, ProcessStepInterface> allDependencies = resolver.getAllDependencies('process_5');
+    Test.stopTest();
+
+    System.assertNotEquals(null, allDependencies);
+    System.assert(!allDependencies.isEmpty(), 'the map of all dependencies must not be empty');
+    System.assert(allDependencies.containsKey('process_1'), 'Dependency \'process_1\' was not found.');
+    System.assert(allDependencies.containsKey('process_2'), 'Dependency \'process_2\' was not found.');
+    System.assert(allDependencies.containsKey('process_3'), 'Dependency \'process_3\' was not found.');
+    System.assert(allDependencies.containsKey('process_4'), 'Dependency \'process_4\' was not found.');
+    System.assert(allDependencies.containsKey('process_5'), 'Dependency \'process_5\' was not found.');
+    System.assert(allDependencies.containsKey('process_6'), 'Dependency \'process_6\' was not found.');
+    System.assert(allDependencies.containsKey('process_7'), 'Dependency \'process_7\' was not found.');
+    System.assertEquals(7, allDependencies.size(), 'More steps returned than required');
+  }
+
+  @IsTest
+  static void exceptionOnUndefinedProcessKey(){
+    ProcessStepLibrary library = new Processor_ComplexTest.ComplexTestLibrary();
+    Processor.DependencyResolver resolver = new Processor.DependencyResolver(library);
+  
+    try {
+      Test.startTest();
+      Map<String, ProcessStepInterface> allDependencies = resolver.getAllDependencies('no_existing_key');
+      Test.stopTest();
+
+      System.assert(false, 'An exception is supposed to be thrown on an invalid key');
+    } catch (Processor.DependencyResolverException exc) {
+      System.assert(true);
+    }
+  }
 }
