@@ -252,9 +252,7 @@ public with sharing class Processor_ComplexTest {
     System.assert(allDependencies.containsKey('process_5'), 'Dependency \'process_5\' was not found.');
     System.assert(allDependencies.containsKey('process_6'), 'Dependency \'process_6\' was not found.');
     System.assert(allDependencies.containsKey('process_7'), 'Dependency \'process_7\' was not found.');
-    //ystem.assertEquals(7, allDependencies.size(), );
-
-
+    System.assertEquals(7, allDependencies.size(), 'More steps returned than required');
   }
 
   @IsTest
