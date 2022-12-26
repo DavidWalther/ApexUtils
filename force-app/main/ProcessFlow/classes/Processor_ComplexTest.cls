@@ -322,7 +322,7 @@ public with sharing class Processor_ComplexTest {
   
     try {
       Test.startTest();
-      Map<String, ProcessStepInterface> allDependencies = resolver.getAllDependencies('process_8');
+      Map<String, ProcessStepInterface> allDependencies = resolver.getAllDependencies('no_existing_key');
       Test.stopTest();
 
       System.assert(false, 'An exception is supposed to be thrown on an invalid key');
