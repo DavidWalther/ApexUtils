@@ -272,6 +272,25 @@ public with sharing class Processor_ComplexTest {
     }
   }
 
+  public class ProcessStep10 implements ProcessStepInterface {
+    public void execute(ProcessDto dto) {
+      dto.logMessages.add(
+      Processor.LOG_STRING_PATTERN
+      .replace('{datetime}', json.serialize(datetime.now()))
+      .replace('{executingUnit}', 'ProcessStep10')
+      .replace('{message}', 'processing ')
+      );
+    }
+    
+    public String getGeneratedProcessKey() {
+      return 'process_10';
+    }
+    
+    public Set<String> getRequiredProcessKeys() {
+      return new Set<String>();
+    }
+  }
+
   @IsTest
   static void complexDependenciesAreResolved(){
     ProcessStepLibrary library = new Processor_ComplexTest.ComplexTestLibrary();
