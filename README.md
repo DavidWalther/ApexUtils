@@ -8,7 +8,7 @@ In this repository I'm storing ideas in development and Snippets for later use.
 4. MockBase
 5. Query Counter
 6. SelectorFactory & Selector Base
-7. MapUtility
+7. [MapUtility](https://github.com/DavidWalther/ApexUtils/tree/master/force-app/main/MapUtility)
 
 ## Query Counter
 
