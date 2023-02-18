@@ -10,6 +10,10 @@ In this repository I'm storing ideas in development and Snippets for later use.
 6. SelectorFactory & Selector Base
 7. [MapUtility](https://github.com/DavidWalther/ApexUtils/tree/master/force-app/main/MapUtility)
 
+    * Let's 'user' define criteria and then handles the building.
+    * Can map 'anything by everything'
+
+
 ## Query Counter
 
 This one is used for simple counting. Add a call to it at the beginning of a method and print the result in the end of the context. Voila you get the count how often each method is called.
