@@ -2,7 +2,10 @@
 
 In this repository I'm storing ideas in development and Snippets for later use.
 
-1. ApexContext *(will be removed)*
+1. ApexContext *(will be removed / become a part of 'ProcessFlow')*
+
+      * A prebuild DTO class with build-in 'commit'
+      
 1. DataContainer
 1. GenericRecordBuilder
 1. MockBase
