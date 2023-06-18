@@ -6,7 +6,7 @@ orbs:
 parameters:
   action:
     type: enum
-    enum: [build, limits, test-sfdx-install]
+    enum: [ build, limits, test-sfdx-install ]
     default: build
 
 jobs:
@@ -35,7 +35,7 @@ jobs:
             mkdir tmp
             mkdir tmp/artifacts
             mkdir cache
-          name: create folder for artifacts 
+          name: create folder for artifacts
 
       - persist_to_workspace:
           # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
@@ -51,7 +51,7 @@ jobs:
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
           at: ./
-          
+
       - run:
           command: >
             node ./scripts/deployment/node/writeChecksumFile.js
@@ -61,7 +61,7 @@ jobs:
           root: ./
           paths:
             - ./
-            
+
   create-scratch-org:
     executor: sfdx/default
     steps:
@@ -71,8 +71,8 @@ jobs:
 
       - sfdx/install
 
-  # create / restore credential file
-    # chaching - start
+      # create / restore credential file
+      # chaching - start
       - restore_cache:
           key: -v4-credentials-{{ checksum "checksum_24h.cache" }}
 
@@ -81,29 +81,29 @@ jobs:
 
       - run:
           command: >
-            scripts/deployment/createNewScratchOrg.sh tempScratchOrg ./cache/org.credentials
+            scripts/deployment/createNewScratchOrg.sh tempScratchOrg
+            ./cache/org.credentials
           name: create scratch org
 
       - save_cache:
           key: -v4-credentials-{{ checksum "checksum_24h.cache" }}
           paths:
             - "cache"
-       # chaching scratch org credentials - end 
-        
+      # chaching scratch org credentials - end 
       - store_artifacts:
           path: tmp/artifacts/
-          
-          
+
       - run:
           command: >
             rm server.key
           name: Remove 'server.key' file
-      
+
       - persist_to_workspace:
           root: ./
           paths:
             - ./
-    
+    # The resource_class feature allows configuring CPU and RAM resources for each job. Different resource classes are available for different executors. https://circleci.com/docs/2.0/configuration-reference/#resourceclass
+    resource_class: large
 
   push-code-and-run-tests:
     docker:
@@ -113,54 +113,38 @@ jobs:
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
           at: ./
-   
+
       # - sfdx/auth:
       #     defaultusername: david@mcga.de
-
-      
-
-
       #- run:
       #    command: |
       #      echo "$SFDX_JWT_KEY" | base64 --decode > server.key
       #    name: Authorize Scratch org
-
       # - run:
       #     command: |
       #       FILEPATH="./cache/org.credentials"
       #       echo $FILEPATH
-
       #       USERNAME_LINE=$( cat $FILEPATH | grep "Username" )
       #       echo $USERNAME_LINE
       #       USERNAME="${USERNAME_LINE/"Username"/}"
       #       echo $USERNAME
-
       #       INSTANCE_URL_LINE=$( cat $FILEPATH | grep "Instance Url" )
       #       echo $INSTANCE_URL_LINE
       #       INSTANCE_URL="${INSTANCE_URL_LINE/"Instance Url"/}"
       #       echo $INSTANCE_URL
-
       #       ACCESS_TOKEN_LINE=$( cat $FILEPATH | grep "Access Token" )
       #       echo $ACCESS_TOKEN_LINE
       #       ACCESS_TOKEN="${ACCESS_TOKEN_LINE/"Access Token"/}"
       #       echo $ACCESS_TOKEN
-
-
       #       export SFDX_ACCESS_TOKEN=$ACCESS_TOKEN
       #       echo $SFDX_ACCESS_TOKEN
-
       #       ALIAS="tempScratchOrg"
       #       echo $ALIAS
-
       #       sfdx auth:accesstoken:store --instanceurl="$INSTANCE_URL" --setalias="$ALIAS" --setdefaultusername --noprompt
-            
       #     name: Authorize Scratch org
-      
-
       #=============================================
       # Authorize with JWT - all in on - without auth script
       #=============================================
-
       - run:
           command: |
             CACHED_ORG_DETAILS="./cache/org.credentials"
@@ -174,7 +158,7 @@ jobs:
             echo Username
             echo $USER_NAME
             echo
-            
+
             CLIENT_ID=$SFDX_CONSUMER_KEY
 
             echo "$SFDX_JWT_KEY" | base64 --decode > server.key
@@ -190,7 +174,6 @@ jobs:
       #=============================================
       # Authorize with JWT - all in on - call script
       #=============================================
-
       # - run:
       #     command: |
       #       CACHED_ORG_DETAILS="./cache/org.credentials"
@@ -202,7 +185,6 @@ jobs:
       #       chmod +x scripts/deployment/authorize.sh
       #       ./scripts/deployment/authorize.sh "${SFDX_JWT_KEY}" "${SFDX_CONSUMER_KEY}" "${CACHED_ORG_DETAILS}" "${ORG_ALIAS}"
       #     name: authorize via JWT
-
       #=============================================
       # Authorize with JWT - split steps
       #=============================================
@@ -210,7 +192,6 @@ jobs:
       #     command: |
       #       base64 --decode $SFDX_JWT_KEY > ./server.key
       #     name: create ./server.key 
-      
       # - run:
       #     command: |
       #       CACHED_ORG_DETAILS="./cache/org.credentials"
@@ -221,8 +202,6 @@ jobs:
       #       chmod +x scripts/deployment/authorize.sh
       #       ./scripts/deployment/authorize.sh "${SFDX_JWT_KEY}" "${SFDX_CONSUMER_KEY}" "${CACHED_ORG_DETAILS}" "${ORG_ALIAS}"
       #     name: authorize via JWT
-
-
       #------------
       # Authorize with auth:accesstoken:store
       #------------
@@ -232,30 +211,22 @@ jobs:
       #       ACCESSTOKEN=$(scripts/deployment/readAccessToken.sh "$FILEPATH")
       #       #echo $ACCESSTOKEN
       #       export SFDX_ACCESS_TOKEN=$ACCESSTOKEN
-
       #       chmod +x scripts/deployment/authorizeWithAccessToken.sh
       #       scripts/deployment/authorizeWithAccessToken.sh "./cache/org.credentials" "tempScratchOrg"
       #     name: Authorize with accesstoken
-
-
       #------------
       # Skip auth and use accesstoken as targetUsername
       #------------
       # - run:
       #     command: |
       #       FILEPATH="./cache/org.credentials"
-
       #       INSTANCE_URL=$(scripts/deployment/readInstanceUrl.sh "$FILEPATH")
       #       echo $INSTANCE_URL
       #       sfdx config:set instanceUrl=$INSTANCE_URL
-
       #       SFDX_ACCESS_TOKEN=$(scripts/deployment/readAccessToken.sh "$FILEPATH")
       #       echo $SFDX_ACCESS_TOKEN
-
       #       sfdx force:source:deploy --checkonly --sourcepath ./force-app/main/ --targetusername $SFDX_ACCESS_TOKEN
       #     name: Use accesstoken as username
-
-
       - run:
           command: >
             sfdx force:org:list
@@ -263,17 +234,18 @@ jobs:
 
       - run:
           command: >
-            sfdx force:source:push --forceoverwrite --wait 60 > tmp/artifacts/DeploymentResults.txt
+            sfdx force:source:push --forceoverwrite --wait 60 >
+            tmp/artifacts/DeploymentResults.txt
           name: SFDX Push Changes
-          
+
       - run:
           command: >
-            sfdx force:apex:test:run -l RunLocalTests --resultformat=human --codecoverage --wait 60 --outputdir tmp/artifacts/testResults
+            sfdx force:apex:test:run -l RunLocalTests --resultformat=human
+            --codecoverage --wait 60 --outputdir tmp/artifacts/testResults
           name: Run APEX Tests
 
       - store_artifacts:
-          path: tmp/artifacts/          
-
+          path: tmp/artifacts/
 
   authorize-scratch-org-with-jwt:
     docker:
@@ -289,9 +261,7 @@ jobs:
             sfdx auth:jwt:grant --help
           name: Print auth help
 
-
-# Testjobs with docker-SFDX
-
+  # Testjobs with docker-SFDX
   test-install-sfdx-auth:
     docker:
       #- image: cimg/node:19.1.0
@@ -329,7 +299,6 @@ jobs:
       #     command: >
       #     name: Authorize Devhub
       #      david@mcga.de
-
   test-install-sfdx-print:
     docker:
       - image: salesforce/salesforcedx:7.178.0-slim
@@ -346,12 +315,9 @@ jobs:
             sfdx force:org:list
           name: print Org list
 
-# -----------------------
-# Utilities
-# -----------------------
-
-
-
+  # -----------------------
+  # Utilities
+  # -----------------------
   print-org-status:
     executor: sfdx/default
     parameters:
@@ -363,7 +329,7 @@ jobs:
       - sfdx/install
       - sfdx/auth:
           defaultusername: david@mcga.de
-      
+
       - run:
           command: >
             sfdx force:limits:api:display -u david@mcga.de
@@ -402,7 +368,6 @@ jobs:
 # -----------------------
 # Workflows
 # -----------------------
-
 workflows:
   install-sfdx:
     when:
@@ -420,7 +385,6 @@ workflows:
       - print-org-status:
           name: Org Limits
           filename: orgLimits.txt
-
 
   deploy-and-test:
     when:
