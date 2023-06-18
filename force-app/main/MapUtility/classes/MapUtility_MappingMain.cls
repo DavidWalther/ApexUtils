@@ -14,6 +14,7 @@ public with sharing class MapUtility_MappingMain {
 
     public interface MapUtility_MappingLogicInterface {
         Object execute(List<Object> objects, IValueReader valueReader, List<IncludeItemKeyInMapInterface> keyEvaluators, List<MapUtility_MappingMain.IncludeItemInMapInterface> itemFilters);
+        Object execute(MappingParameters mappingParameters);
     }
 
     //----------------------------
