@@ -21,7 +21,16 @@ public with sharing class MapUtility_MappingLogicFactory {
     private abstract class ListInterationBase implements MapUtility_MappingMain.MapUtility_MappingLogicInterface {
         protected abstract Object createResultMap();
         protected abstract void addItem(Object resultMap, Object key, Object newItem);
-        
+
+        public Object execute(MapUtility_MappingMain.MappingParameters mappingParameters) {
+            return this.execute(
+                mappingParameters.objects,
+                mappingParameters.valueReader,
+                mappingParameters.keyEvaluators,
+                mappingParameters.itemFilters
+            );
+        }
+
         public Object execute(List<Object> objects, IValueReader valueReader, List<MapUtility_MappingMain.IncludeItemKeyInMapInterface> keyEvaluators, List<MapUtility_MappingMain.IncludeItemInMapInterface> itemFilters) {
             Object result = this.createResultMap();
             for(Object tempSObject : objects) {
