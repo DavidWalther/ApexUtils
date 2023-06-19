@@ -23,12 +23,20 @@ public with sharing class MapUtility_MappingLogicFactory {
         protected abstract void addItem(Object resultMap, Object key, Object newItem);
 
         public Object execute(MapUtility_MappingMain.MappingParameters mappingParameters) {
-            return this.execute(
-                mappingParameters.objects,
-                mappingParameters.valueReader,
-                mappingParameters.keyEvaluators,
-                mappingParameters.itemFilters
-            );
+            Object result = this.createResultMap();
+            
+            for(Object tempSObject : mappingParameters.objects) {
+                if(!this.isIncludeItem(mappingParameters.itemFilters, tempSObject)) {
+                    continue;
+                }
+                Object key = mappingParameters.valueReader.getValue(tempSObject);
+                Boolean isAddItem = this.isIncludeItemKey(mappingParameters.keyEvaluators, key);
+
+                if(isAddItem) {
+                    this.addItem(result, key, tempSObject);
+                }
+            }
+            return result;
         }
 
         public Object execute(List<Object> objects, IValueReader valueReader, List<MapUtility_MappingMain.IncludeItemKeyInMapInterface> keyEvaluators, List<MapUtility_MappingMain.IncludeItemInMapInterface> itemFilters) {
