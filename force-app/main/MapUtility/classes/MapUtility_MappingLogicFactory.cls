@@ -40,19 +40,13 @@ public with sharing class MapUtility_MappingLogicFactory {
         }
 
         public Object execute(List<Object> objects, IValueReader valueReader, List<MapUtility_MappingMain.IncludeItemKeyInMapInterface> keyEvaluators, List<MapUtility_MappingMain.IncludeItemInMapInterface> itemFilters) {
-            Object result = this.createResultMap();
-            for(Object tempSObject : objects) {
-                if(!this.isIncludeItem(itemFilters, tempSObject)) {
-                    continue;
-                }
-                Object key = valueReader.getValue(tempSObject);
-                Boolean isAddItem = this.isIncludeItemKey(keyEvaluators, key);
+            MapUtility_MappingMain.MappingParameters mappingParameters = new MapUtility_MappingMain.MappingParameters();
+            mappingParameters.objects = objects;
+            mappingParameters.valueReader = valueReader;
+            mappingParameters.keyEvaluators = keyEvaluators;
+            mappingParameters.itemFilters = itemFilters;
 
-                if(isAddItem) {
-                    this.addItem(result, key, tempSObject);
-                }
-            }
-            return result;
+            return this.execute(mappingParameters);
         }
 
         private Boolean isIncludeItem(List<MapUtility_MappingMain.IncludeItemInMapInterface> itemFilters, Object item) {
