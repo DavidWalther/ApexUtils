@@ -1,9 +1,9 @@
 public with sharing class MapUtility_MappingMain {
-    
+
     //----------------------------
     // Interfaces
     //----------------------------
-    
+
     public interface IncludeItemInMapInterface {
         Boolean isIncludeItem(Object itemToCheckForInclusion);
     }
@@ -14,13 +14,27 @@ public with sharing class MapUtility_MappingMain {
 
     public interface MapUtility_MappingLogicInterface {
         Object execute(List<Object> objects, IValueReader valueReader, List<IncludeItemKeyInMapInterface> keyEvaluators, List<MapUtility_MappingMain.IncludeItemInMapInterface> itemFilters);
+        Object execute(MappingParameters mappingParameters);
+    }
+
+    //----------------------------
+    // parameter class
+    //----------------------------
+
+    public class MappingParameters {
+        public List<Object> objects;
+        public IValueReader valueReader;
+        public List<IncludeItemKeyInMapInterface> keyEvaluators;
+        public List<MapUtility_MappingMain.IncludeItemInMapInterface> itemFilters;
+
+        // Constructor, getters, and setters
     }
 
     /**
      * Objects can be casted into collecteions or Objects
      * BUT
      * A special logic is required to cast Objects into sObjects or Collections of sObjects.
-     * 
+     *
      * This interface provides an abstraction
      */
     public interface MapUtility_TypeConverterInterface {
@@ -32,7 +46,7 @@ public with sharing class MapUtility_MappingMain {
     //----------------------------
 
     public Map<Object, Object> generateMapFromObjectList(List<Object> objects, IValueReader valueReader, MAP_RETAIN_MODE retainingMode, List<IncludeItemKeyInMapInterface> keyEvaluators, List<MapUtility_MappingMain.IncludeItemInMapInterface> itemFilters) {
-    
+
         //----------------------------
         // Guardians
         //----------------------------

@@ -21,21 +21,32 @@ public with sharing class MapUtility_MappingLogicFactory {
     private abstract class ListInterationBase implements MapUtility_MappingMain.MapUtility_MappingLogicInterface {
         protected abstract Object createResultMap();
         protected abstract void addItem(Object resultMap, Object key, Object newItem);
-        
-        public Object execute(List<Object> objects, IValueReader valueReader, List<MapUtility_MappingMain.IncludeItemKeyInMapInterface> keyEvaluators, List<MapUtility_MappingMain.IncludeItemInMapInterface> itemFilters) {
+
+        public Object execute(MapUtility_MappingMain.MappingParameters mappingParameters) {
             Object result = this.createResultMap();
-            for(Object tempSObject : objects) {
-                if(!this.isIncludeItem(itemFilters, tempSObject)) {
+            
+            for(Object tempSObject : mappingParameters.objects) {
+                if(!this.isIncludeItem(mappingParameters.itemFilters, tempSObject)) {
                     continue;
                 }
-                Object key = valueReader.getValue(tempSObject);
-                Boolean isAddItem = this.isIncludeItemKey(keyEvaluators, key);
+                Object key = mappingParameters.valueReader.getValue(tempSObject);
+                Boolean isAddItem = this.isIncludeItemKey(mappingParameters.keyEvaluators, key);
 
                 if(isAddItem) {
                     this.addItem(result, key, tempSObject);
                 }
             }
             return result;
+        }
+
+        public Object execute(List<Object> objects, IValueReader valueReader, List<MapUtility_MappingMain.IncludeItemKeyInMapInterface> keyEvaluators, List<MapUtility_MappingMain.IncludeItemInMapInterface> itemFilters) {
+            MapUtility_MappingMain.MappingParameters mappingParameters = new MapUtility_MappingMain.MappingParameters();
+            mappingParameters.objects = objects;
+            mappingParameters.valueReader = valueReader;
+            mappingParameters.keyEvaluators = keyEvaluators;
+            mappingParameters.itemFilters = itemFilters;
+
+            return this.execute(mappingParameters);
         }
 
         private Boolean isIncludeItem(List<MapUtility_MappingMain.IncludeItemInMapInterface> itemFilters, Object item) {
