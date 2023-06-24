@@ -1,59 +1,60 @@
 {
-    "packageDirectories": [
+  "packageDirectories": [
+    {
+      "path": "force-app/main/fflib",
+      "default": false,
+      "package": "ApexUtilities-fflib",
+      "versionNumber": "1.0.0.NEXT",
+      "versionName": "create package for fflib elements"
+    },
+    {
+      "path": "force-app/main/core",
+      "default": false,
+      "package": "ApexUtilities-Core",
+      "versionNumber": "1.3.0.NEXT",
+      "versionName": "remove fflib items"
+    },
+    {
+      "path": "force-app/main/MapUtility",
+      "default": false,
+      "package": "ApexUtilities-Mapping",
+      "versionNumber": "4.1.0.NEXT",
+      "versionName": "Create mapping paramter class",
+      "dependencies": [
         {
-            "path": "force-app/main/fflib",
-            "default": false,
-            "package": "ApexUtilities-fflib",
-            "versionNumber": "1.0.0.NEXT",
-            "versionName": "create package for fflib elements"
-        },
-        {
-            "path": "force-app/main/core",
-            "default": false,
-            "package": "ApexUtilities-Core",
-            "versionNumber": "1.3.0.NEXT",
-            "versionName": "remove fflib items"
-        },
-        {
-            "path": "force-app/main/MapUtility",
-            "default": false,
-            "package": "ApexUtilities-Mapping",
-            "versionNumber": "4.0.0.NEXT",
-            "versionName": "Remove enum MAP_OPTION",
-            "dependencies": [
-                {
-                    "package": "ApexUtilities-Core",
-                    "versionNumber": "1.3.0.LATEST"
-                }
-            ]
-        },
-        {
-            "path": "force-app",
-            "default": true
+          "package": "ApexUtilities-Core",
+          "versionNumber": "1.3.0.LATEST"
         }
-    ],
-    "namespace": "",
-    "sfdcLoginUrl": "https://login.salesforce.com",
-    "sourceApiVersion": "53.0",
-    "packageAliases": {
-        "ApexUtilities-fflib": "0Ho2o000000fxYiCAI",
-        "ApexUtilities-fflib@1.0.0-1": "04t2o000000yUWwAAM",
-        "ApexUtilities-Core": "0Ho2o000000fxYYCAY",
-        "ApexUtilities-Core@1.0.0-1": "04t2o000000yUVUAA2",
-        "ApexUtilities-Core@1.0.0-2": "04t2o000000yUVjAAM",
-        "ApexUtilities-Core@1.0.0-3": "04t2o000000yUVoAAM",
-        "ApexUtilities-Core@1.1.0-1": "04t2o000000yUVyAAM",
-        "ApexUtilities-Core@1.3.0-1": "04t2o000000yUX6AAM",
-        "ApexUtilities-Mapping": "0Ho2o000000fxYdCAI",
-        "ApexUtilities-Mapping@1.0.0-1": "04t2o000000yUVZAA2",
-        "ApexUtilities-Mapping@1.0.0-2": "04t2o000000yUVeAAM",
-        "ApexUtilities-Mapping@1.1.0-2": "04t2o000000yUW3AAM",
-        "ApexUtilities-Mapping@2.0.0-1": "04t2o000000yUWSAA2",
-        "ApexUtilities-Mapping@2.1.0-1": "04t2o000000yUWXAA2",
-        "ApexUtilities-Mapping@2.1.0-2": "04t2o000000yUWcAAM",
-        "ApexUtilities-Mapping@3.0.0-1": "04t2o000000yUWmAAM",
-        "ApexUtilities-Mapping@3.1.0-2": "04t2o000000yUXGAA2",
-        "ApexUtilities-Mapping@3.2.0-1": "04t2o000000yUXLAA2",
-        "ApexUtilities-Mapping@4.0.0-1": "04t2o000000yUXQAA2"
+      ]
+    },
+    {
+      "path": "force-app",
+      "default": true
     }
+  ],
+  "namespace": "",
+  "sfdcLoginUrl": "https://login.salesforce.com",
+  "sourceApiVersion": "53.0",
+  "packageAliases": {
+    "ApexUtilities-fflib": "0Ho2o000000fxYiCAI",
+    "ApexUtilities-fflib@1.0.0-1": "04t2o000000yUWwAAM",
+    "ApexUtilities-Core": "0Ho2o000000fxYYCAY",
+    "ApexUtilities-Core@1.0.0-1": "04t2o000000yUVUAA2",
+    "ApexUtilities-Core@1.0.0-2": "04t2o000000yUVjAAM",
+    "ApexUtilities-Core@1.0.0-3": "04t2o000000yUVoAAM",
+    "ApexUtilities-Core@1.1.0-1": "04t2o000000yUVyAAM",
+    "ApexUtilities-Core@1.3.0-1": "04t2o000000yUX6AAM",
+    "ApexUtilities-Mapping": "0Ho2o000000fxYdCAI",
+    "ApexUtilities-Mapping@1.0.0-1": "04t2o000000yUVZAA2",
+    "ApexUtilities-Mapping@1.0.0-2": "04t2o000000yUVeAAM",
+    "ApexUtilities-Mapping@1.1.0-2": "04t2o000000yUW3AAM",
+    "ApexUtilities-Mapping@2.0.0-1": "04t2o000000yUWSAA2",
+    "ApexUtilities-Mapping@2.1.0-1": "04t2o000000yUWXAA2",
+    "ApexUtilities-Mapping@2.1.0-2": "04t2o000000yUWcAAM",
+    "ApexUtilities-Mapping@3.0.0-1": "04t2o000000yUWmAAM",
+    "ApexUtilities-Mapping@3.1.0-2": "04t2o000000yUXGAA2",
+    "ApexUtilities-Mapping@3.2.0-1": "04t2o000000yUXLAA2",
+    "ApexUtilities-Mapping@4.0.0-1": "04t2o000000yUXQAA2",
+    "ApexUtilities-Mapping@4.1.0-1": "04t2o000001J0r5AAC"
+  }
 }

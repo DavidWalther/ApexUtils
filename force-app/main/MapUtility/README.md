@@ -330,7 +330,7 @@ For further examples see class `MapUtility_MappingMainTest`.
 | Sandbox | Production | 
 | --- | --- |
 | [Core](https://test.salesforce.com/packaging/installPackage.apexp?p0=04t2o000000yUX6AAM) | [Core](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t2o000000yUX6AAM) |
-| [Mapping](https://test.salesforce.com/packaging/installPackage.apexp?p0=04t2o000000yUWwAAM) | [Mapping](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t2o000000yUWwAAM) |
+| [Mapping](https://test.salesforce.com/packaging/installPackage.apexp?p0=04t2o000000yUWwAAM) | [Mapping](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t2o000001J0r5AAC) |
 
 ### **Package versions**
 | Packagen | Version | Id| Promoted | Highlight |
@@ -346,6 +346,7 @@ For further examples see class `MapUtility_MappingMainTest`.
 | Mapping | 3.1.0-2 | 04t2o000000yUXGAA2 |no | Create an interface to evaluate entries |
 | Mapping | 3.2.0-1 | 04t2o000000yUXLAA2 |yes | Create an interface to evaluate entries |
 | Mapping | 4.0.0-1 | 04t2o000000yUWwAAM |yes | Remove enum MAP_OPTION |
+| Mapping | 4.1.0-1 | 04t2o000001J0r5AAC |yes | Create mapping paramter class |
 
 ### Installation via SFDX
 
