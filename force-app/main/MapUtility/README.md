@@ -3,6 +3,15 @@
 ## **Purpose**
 This utility is designed releave developers from the repetitive and error-prone task of creating maps of objects. This is done over and over again with only slight changes. By generalized by providing a basic logic and ways to options to define certain criteria.
 
+## Use Cases
+- Map a list of records by field value as key
+- Map a list of class instances by result of a method as key
+- Use class instances as key
+- Define which entries to map
+- Define which keys to Keep
+
+  
+
 ## **Concept**
 Creating a map from a list of objects is always done by the same steps:
 
