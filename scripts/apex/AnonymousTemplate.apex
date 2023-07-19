@@ -28,6 +28,8 @@ if(DO_ROLLBACK) {
 // Logic
 //----------------------------
 
+public class ExecutionHandler_Exception extends System.Exception{}
+
 public class ExecutionHandler {
 
   public ExecutionHandler execute() {
