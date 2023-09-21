@@ -353,17 +353,22 @@ jobs:
 
 
   print-org-status:
-    executor: sfdx/default
+    docker:
+      - image: salesforce/salesforcedx:7.178.0-slim
     parameters:
       filename:
         type: string
     steps:
       - checkout
 
-      - sfdx/install
-      - sfdx/auth:
-          defaultusername: david@mcga.de
-      
+      - run:
+          command: |
+            echo "$SFDX_JWT_KEY" | base64 --decode > server.key
+            sfdx auth:jwt:grant --clientid $SFDX_CONSUMER_KEY --instanceurl https://login.salesforce.com --jwtkeyfile ./server.key --setdefaultdevhubusername --username david@mcga.de --setalias devHub
+
+            rm server.key
+          name: Authorize Devhub
+
       - run:
           command: >
             sfdx force:limits:api:display -u david@mcga.de
