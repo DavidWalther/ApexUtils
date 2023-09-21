@@ -11,25 +11,11 @@ parameters:
 
 jobs:
   set-up-enviroment:
-    executor: sfdx/default
+    docker:
+      - image: salesforce/salesforcedx:7.178.0-slim
     steps:
       - checkout
-      - sfdx/install
 
-      # install / restore node modules - Start          		
-      - restore_cache:
-          key: -v1-node_modules
-
-      - run:
-          command: >
-            npm install sfdx-node
-          name: install sfdx-node
-
-      # install / restore node modules - End		
-      - save_cache:
-          key: -v1-node_modules
-          paths:
-            - "node_modules"
       - run:
           command: |
             mkdir tmp
