@@ -57,8 +57,6 @@ jobs:
           # Must be absolute path or relative path from working_directory
           at: ./
 
-      - sfdx/install
-
   # create / restore credential file
     # chaching - start
       - restore_cache:
