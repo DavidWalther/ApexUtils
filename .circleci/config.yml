@@ -40,8 +40,10 @@ jobs:
           at: ./
           
       - run:
-          command: >
+          command: |
             node ./scripts/deployment/node/writeChecksumFile.js
+            echo $CircleCI_Cache_Version >> checksum_24h.cache
+            cat checksum_24h.cache
           name: writing file for checksum
 
       - persist_to_workspace:
@@ -60,7 +62,7 @@ jobs:
   # create / restore credential file
     # chaching - start
       - restore_cache:
-          key: {{ .Environment.CCI_CACHE_PREFIX }}-{{ checksum "checksum_24h.cache" }}
+          key: scratchorg-cache-{{ checksum "checksum_24h.cache" }}
 
       - run:
           command: |
@@ -76,7 +78,7 @@ jobs:
           name: create scratch org
 
       - save_cache:
-          key: {{ .Environment.CCI_CACHE_PREFIX }}-{{ checksum "checksum_24h.cache" }}
+          key: scratchorg-cache-{{ checksum "checksum_24h.cache" }}
           paths:
             - "cache"
        # chaching scratch org credentials - end 
