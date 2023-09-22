@@ -60,7 +60,7 @@ jobs:
   # create / restore credential file
     # chaching - start
       - restore_cache:
-          key: $CCI_CACHE_PREFIX{{ checksum "checksum_24h.cache" }}
+          key: {{ .Environment.CCI_CACHE_PREFIX }}-{{ checksum "checksum_24h.cache" }}
 
       - run:
           command: |
@@ -76,7 +76,7 @@ jobs:
           name: create scratch org
 
       - save_cache:
-          key: -v1-credentials-{{ checksum "checksum_24h.cache" }}
+          key: {{ .Environment.CCI_CACHE_PREFIX }}-{{ checksum "checksum_24h.cache" }}
           paths:
             - "cache"
        # chaching scratch org credentials - end 
