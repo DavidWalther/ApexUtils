@@ -42,7 +42,6 @@ jobs:
       - run:
           command: |
             node ./scripts/deployment/node/writeChecksumFile.js
-            echo $CircleCI_Cache_Version >> checksum_24h.cache
             cat checksum_24h.cache
           name: writing file for checksum
 

@@ -5,7 +5,7 @@ const filepath = 'checksum_24h.cache';
 
 const checksumObj = {
   currentDateString: getCurrentDateString(),
-  version: 'v1'
+  version: process.env.CircleCI_Cache_Version
 }
 
 
