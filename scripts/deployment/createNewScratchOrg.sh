@@ -11,6 +11,7 @@ if [ ! -f "$CREDFILE" ]; then
   sfdx force:org:create --setalias "$ALIAS" --definitionfile ./config/project-scratch-def.json --durationdays 1
   sfdx force:org:display --targetusername "$ALIAS" --verbose > "$CREDFILE"
   echo ""
+  cat "$CREDFILE"
 else
   echo "$CREDFILE does exist. skip Creation"
   echo ""
