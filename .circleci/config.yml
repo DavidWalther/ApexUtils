@@ -85,13 +85,13 @@ jobs:
               echo "create server.key-file for creation"
               echo "$SFDX_JWT_KEY" | base64 --decode > server.key
 
-              echo "\nCreate Scratch Org"
+              echo -e "\nCreate Scratch Org"
               sfdx force:org:create --setalias "$ALIAS" --definitionfile ./config/project-scratch-def.json --durationdays 1
 
-              echo "\nGet Scratch Org details"
+              echo -e "\nGet Scratch Org details"
               sfdx force:org:display --targetusername "$ALIAS" --verbose > "$CREDFILE"
               
-              echo "\nScratch Org details"
+              echo -e "\nScratch Org details"
               cat "$CREDFILE"
             else
               echo "$CREDFILE does exist. skip Creation"
