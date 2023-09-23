@@ -73,6 +73,7 @@ jobs:
 
       - run:
           command: |
+            ls -l
             if [ -e ./cache/org.credentials ]; then
               echo "credetials do exist"
               cat ./cache/org.credentials
