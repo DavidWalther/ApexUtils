@@ -68,7 +68,7 @@ jobs:
             echo "$SFDX_JWT_KEY" | base64 --decode > server.key
             sfdx auth:jwt:grant --clientid $SFDX_CONSUMER_KEY --instanceurl https://login.salesforce.com --jwtkeyfile ./server.key --setdefaultdevhubusername --username david@mcga.de --setalias devHub
 
-           # rm server.key
+            rm server.key
           name: Authorize Devhub
 
       - run:
