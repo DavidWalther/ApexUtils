@@ -11,25 +11,11 @@ parameters:
 
 jobs:
   set-up-enviroment:
-    executor: sfdx/default
+    docker:
+      - image: salesforce/salesforcedx:7.178.0-slim
     steps:
       - checkout
-      - sfdx/install
 
-      # install / restore node modules - Start          		
-      - restore_cache:
-          key: -v1-node_modules
-
-      - run:
-          command: >
-            npm install sfdx-node
-          name: install sfdx-node
-
-      # install / restore node modules - End		
-      - save_cache:
-          key: -v1-node_modules
-          paths:
-            - "node_modules"
       - run:
           command: |
             mkdir tmp
@@ -46,15 +32,17 @@ jobs:
             - ./
 
   create-cache-checksum:
-    executor: sfdx/default
+    docker:
+      - image: salesforce/salesforcedx:7.178.0-slim
     steps:
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
           at: ./
           
       - run:
-          command: >
+          command: |
             node ./scripts/deployment/node/writeChecksumFile.js
+            cat checksum_24h.cache
           name: writing file for checksum
 
       - persist_to_workspace:
@@ -63,41 +51,51 @@ jobs:
             - ./
             
   create-scratch-org:
-    executor: sfdx/default
+    docker:
+      - image: salesforce/salesforcedx:7.178.0-slim
     steps:
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
           at: ./
 
-      - sfdx/install
-
   # create / restore credential file
     # chaching - start
       - restore_cache:
-          key: -v1-credentials-{{ checksum "checksum_24h.cache" }}
-
-      - sfdx/auth:
-          defaultusername: david@mcga.de
+          key: scratchorg-cache-{{ checksum "checksum_24h.cache" }}
 
       - run:
-          command: >
+          command: |
+            echo "$SFDX_JWT_KEY" | base64 --decode > server.key
+            sfdx auth:jwt:grant --clientid $SFDX_CONSUMER_KEY --instanceurl https://login.salesforce.com --jwtkeyfile ./server.key --setdefaultdevhubusername --username david@mcga.de --setalias devHub
+
+           # rm server.key
+          name: Authorize Devhub
+
+      - run:
+          command: |
+            ls -l ./cache
+            echo ""
+            if [ -e ./cache/org.credentials ]; then
+              echo "credetials do exist"
+              echo ""
+              cat ./cache/org.credentials
+              echo ""
+              base64 ./cache/org.credentials
+            else
+              echo "credetials dont exist"
+            fi
+            
             scripts/deployment/createNewScratchOrg.sh tempScratchOrg ./cache/org.credentials
           name: create scratch org
 
       - save_cache:
-          key: -v1-credentials-{{ checksum "checksum_24h.cache" }}
+          key: scratchorg-cache-{{ checksum "checksum_24h.cache" }}
           paths:
             - "cache"
        # chaching scratch org credentials - end 
         
       - store_artifacts:
           path: tmp/artifacts/
-          
-          
-      - run:
-          command: >
-            rm server.key
-          name: Remove 'server.key' file
       
       - persist_to_workspace:
           root: ./
@@ -353,17 +351,22 @@ jobs:
 
 
   print-org-status:
-    executor: sfdx/default
+    docker:
+      - image: salesforce/salesforcedx:7.178.0-slim
     parameters:
       filename:
         type: string
     steps:
       - checkout
 
-      - sfdx/install
-      - sfdx/auth:
-          defaultusername: david@mcga.de
-      
+      - run:
+          command: |
+            echo "$SFDX_JWT_KEY" | base64 --decode > server.key
+            sfdx auth:jwt:grant --clientid $SFDX_CONSUMER_KEY --instanceurl https://login.salesforce.com --jwtkeyfile ./server.key --setdefaultdevhubusername --username david@mcga.de --setalias devHub
+
+            rm server.key
+          name: Authorize Devhub
+
       - run:
           command: >
             sfdx force:limits:api:display -u david@mcga.de
@@ -378,7 +381,8 @@ jobs:
           name: Print packages versions
 
   print-filesystem:
-    executor: sfdx/default
+    docker:
+      - image: salesforce/salesforcedx:7.178.0-slim
     steps:
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
