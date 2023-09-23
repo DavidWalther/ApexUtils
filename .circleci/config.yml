@@ -68,24 +68,37 @@ jobs:
             echo "$SFDX_JWT_KEY" | base64 --decode > server.key
             sfdx auth:jwt:grant --clientid $SFDX_CONSUMER_KEY --instanceurl https://login.salesforce.com --jwtkeyfile ./server.key --setdefaultdevhubusername --username david@mcga.de --setalias devHub
 
-           # rm server.key
+            rm server.key
           name: Authorize Devhub
 
       - run:
-          command: |
-            ls -l ./cache
-            echo ""
-            if [ -e ./cache/org.credentials ]; then
-              echo "credetials do exist"
-              echo ""
-              cat ./cache/org.credentials
-              echo ""
-              base64 ./cache/org.credentials
+          command: | 
+
+            ALIAS="tempScratchOrg"
+            CREDFILE="./cache/org.credentials"
+             
+            if [ ! -f "$CREDFILE" ]; then
+              echo "$CREDFILE does not exist." 
+
+              echo "Creating Org"
+              echo "------------"
+              echo "create server.key-file for creation"
+              echo "$SFDX_JWT_KEY" | base64 --decode > server.key
+
+              echo -e "\nCreate Scratch Org"
+              sfdx force:org:create --setalias "$ALIAS" --definitionfile ./config/project-scratch-def.json --durationdays 1
+
+              echo -e "\nGet Scratch Org details"
+              sfdx force:org:display --targetusername "$ALIAS" --verbose > "$CREDFILE"
+              
+              echo -e "\nScratch Org details"
+              cat "$CREDFILE"
             else
-              echo "credetials dont exist"
+              echo "$CREDFILE does exist. skip Creation"
+              echo ""
+              cat "$CREDFILE"
             fi
-            
-            scripts/deployment/createNewScratchOrg.sh tempScratchOrg ./cache/org.credentials
+
           name: create scratch org
 
       - save_cache:
