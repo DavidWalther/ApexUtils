@@ -15,4 +15,5 @@ if [ ! -f "$CREDFILE" ]; then
 else
   echo "$CREDFILE does exist. skip Creation"
   echo ""
+  cat "$CREDFILE"
 fi
