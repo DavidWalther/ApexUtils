@@ -72,7 +72,8 @@ jobs:
           name: Authorize Devhub
 
       - run:
-          command: >
+          command: |
+            cat ./cache/org.credentials
             scripts/deployment/createNewScratchOrg.sh tempScratchOrg ./cache/org.credentials
           name: create scratch org
 
