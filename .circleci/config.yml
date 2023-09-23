@@ -79,6 +79,8 @@ jobs:
               echo "credetials do exist"
               echo ""
               cat ./cache/org.credentials
+              echo ""
+              base64 ./cache/org.credentials
             else
               echo "credetials dont exist"
             fi
