@@ -72,19 +72,7 @@ jobs:
           name: Authorize Devhub
 
       - run:
-          command: |
-            ls -l ./cache
-            echo ""
-            if [ -e ./cache/org.credentials ]; then
-              echo "credetials do exist"
-              echo ""
-              cat ./cache/org.credentials
-              echo ""
-              base64 ./cache/org.credentials
-            else
-              echo "credetials dont exist"
-            fi
-            
+          command: | 
             scripts/deployment/createNewScratchOrg.sh tempScratchOrg ./cache/org.credentials
           name: create scratch org
 
