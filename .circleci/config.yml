@@ -73,7 +73,12 @@ jobs:
 
       - run:
           command: |
-            cat ./cache/org.credentials
+            if [ -e ./cache/org.credentials ]; then
+              cat ./cache/org.credentials
+            else
+              echo "credetials dont exist"
+            fi
+            
             scripts/deployment/createNewScratchOrg.sh tempScratchOrg ./cache/org.credentials
           name: create scratch org
 
