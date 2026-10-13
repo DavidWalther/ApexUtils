@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>KeepLog__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Verhindert automatisches Löschen durch Batch</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Verhindert automatisches Löschen</inlineHelpText>
+    <label>Keep Log</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

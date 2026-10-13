@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>MessageList__c</fullName>
+    <description>Field to contain logs passed to the Handler</description>
+    <inlineHelpText>Feld um ein Nachrichten-Log zu speichern</inlineHelpText>
+    <label>Message List</label>
+    <length>32768</length>
+    <trackTrending>false</trackTrending>
+    <type>LongTextArea</type>
+    <visibleLines>15</visibleLines>
+</CustomField>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>AllErrorlogsByDate</fullName>
+    <columns>KeepLog__c</columns>
+    <columns>NAME</columns>
+    <columns>CREATED_DATE</columns>
+    <columns>ExceptionType__c</columns>
+    <columns>ExceptionCategory__c</columns>
+    <columns>ExceptionMessage__c</columns>
+    <filterScope>Mine</filterScope>
+    <label>All Errorlogs by Date</label>
+</ListView>

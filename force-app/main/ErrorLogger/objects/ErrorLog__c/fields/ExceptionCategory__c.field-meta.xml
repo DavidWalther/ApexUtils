@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ExceptionCategory__c</fullName>
+    <deprecated>false</deprecated>
+    <description>Kann genutzt werden um  &quot;API&quot;, &quot;LWC&quot;, ... zu dokumentieren</description>
+    <label>Exception Kategorie</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>API</fullName>
+                <default>false</default>
+                <label>API</label>
+            </value>
+            <value>
+                <fullName>AURA</fullName>
+                <default>false</default>
+                <label>AURA</label>
+            </value>
+            <value>
+                <fullName>BATCH</fullName>
+                <default>false</default>
+                <label>BATCH</label>
+            </value>
+            <value>
+                <fullName>LWC</fullName>
+                <default>false</default>
+                <label>LWC</label>
+            </value>
+            <value>
+                <fullName>VF</fullName>
+                <default>false</default>
+                <label>VF</label>
+            </value>
+            <value>
+                <fullName>FLOW</fullName>
+                <default>false</default>
+                <label>FLOW</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>
